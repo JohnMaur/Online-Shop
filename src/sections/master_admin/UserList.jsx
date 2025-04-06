@@ -1,0 +1,558 @@
+// import React, { useState, useEffect } from 'react';
+// import { Table, Spin, Alert } from 'antd'; // Added Spin and Alert components for loading and error states
+// import { NavigationBar, Header } from "../layout";
+
+// const UserList = () => {
+//   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
+//   const [userList, setUserList] = useState([]);
+//   const [loading, setLoading] = useState(false); // Track loading state
+//   const [error, setError] = useState(null); // Track error state
+
+//   const toggleNav = () => {
+//     setIsNavCollapsed(!isNavCollapsed);
+//   };
+
+//   useEffect(() => {
+//     // Fetch the user list when the component mounts
+//     const fetchUserList = async () => {
+//       setLoading(true); // Set loading state
+//       setError(null); // Clear previous errors
+
+//       try {
+//         const response = await fetch('http://localhost:3000/api/user-list');
+
+//         // Check if response is successful
+//         if (!response.ok) {
+//           throw new Error('Failed to fetch user data');
+//         }
+
+//         const data = await response.json();
+//         setUserList(data);
+//       } catch (error) {
+//         setError(error.message); // Set error state
+//       } finally {
+//         setLoading(false); // Set loading to false after fetching
+//       }
+//     };
+
+//     fetchUserList();
+//   }, []);
+
+//   const columns = [
+//     {
+//       title: 'Username',
+//       dataIndex: 'username',
+//       key: 'username',
+//     },
+//     {
+//       title: 'Password',
+//       dataIndex: 'password',
+//       key: 'password',
+//       render: (text) => '*****', // Mask passwords
+//     },
+//     {
+//       title: 'Recipient Name',
+//       dataIndex: 'recipientName',
+//       key: 'recipientName',
+//     },
+//     {
+//       title: 'Phone Number',
+//       dataIndex: 'phoneNumber',
+//       key: 'phoneNumber',
+//     },
+//     {
+//       title: 'Region',
+//       dataIndex: 'region',
+//       key: 'region',
+//     },
+//     {
+//       title: 'House & Street',
+//       dataIndex: 'houseStreet',
+//       key: 'houseStreet',
+//     },
+//   ];
+
+//   return (
+//     <div className={`flex flex-row-reverse max-md:flex-row w-full`}>
+//       <div className='flex flex-col flex-1 h-screen'>
+//         <Header toggleNav={toggleNav} />
+
+//         <div className={`flex-1 overflow-auto mt-14 bg-[#EFEFEF] p-6`}>
+//           <h2 className="text-xl font-bold mb-4">User List</h2>
+
+//           {loading ? (
+//             // Display a loading spinner while fetching
+//             <div className="flex justify-center">
+//               <Spin size="large" />
+//             </div>
+//           ) : error ? (
+//             // Display an error message if there is an error
+//             <Alert message={`Error: ${error}`} type="error" showIcon />
+//           ) : userList.length === 0 ? (
+//             // Display a message if no users are available
+//             <p>No users found.</p>
+//           ) : (
+//             <Table dataSource={userList} columns={columns} rowKey="username" pagination={{ pageSize: 5 }} />
+//           )}
+//         </div>
+//       </div>
+
+//       <nav className={`max-md:hidden ${isNavCollapsed ? "w-20" : "w-56"} transition-width duration-300`}>
+//         <NavigationBar isNavCollapsed={isNavCollapsed} />
+//       </nav>
+//     </div>
+//   );
+// };
+
+// export default UserList;
+
+
+// import React, { useState, useEffect } from 'react';
+// import { Table, Spin, Alert, Button, Modal, Input } from 'antd'; // Added Modal, Input components
+// import { NavigationBar, Header } from "../layout";
+
+// const UserList = () => {
+//   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
+//   const [userList, setUserList] = useState([]);
+//   const [loading, setLoading] = useState(false); // Track loading state
+//   const [error, setError] = useState(null); // Track error state
+//   const [editingUser, setEditingUser] = useState(null); // Track the user being edited
+//   const [formValues, setFormValues] = useState({}); // Form data for editing
+
+//   const toggleNav = () => {
+//     setIsNavCollapsed(!isNavCollapsed);
+//   };
+
+//   useEffect(() => {
+//     // Fetch the user list when the component mounts
+//     const fetchUserList = async () => {
+//       setLoading(true); // Set loading state
+//       setError(null); // Clear previous errors
+
+//       try {
+//         const response = await fetch('http://localhost:3000/api/user-list');
+
+//         // Check if response is successful
+//         if (!response.ok) {
+//           throw new Error('Failed to fetch user data');
+//         }
+
+//         const data = await response.json();
+//         setUserList(data);
+//       } catch (error) {
+//         setError(error.message); // Set error state
+//       } finally {
+//         setLoading(false); // Set loading to false after fetching
+//       }
+//     };
+
+//     fetchUserList();
+//   }, []);
+
+//   const handleEdit = (user) => {
+//     setEditingUser(user);
+//     setFormValues(user); // Pre-fill form with user data
+//   };
+
+//   const handleModalClose = () => {
+//     setEditingUser(null); // Close modal
+//   };
+
+//   const handleFormChange = (e) => {
+//     const { name, value } = e.target;
+//     setFormValues((prevState) => ({
+//       ...prevState,
+//       [name]: value,
+//     }));
+//   };
+
+//   const handleSave = async () => {
+//     try {
+//       const response = await fetch(`http://localhost:3000/api/user/${editingUser.username}`, {
+//         method: 'PUT',
+//         headers: {
+//           'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify(formValues),
+//       });
+
+//       if (!response.ok) {
+//         throw new Error('Failed to update user');
+//       }
+
+//       const updatedUser = await response.json();
+
+//       // Update user list with the updated user data
+//       setUserList((prevList) => 
+//         prevList.map((user) => (user.username === updatedUser.username ? updatedUser : user))
+//       );
+
+//       handleModalClose(); // Close the modal after saving
+
+//     } catch (error) {
+//       setError(error.message); // Handle error
+//     }
+//   };
+
+//   const columns = [
+//     {
+//       title: 'Username',
+//       dataIndex: 'username',
+//       key: 'username',
+//     },
+//     {
+//       title: 'Password',
+//       dataIndex: 'password',
+//       key: 'password',
+//       render: (text) => '*****', // Mask passwords
+//     },
+//     {
+//       title: 'Recipient Name',
+//       dataIndex: 'recipientName',
+//       key: 'recipientName',
+//     },
+//     {
+//       title: 'Phone Number',
+//       dataIndex: 'phoneNumber',
+//       key: 'phoneNumber',
+//     },
+//     {
+//       title: 'Region',
+//       dataIndex: 'region',
+//       key: 'region',
+//     },
+//     {
+//       title: 'House & Street',
+//       dataIndex: 'houseStreet',
+//       key: 'houseStreet',
+//     },
+//     {
+//       title: 'Action',
+//       key: 'action',
+//       render: (text, user) => (
+//         <Button type="primary" onClick={() => handleEdit(user)}>
+//           Edit
+//         </Button>
+//       ),
+//     },
+//   ];
+
+//   return (
+//     <div className={`flex flex-row-reverse max-md:flex-row w-full`}>
+//       <div className='flex flex-col flex-1 h-screen'>
+//         <Header toggleNav={toggleNav} />
+
+//         <div className={`flex-1 overflow-auto mt-14 bg-[#EFEFEF] p-6`}>
+//           <h2 className="text-xl font-bold mb-4">User List</h2>
+
+//           {loading ? (
+//             // Display a loading spinner while fetching
+//             <div className="flex justify-center">
+//               <Spin size="large" />
+//             </div>
+//           ) : error ? (
+//             // Display an error message if there is an error
+//             <Alert message={`Error: ${error}`} type="error" showIcon />
+//           ) : userList.length === 0 ? (
+//             // Display a message if no users are available
+//             <p>No users found.</p>
+//           ) : (
+//             <Table dataSource={userList} columns={columns} rowKey="username" pagination={{ pageSize: 5 }} />
+//           )}
+//         </div>
+//       </div>
+
+//       <nav className={`max-md:hidden ${isNavCollapsed ? "w-20" : "w-56"} transition-width duration-300`}>
+//         <NavigationBar isNavCollapsed={isNavCollapsed} />
+//       </nav>
+
+//       {/* Edit Modal */}
+//       <Modal
+//         title="Edit User"
+//         visible={!!editingUser}
+//         onCancel={handleModalClose}
+//         onOk={handleSave}
+//         okText="Save"
+//         cancelText="Cancel"
+//       >
+//         {editingUser && (
+//           <>
+//             <div className="mb-4">
+//               <label className="block">Recipient Name</label>
+//               <Input
+//                 name="recipientName"
+//                 value={formValues.recipientName}
+//                 onChange={handleFormChange}
+//               />
+//             </div>
+//             <div className="mb-4">
+//               <label className="block">Phone Number</label>
+//               <Input
+//                 name="phoneNumber"
+//                 value={formValues.phoneNumber}
+//                 onChange={handleFormChange}
+//               />
+//             </div>
+//             <div className="mb-4">
+//               <label className="block">Region</label>
+//               <Input
+//                 name="region"
+//                 value={formValues.region}
+//                 onChange={handleFormChange}
+//               />
+//             </div>
+//             <div className="mb-4">
+//               <label className="block">House & Street</label>
+//               <Input
+//                 name="houseStreet"
+//                 value={formValues.houseStreet}
+//                 onChange={handleFormChange}
+//               />
+//             </div>
+//           </>
+//         )}
+//       </Modal>
+//     </div>
+//   );
+// };
+
+// export default UserList;
+
+
+import React, { useState, useEffect } from 'react';
+import { Table, Spin, Alert, Button, Modal, Input } from 'antd'; // Added Modal, Input components
+import { NavigationBar, Header } from "../layout";
+
+const UserList = () => {
+  const [isNavCollapsed, setIsNavCollapsed] = useState(false);
+  const [userList, setUserList] = useState([]);
+  const [loading, setLoading] = useState(false); // Track loading state
+  const [error, setError] = useState(null); // Track error state
+  const [editingUser, setEditingUser] = useState(null); // Track the user being edited
+  const [formValues, setFormValues] = useState({}); // Form data for editing
+
+  const toggleNav = () => {
+    setIsNavCollapsed(!isNavCollapsed);
+  };
+
+  const fetchUserList = async () => {
+    setLoading(true); // Set loading state
+    setError(null); // Clear previous errors
+
+    try {
+      const response = await fetch('http://localhost:3000/api/user-list');
+
+      // Check if response is successful
+      if (!response.ok) {
+        throw new Error('Failed to fetch user data');
+      }
+
+      const data = await response.json();
+      setUserList(data);
+    } catch (error) {
+      setError(error.message); // Set error state
+    } finally {
+      setLoading(false); // Set loading to false after fetching
+    }
+  };
+
+  useEffect(() => {
+    // Fetch the user list when the component mounts
+    fetchUserList();
+  }, []);
+
+  const handleEdit = (user) => {
+    setEditingUser(user);
+    setFormValues(user); // Pre-fill form with user data
+  };
+
+  const handleModalClose = () => {
+    setEditingUser(null); // Close modal
+  };
+
+  const handleFormChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleSave = async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/user/${editingUser.username}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formValues),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update user');
+      }
+
+      const updatedUser = await response.json();
+
+      // Update user list with the updated user data
+      setUserList((prevList) =>
+        prevList.map((user) => (user.username === updatedUser.username ? updatedUser : user))
+      );
+
+      handleModalClose(); // Close the modal after saving
+      fetchUserList(); // Refresh the user list after updating
+    } catch (error) {
+      setError(error.message); // Handle error
+    }
+  };
+
+  const handleDelete = async (username) => {
+    try {
+      const confirmed = window.confirm(`Are you sure you want to delete user "${username}"?`);
+      if (!confirmed) return;
+
+      const response = await fetch(`http://localhost:3000/api/user/${username}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete user');
+      }
+
+      // Refresh user list after deletion
+      fetchUserList();
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const columns = [
+    {
+      title: 'Username',
+      dataIndex: 'username',
+      key: 'username',
+    },
+    {
+      title: 'Password',
+      dataIndex: 'password',
+      key: 'password',
+      render: (text) => '*****', // Mask passwords
+    },
+    {
+      title: 'Recipient Name',
+      dataIndex: 'recipientName',
+      key: 'recipientName',
+    },
+    {
+      title: 'Phone Number',
+      dataIndex: 'phoneNumber',
+      key: 'phoneNumber',
+    },
+    {
+      title: 'Region',
+      dataIndex: 'region',
+      key: 'region',
+    },
+    {
+      title: 'House & Street',
+      dataIndex: 'houseStreet',
+      key: 'houseStreet',
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (text, user) => (
+        <div className='w-44 flex flex-row justify-end'>
+          <Button type="primary" onClick={() => handleEdit(user)} style={{ marginRight: 8 }}>
+            Edit
+          </Button>
+          <Button danger onClick={() => handleDelete(user.username)}>
+            Delete
+          </Button>
+        </div>
+      ),
+    },
+  ];
+
+  return (
+    <div className={`flex flex-row-reverse max-md:flex-row w-full`}>
+      <div className='flex flex-col flex-1 h-screen'>
+        <Header toggleNav={toggleNav} />
+
+        <div className={`flex-1 overflow-auto mt-14 bg-[#EFEFEF] p-6`}>
+          <h2 className="text-xl font-bold mb-4">User List</h2>
+
+          {loading ? (
+            // Display a loading spinner while fetching
+            <div className="flex justify-center">
+              <Spin size="large" />
+            </div>
+          ) : error ? (
+            // Display an error message if there is an error
+            <Alert message={`Error: ${error}`} type="error" showIcon />
+          ) : userList.length === 0 ? (
+            // Display a message if no users are available
+            <p>No users found.</p>
+          ) : (
+            <div className='bg-white rounded-xl'>
+              <Table dataSource={userList} columns={columns} rowKey="username" pagination={{ pageSize: 5 }} />
+            </div>
+          )}
+        </div>
+      </div>
+
+      <nav className={`max-md:hidden ${isNavCollapsed ? "w-20" : "w-56"} transition-width duration-300`}>
+        <NavigationBar isNavCollapsed={isNavCollapsed} />
+      </nav>
+
+      {/* Edit Modal */}
+      <Modal
+        title="Edit User"
+        visible={!!editingUser}
+        onCancel={handleModalClose}
+        onOk={handleSave}
+        okText="Save"
+        cancelText="Cancel"
+      >
+        {editingUser && (
+          <>
+            <div className="mb-4">
+              <label className="block">Recipient Name</label>
+              <Input
+                name="recipientName"
+                value={formValues.recipientName}
+                onChange={handleFormChange}
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block">Phone Number</label>
+              <Input
+                name="phoneNumber"
+                value={formValues.phoneNumber}
+                onChange={handleFormChange}
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block">Region</label>
+              <Input
+                name="region"
+                value={formValues.region}
+                onChange={handleFormChange}
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block">House & Street</label>
+              <Input
+                name="houseStreet"
+                value={formValues.houseStreet}
+                onChange={handleFormChange}
+              />
+            </div>
+          </>
+        )}
+      </Modal>
+    </div>
+  );
+};
+
+export default UserList;
