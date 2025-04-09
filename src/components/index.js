@@ -6,15 +6,17 @@ import Tooltip from "./Tooltip";
 import DashboardCard from "./DashboardCard";
 import Profile from "./Profile";
 import Modal from "./Modal";
-import UpdateProduct from "./UpdateProduct";
+import UpdateProduct from "./Modal/UpdateProduct";
 import ConfirmModal from "./Modal/ConfirmModal";
 import ShowPaymentMethod from "./Modal/ShowPaymentMethod";
 import UpdateQuantity from "./Modal/UpdateQuantity";
 import ChangePasswordModal from "./ChangePasswordModal";
 import UpdateSupplier from "./Modal/UpdateSupplier";
 import SupplierModal from "./Modal/AddingSupplier";
-import AdminAddingProduct from "./Modal/AdminAddingProduct";
 import AdminAddingSupplier from "./Modal/AdminAddingSupplier";
+import AddDeliveryModal from "./Modal/AddDeliveryModal";
+import UpdateStock from "./Modal/UpdateStocks";
+import RestockModal from "./Modal/RestockModal";
 
 export {
   TextInput,
@@ -32,6 +34,8 @@ export {
   ChangePasswordModal,
   UpdateSupplier,
   SupplierModal,
-  AdminAddingProduct,
-  AdminAddingSupplier
+  AdminAddingSupplier,
+  AddDeliveryModal,
+  UpdateStock,
+  RestockModal,
 }

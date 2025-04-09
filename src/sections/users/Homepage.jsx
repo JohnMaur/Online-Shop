@@ -100,7 +100,7 @@ const Homepage = () => {
                   />
                 </a>
                 <p className="font-semibold mt-2">Product: {product.productName}</p>
-                <p>Color: {product.color?.value}</p>
+                <p>Color: {product.color}</p>
                 <p>Price: ₱ {product.price}.00</p>
                 <div className='flex justify-end space-x-2 mt-2'>
                   <div className='w-32 max-md:w-full'>

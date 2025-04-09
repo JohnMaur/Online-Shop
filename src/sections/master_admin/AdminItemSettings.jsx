@@ -1,39 +1,3 @@
-// import React, { useState } from 'react';
-// import { NavigationBar, Header } from "../layout"
-
-// const AdminItemSettings = () => {
-//   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
-
-//   const toggleNav = () => {
-//     setIsNavCollapsed(!isNavCollapsed);
-//   };
-
-//   return (
-//     <div className={`flex flex-row-reverse max-md:flex-row w-full`}>
-//       <div className='flex flex-col flex-1 h-screen'>
-//         <Header
-//           toggleNav={toggleNav}
-//         />
-
-//         <div className={`flex-1 overflow-auto mt-14 bg-[#EFEFEF]`}>
-//           {/* Your content here */}
-//           <p>ItemSettings</p>
-//         </div>
-//       </div>
-
-//       <nav className={`max-md:hidden ${isNavCollapsed ? "w-20" : "w-56"} transition-width duration-300`}>
-//         <NavigationBar
-//           isNavCollapsed={isNavCollapsed}
-//         />
-
-//       </nav>
-
-//     </div>
-//   )
-// }
-
-// export default AdminItemSettings
-
 import React, { useState, useEffect } from 'react';
 import { NavigationBar, Header } from "../layout";
 import { ConfirmModal, CustomButton } from '../../components';
@@ -159,8 +123,11 @@ const AdminItemSettings = () => {
               onClick={() => { setIsModalOpen(true); form.resetFields(); setEditingProduct(null); }}
             />
           </div>
-          {/* <Button type="primary" onClick={() => { setIsModalOpen(true); form.resetFields(); setEditingProduct(null); }}>Add New</Button> */}
-          <Table dataSource={productData} columns={columns} rowKey="_id" className="mt-4" />
+
+          <div className='bg-white mt-2 rounded-xl'>
+            <Table dataSource={productData} columns={columns} rowKey="_id" className="mt-4" />
+          </div>
+
         </div>
       </div>
       <nav className={`max-md:hidden ${isNavCollapsed ? "w-20" : "w-56"} transition-width duration-300`}>

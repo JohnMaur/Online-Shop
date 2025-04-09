@@ -14,12 +14,12 @@ const StaffProduct = () => {
 
   const fetchProducts = async () => {
     if (!staffUsername) {
-      console.warn("Staff username is empty. Skipping fetch.");
+      console.warn("Staff is empty. Skipping fetch.");
       return; // Stop execution if staffUsername is empty
     }
-
+    
     try {
-      const response = await fetch(`http://localhost:3000/api/staffProducts?staffUsername=${staffUsername}`);
+      const response = await fetch('http://localhost:3000/api/products'); // Adjust URL as needed
       const data = await response.json();
       setProducts(data);
     } catch (error) {
@@ -99,10 +99,7 @@ const StaffProduct = () => {
                   className="w-full h-48 object-contain rounded-lg"
                 />
                 <p className="font-semibold mt-2">Product Name: {product.productName}</p>
-                <p className="font-semibold">Supplier: {product.supplierName}</p>
                 <p>Color: {product.color}</p>
-                <p>Quantity: {product.quantity}</p>
-                <p>Price: ₱ {product.price}.00</p>
                 <div className='flex justify-end space-x-2'>
                   <div className='w-28'>
                     <CustomButton

@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Login, SignUp, Admin, LoginStaff } from "./(auth)";
-import { AdminDashboard, Staff, Product, AdminItemSettings, UserList, StaffList, AdminStock, AdminSupplier, AuditTrail } from "./sections/master_admin";
+import { AdminDashboard, Staff, Product, AdminItemSettings, UserList, StaffList, AdminStock, AdminSupplier, AuditTrail, AdminDelivery } from "./sections/master_admin";
 import { StaffDashboard, StaffProduct, StaffReceiving, StaffShipping, StaffProfile, ItemSettings, StaffMaintenance, StockMaintenance, DeleveryMaintenance, OrderTranstaction } from "./sections/staff";
 import { UserLandingPage, Receiving, Shipping, Cart, Homepage, UsersProduct, UserOrderReceived, UserCancelled } from "./sections/users";
 
@@ -48,6 +48,7 @@ const App = () => {
           <Route path="/admin-stock-maintenance" element={<AdminStock/>} />
           <Route path="/admin-supplier-maintenance" element={<AdminSupplier/>} />
           <Route path="/audit-trail" element={<AuditTrail/>} />
+          <Route path="/admin-delevery-maintenance" element={<AdminDelivery/>} />
         </Routes>
       </Router>
     </UserProvider>

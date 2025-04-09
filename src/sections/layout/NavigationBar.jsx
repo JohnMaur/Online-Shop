@@ -57,17 +57,24 @@ const NavigationBar = ({ isNavCollapsed }) => {
           />
           <NavItem
             isNavCollapsed={isNavCollapsed}
+            icon={maintenance}
+            iconHovered={lightMaintenance}
+            tooltipText="Category Maintenance"
+            link="/product_maintenance"
+          />
+          <NavItem
+            isNavCollapsed={isNavCollapsed}
             icon={product}
             iconHovered={productLight}
             tooltipText="Product"
             link="/product"
           />
-          <NavItem
+           <NavItem
             isNavCollapsed={isNavCollapsed}
-            icon={maintenance}
-            iconHovered={lightMaintenance}
-            tooltipText="Maintenance"
-            link="/product_maintenance"
+            icon={product}
+            iconHovered={productLight}
+            tooltipText="Delivery Maintenance"
+            link="/admin-delevery-maintenance"
           />
           <NavItem
             isNavCollapsed={isNavCollapsed}

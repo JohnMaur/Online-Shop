@@ -7,6 +7,7 @@ import StaffList from "./StaffList";
 import AdminStock from "./AdminStock";
 import AdminSupplier from "./AdminSupplier";
 import AuditTrail from "./AuditTrail";
+import AdminDelivery from "./AdminDelivery";
 
 export {
   Product,
@@ -18,4 +19,5 @@ export {
   AdminStock,
   AdminSupplier,
   AuditTrail,
+  AdminDelivery,
 }

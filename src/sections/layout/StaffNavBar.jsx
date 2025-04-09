@@ -100,7 +100,7 @@ const StaffNavBar = ({ isNavCollapsed, setStaffUsername }) => {
             isNavCollapsed={isNavCollapsed}
             icon={product}
             iconHovered={productLight}
-            tooltipText="Delevery Maintenance"
+            tooltipText="Delivery Maintenance"
             link="/delevery-maintenance"
           />
          

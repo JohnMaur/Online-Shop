@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavigationBar, Header } from "../layout";
-import { CustomButton, UpdateProduct, ConfirmModal, AdminAddingProduct } from '../../components';
+import { CustomButton, UpdateProduct, ConfirmModal, Modal } from '../../components';
 
 const Product = () => {
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
@@ -85,10 +85,7 @@ const Product = () => {
                   className="w-full h-48 object-contain rounded-lg"
                 />
                 <p className="font-semibold mt-2">Product Name: {product.productName}</p>
-                <p className="font-semibold">Supplier: {product.supplierName}</p>
                 <p>Color: {product.color}</p>
-                <p>Quantity: {product.quantity}</p>
-                <p>Price: ₱ {product.price}.00</p>
                 <div className='flex justify-end space-x-2'>
                   <div className='w-28'>
                     <CustomButton
@@ -124,7 +121,7 @@ const Product = () => {
         />
       </nav>
 
-      <AdminAddingProduct
+      <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         refreshProducts={fetchProducts}
