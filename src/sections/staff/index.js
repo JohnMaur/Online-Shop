@@ -8,6 +8,8 @@ import StaffMaintenance from "./StaffMaintenance";
 import StockMaintenance from "./StockMaintenance";
 import DeleveryMaintenance from "./Delevery";
 import OrderTranstaction from "./OrderTranstaction";
+import OrderReceived from "./OrderReceived";
+import CanceledOrder from "./canceledOrder";
 
 export {
   StaffDashboard,
@@ -20,4 +22,6 @@ export {
   StockMaintenance,
   DeleveryMaintenance,
   OrderTranstaction,
+  OrderReceived,
+  CanceledOrder,
 }

@@ -1,54 +1,11 @@
-// import React, { useState } from 'react';
-// import { StaffNavBar, Header } from "../layout"
-
-// const OrderTranstaction = () => {
-//   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
-//   const [staffUsername, setStaffUsername] = useState("");
-
-//   const toggleNav = () => {
-//     setIsNavCollapsed(!isNavCollapsed);
-//   };
-
-//   return (
-//     <div className={`flex flex-row-reverse max-md:flex-row w-full`}>
-//       <div className='flex flex-col flex-1 h-screen'>
-//         <Header
-//           toggleNav={toggleNav}
-//         />
-
-//         <div className={`flex-1 overflow-auto mt-14 bg-[#EFEFEF]`}>
-//           {/* Your content here */}
-//           <p>Sorting button</p>
-//           <p>Successful order, Failed order, Refunded order, cancelled order</p>
-//           <p>Table for fetching data - with status</p>
-//         </div>
-//       </div>
-
-//       <nav className={`max-md:hidden ${isNavCollapsed ? "w-20" : "w-56"} transition-width duration-300`}>
-//         <StaffNavBar
-//           isNavCollapsed={isNavCollapsed}
-//           setStaffUsername={setStaffUsername}
-//         />
-//       </nav>
-
-//     </div>
-//   )
-// }
-
-// export default OrderTranstaction
-
-
 import React, { useEffect, useState } from 'react';
 import { Table, Select, message } from 'antd';
 import axios from 'axios';
-import { StaffNavBar, Header, MobileStaffNavbar } from "../layout";
+import { NavigationBar, Header, MobileAdminNavbar } from "../layout"
 
-const { Option } = Select;
-
-const OrderTranstaction = () => {
+const AdminOrderTransaction = () => {
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
-  const [staffUsername, setStaffUsername] = useState("");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [sortType, setSortType] = useState('received'); // Default to order received
@@ -103,7 +60,7 @@ const OrderTranstaction = () => {
     <div className={`flex flex-row-reverse max-md:flex-row w-full`}>
       <div className='flex flex-col flex-1 h-screen'>
         <Header toggleNav={toggleNav} />
-        <MobileStaffNavbar isOpen={isMobileNavOpen} onClose={() => setIsMobileNavOpen(false)} />
+        <MobileAdminNavbar isOpen={isMobileNavOpen} onClose={() => setIsMobileNavOpen(false)} />
         <div className={`flex-1 overflow-auto mt-14 bg-[#EFEFEF] p-5`}>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-bold">Order Transactions</h2>
@@ -117,7 +74,7 @@ const OrderTranstaction = () => {
             </Select>
           </div>
 
-          <div className='max-md:w-[100vw] bg-white mt-2 rounded-xl max-md:overflow-x-auto md:whitespace-nowrap'>
+           <div className='max-md:w-[100vw] bg-white mt-2 rounded-xl max-md:overflow-x-auto max-md:whitespace-nowrap'>
             <Table
               dataSource={data}
               columns={sortType === 'canceled' ? canceledColumns : receivedColumns}
@@ -130,10 +87,10 @@ const OrderTranstaction = () => {
       </div>
 
       <nav className={`max-md:hidden ${isNavCollapsed ? "w-20" : "w-56"} transition-width duration-300`}>
-        <StaffNavBar isNavCollapsed={isNavCollapsed} setStaffUsername={setStaffUsername} />
+        <NavigationBar isNavCollapsed={isNavCollapsed} />
       </nav>
     </div>
   );
 };
 
-export default OrderTranstaction;
+export default AdminOrderTransaction

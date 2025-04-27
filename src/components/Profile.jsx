@@ -2,6 +2,10 @@ import { useState, useEffect } from "react";
 import { profile } from "../assets/icons";
 import { firebase } from "../firebaseConfig";
 import axios from "axios";
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+const MySwal = withReactContent(Swal);
 
 const Profile = ({ region, houseStreet, recipient, staffFullname, phoneNumber, email, username, contactPerson, updateAPI, getApi, titleHeader }) => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -34,7 +38,15 @@ const Profile = ({ region, houseStreet, recipient, staffFullname, phoneNumber, e
   };
 
   const uploadImage = async () => {
-    if (!imageFile) return alert("Please select an image first.");
+    if (!imageFile) {
+      MySwal.fire({
+        icon: "warning",
+        title: "No Image Selected",
+        text: "Please select an image first.",
+        confirmButtonColor: "#3B82F6",
+      });
+      return;
+    }
     setUploading(true);
 
     try {
@@ -52,10 +64,20 @@ const Profile = ({ region, houseStreet, recipient, staffFullname, phoneNumber, e
       });
 
       setSelectedImage(downloadURL); // Update the displayed image
-      alert("Profile picture updated successfully!");
+      MySwal.fire({
+        icon: "success",
+        title: "Profile Updated",
+        text: "Profile picture updated successfully!",
+        confirmButtonColor: "#3B82F6",
+      });
     } catch (error) {
       console.error("Error uploading image:", error);
-      alert("Failed to update profile picture.");
+      MySwal.fire({
+        icon: "error",
+        title: "Upload Failed",
+        text: "Failed to update profile picture.",
+        confirmButtonColor: "#3B82F6",
+      });
     } finally {
       setUploading(false);
     }

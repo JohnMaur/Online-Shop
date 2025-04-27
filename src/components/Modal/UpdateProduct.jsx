@@ -4,7 +4,7 @@ import axios from "axios";
 import { colorOptions } from "../../data/Option";
 import { firebase } from "../../firebaseConfig";
 
-const UpdateProduct = ({ isOpen, onClose, product }) => {
+const UpdateProduct = ({ isOpen, onClose, product, editableApi, staffUsername }) => {
   if (!isOpen || !product) return null;
 
   const [productName, setProductName] = useState(product.productName || "");
@@ -42,6 +42,7 @@ const UpdateProduct = ({ isOpen, onClose, product }) => {
 
       const updatedProduct = {
         ...product,
+        staffUsername,
         productName,
         category,
         subCategory,
@@ -51,7 +52,7 @@ const UpdateProduct = ({ isOpen, onClose, product }) => {
         imageUrl: downloadURL,
       };
 
-      const response = await axios.put(`http://localhost:3000/api/update-product/${product._id}`, updatedProduct);
+      const response = await axios.put(`http://localhost:3000/${editableApi}/${product._id}`, updatedProduct);
       alert(response.data.message);
       onClose();
     } catch (error) {

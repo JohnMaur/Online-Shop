@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Login, SignUp, Admin, LoginStaff } from "./(auth)";
-import { AdminDashboard, Staff, Product, AdminItemSettings, UserList, StaffList, AdminStock, AdminSupplier, AuditTrail, AdminDelivery } from "./sections/master_admin";
-import { StaffDashboard, StaffProduct, StaffReceiving, StaffShipping, StaffProfile, ItemSettings, StaffMaintenance, StockMaintenance, DeleveryMaintenance, OrderTranstaction } from "./sections/staff";
+import { AdminDashboard, Staff, Product, AdminItemSettings, UserList, StaffList, AdminStock, AdminSupplier, AuditTrail, AdminDelivery, AdminToShip, AdminToReceive, AdminOrderReceived, AdminCanceledOrder, AdminOrderTransaction, AdminVAT } from "./sections/master_admin";
+import { StaffDashboard, StaffProduct, StaffReceiving, StaffShipping, StaffProfile, ItemSettings, StaffMaintenance, StockMaintenance, DeleveryMaintenance, OrderTranstaction, OrderReceived, CanceledOrder } from "./sections/staff";
 import { UserLandingPage, Receiving, Shipping, Cart, Homepage, UsersProduct, UserOrderReceived, UserCancelled } from "./sections/users";
 
 import { UserProvider } from "./(auth)/UserContext";
@@ -37,6 +37,8 @@ const App = () => {
           <Route path="/stock-maintenance" element={<StockMaintenance/>} />
           <Route path="/delevery-maintenance" element={<DeleveryMaintenance/>} />
           <Route path="/order-transaction" element={<OrderTranstaction/>} />
+          <Route path="/staff-order-received" element={<OrderReceived/>} />
+          <Route path="/staff-canceled-order" element={<CanceledOrder/>} />
 
           {/* Admin routes */}
           <Route path="/dashboard" element={<AdminDashboard />} />
@@ -49,6 +51,12 @@ const App = () => {
           <Route path="/admin-supplier-maintenance" element={<AdminSupplier/>} />
           <Route path="/audit-trail" element={<AuditTrail/>} />
           <Route path="/admin-delevery-maintenance" element={<AdminDelivery/>} />
+          <Route path="/admin-to-ship" element={<AdminToShip/>} />
+          <Route path="/admin-to-receive" element={<AdminToReceive/>} />
+          <Route path="/admin-order-received" element={<AdminOrderReceived/>} />
+          <Route path="/admin-order-canceled" element={<AdminCanceledOrder/>} />
+          <Route path="/admin-order-transaction" element={<AdminOrderTransaction/>} />
+          <Route path="/admin-VAT" element={<AdminVAT/>} />
         </Routes>
       </Router>
     </UserProvider>

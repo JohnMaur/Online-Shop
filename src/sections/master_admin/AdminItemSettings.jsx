@@ -1,17 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { NavigationBar, Header } from "../layout";
+import { NavigationBar, Header, MobileAdminNavbar } from "../layout";
 import { ConfirmModal, CustomButton } from '../../components';
 import { Table, Button, Modal, Form, message, Select } from 'antd';
 import axios from 'axios';
 
 const AdminItemSettings = () => {
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [productData, setProductData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(null);
   const [editingProduct, setEditingProduct] = useState(null);
   const [form] = Form.useForm();
+
+  const toggleNav = () => {
+    if (window.innerWidth <= 768) {
+      setIsMobileNavOpen(!isMobileNavOpen);
+    } else {
+      setIsNavCollapsed(!isNavCollapsed);
+    }
+  };
 
   useEffect(() => {
     fetchProductData();
@@ -30,10 +39,10 @@ const AdminItemSettings = () => {
   const handleAddOrEdit = async (values) => {
     try {
       if (editingProduct) {
-        await axios.put(`http://localhost:3000/api/product-maintenance/${editingProduct._id}`, values);
+        await axios.put(`http://localhost:3000/api/admin-product-maintenance/${editingProduct._id}`, values);
         message.success("Product updated successfully");
       } else {
-        await axios.post('http://localhost:3000/api/product-maintenance', values);
+        await axios.post('http://localhost:3000/api/admin-product-maintenance', values);
         message.success("Product added successfully");
       }
       setIsModalOpen(false);
@@ -52,7 +61,7 @@ const AdminItemSettings = () => {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:3000/api/product-maintenance/${selectedProductId}`);
+      await axios.delete(`http://localhost:3000/api/admin-product-maintenance/${selectedProductId}`);
       message.success("Product deleted successfully");
       fetchProductData();
     } catch (error) {
@@ -112,7 +121,8 @@ const AdminItemSettings = () => {
   return (
     <div className={`flex flex-row-reverse max-md:flex-row w-full`}>
       <div className='flex flex-col flex-1 h-screen'>
-        <Header toggleNav={() => setIsNavCollapsed(!isNavCollapsed)} />
+        <Header toggleNav={toggleNav} />
+        <MobileAdminNavbar isOpen={isMobileNavOpen} onClose={() => setIsMobileNavOpen(false)} />
         <div className='flex-1 overflow-auto mt-14 bg-[#EFEFEF] p-4'>
           <div className='w-1/3 max-md:w-full'>
             <CustomButton
@@ -124,7 +134,7 @@ const AdminItemSettings = () => {
             />
           </div>
 
-          <div className='bg-white mt-2 rounded-xl'>
+          <div className='max-md:w-[100vw] bg-white mt-2 rounded-xl max-md:overflow-x-auto max-md:whitespace-nowrap'>
             <Table dataSource={productData} columns={columns} rowKey="_id" className="mt-4" />
           </div>
 

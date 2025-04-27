@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { TextInput, Profile, ChangePasswordModal } from '../../components';
-import { StaffNavBar, Header } from "../layout"
+import { StaffNavBar, Header, MobileStaffNavbar } from "../layout"
 import { Modal } from 'antd';
 
 const StaffProfile = () => {
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [staffUsername, setStaffUsername] = useState("");
   const [changePasswordVisible, setChangePasswordVisible] = useState(false);
 
@@ -118,14 +119,18 @@ const StaffProfile = () => {
   };
 
   const toggleNav = () => {
-    setIsNavCollapsed(!isNavCollapsed);
+    if (window.innerWidth <= 768) {
+      setIsMobileNavOpen(!isMobileNavOpen);
+    } else {
+      setIsNavCollapsed(!isNavCollapsed);
+    }
   };
 
   return (
     <div className="flex flex-row-reverse max-md:flex-row w-full">
       <div className='flex flex-col flex-1 h-screen'>
         <Header toggleNav={toggleNav} />
-
+        <MobileStaffNavbar isOpen={isMobileNavOpen} onClose={() => setIsMobileNavOpen(false)} />
         <div className="flex-1 overflow-auto mt-14 bg-[#EFEFEF]">
           {loading ? (
             <div className="text-center mt-20 text-lg">Loading...</div>

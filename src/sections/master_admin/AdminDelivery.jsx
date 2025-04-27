@@ -37,16 +37,21 @@
 
 
 import React, { useState, useEffect } from 'react';
-import { NavigationBar, Header } from "../layout";
+import { NavigationBar, Header, MobileAdminNavbar } from "../layout";
 import { CustomButton, AddDeliveryModal, RestockModal } from '../../components';
 import { DeliveryHistory } from '../../data';
 import axios from 'axios';
 import { Table, Button } from 'antd';
 import { FaMoneyBillWave } from "react-icons/fa";
 import CountUp from "react-countup";
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+const MySwal = withReactContent(Swal);
 
 const AdminDelivery = () => {
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAddNewModalOpen, setIsAddNewModalOpen] = useState(false);  // for Add New / Restock modal
   const [products, setProducts] = useState([]);
@@ -64,7 +69,27 @@ const AdminDelivery = () => {
 
   const [showRestockModal, setShowRestockModal] = useState(false);
 
-  const toggleNav = () => setIsNavCollapsed(!isNavCollapsed);
+  const [vatPercentage, setVatPercentage] = useState(null); // Example: 12 means 12%
+  const [isVatApplied, setIsVatApplied] = useState(false);
+
+  const toggleNav = () => {
+    if (window.innerWidth <= 768) {
+      setIsMobileNavOpen(!isMobileNavOpen);
+    } else {
+      setIsNavCollapsed(!isNavCollapsed);
+    }
+  };
+
+  const fetchVAT = async () => {
+    const res = await axios.get('http://localhost:3000/api/admin/vat'); // Adjust your endpoint
+    setVatPercentage(res.data.value); // assuming res.data.value = 12
+  };
+
+  useEffect(() => {
+    fetchData();
+    fetchDeliveries();
+    fetchVAT(); // fetch VAT setting on mount
+  }, []);
 
   const fetchData = async () => {
     const productsRes = await axios.get('http://localhost:3000/api/products');
@@ -84,19 +109,64 @@ const AdminDelivery = () => {
     fetchDeliveries();
   }, []);
 
-  const handleAddDelivery = async () => {
+  // const handleAddDelivery = async () => {
+  //   try {
+  //     const payload = {
+  //       productId: selectedProduct._id,
+  //       supplierId: selectedSupplier._id,
+  //       supplierPrice: parseFloat(supplierPrice),
+  //       shopPrice: parseFloat(shopPrice),
+  //       quantity: parseInt(quantity),
+  //       totalCost: parseFloat(supplierPrice) * parseInt(quantity),
+  //       addedAt: new Date()
+  //     };
+  //     await axios.post('http://localhost:3000/api/admin-add-delivery', payload);
+  //     // SweetAlert Success
+  //     MySwal.fire({
+  //       icon: 'success',
+  //       title: 'Delivery added!',
+  //       text: 'The new delivery has been successfully added.',
+  //     });
+
+  //     // Reset modal inputs
+  //     setSelectedProduct(null);
+  //     setSelectedSupplier(null);
+  //     setSupplierPrice('');
+  //     setShopPrice('');
+  //     setQuantity('');
+
+  //     setIsAddNewModalOpen(false);
+  //     setIsModalOpen(false);
+  //     fetchDeliveries(); // refresh table
+  //   } catch (error) {
+  //     console.error("Error adding delivery:", error);
+  //     MySwal.fire({
+  //       icon: 'error',
+  //       title: 'Failed to add delivery.',
+  //       text: 'There was an issue adding the delivery. Please try again.',
+  //     });
+  //   }
+  // };
+
+  const handleAddDelivery = async (finalShopPrice) => {
     try {
       const payload = {
         productId: selectedProduct._id,
         supplierId: selectedSupplier._id,
         supplierPrice: parseFloat(supplierPrice),
-        shopPrice: parseFloat(shopPrice),
+        shopPrice: parseFloat(finalShopPrice), // Use the final shop price with VAT if applicable
         quantity: parseInt(quantity),
         totalCost: parseFloat(supplierPrice) * parseInt(quantity),
-        addedAt: new Date()
+        addedAt: new Date(),
       };
-      await axios.post('http://localhost:3000/api/add-delivery', payload);
-      alert("Delivery added!");
+
+      await axios.post('http://localhost:3000/api/admin-add-delivery', payload);
+      // SweetAlert Success
+      MySwal.fire({
+        icon: 'success',
+        title: 'Delivery added!',
+        text: 'The new delivery has been successfully added.',
+      });
 
       // Reset modal inputs
       setSelectedProduct(null);
@@ -110,24 +180,18 @@ const AdminDelivery = () => {
       fetchDeliveries(); // refresh table
     } catch (error) {
       console.error("Error adding delivery:", error);
-      alert("Failed to add delivery.");
+      MySwal.fire({
+        icon: 'error',
+        title: 'Failed to add delivery.',
+        text: 'There was an issue adding the delivery. Please try again.',
+      });
     }
   };
 
-  // const handleSetAsDelivered = async (deliveryId) => {
-  //   try {
-  //     await axios.post(`http://localhost:3000/api/set-as-delivered/${deliveryId}`);
-  //     alert("Product moved to stock!");
-  //     fetchDeliveries(); // Refresh the table
-  //     setRefreshHistory(prev => !prev); // trigger re-fetch in DeliveryHistory
-  //   } catch (error) {
-  //     console.error("Failed to set as delivered:", error);
-  //     alert("Failed to move product to stock.");
-  //   }
-  // };
+
   const handleSetAsDelivered = async (deliveryId) => {
     try {
-      const response = await axios.post(`http://localhost:3000/api/set-as-delivered/${deliveryId}`);
+      const response = await axios.post(`http://localhost:3000/api/admin-set-as-delivered/${deliveryId}`);
       alert(response.data.message);
       fetchDeliveries(); // Refresh the table
       setRefreshHistory(prev => !prev); // trigger re-fetch in DeliveryHistory
@@ -136,7 +200,7 @@ const AdminDelivery = () => {
       alert("Failed to move product to stock.");
     }
   };
-  
+
 
   const handleRestockSuccess = () => {
     setShowRestockModal(false);
@@ -209,8 +273,8 @@ const AdminDelivery = () => {
     <div className={`flex flex-row-reverse max-md:flex-row w-full`}>
       <div className='flex flex-col flex-1 h-screen'>
         <Header toggleNav={toggleNav} />
-
-        <div className='flex-1 overflow-auto mt-14 bg-[#EFEFEF] p-6 w-full'>
+        <MobileAdminNavbar isOpen={isMobileNavOpen} onClose={() => setIsMobileNavOpen(false)} />
+        <div className='flex-1 overflow-auto mt-14 bg-[#EFEFEF] py-2 md:p-6 w-full'>
           <div className="mb-6 p-4 bg-white rounded-xl shadow-sm border border-gray-200 xl:w-1/3 w-full max-w-md flex items-center gap-4">
             <div className="p-3 bg-blue-100 rounded-full">
               <FaMoneyBillWave className="text-blue-600 text-2xl" />
@@ -241,7 +305,7 @@ const AdminDelivery = () => {
             />
           </div>
 
-          <div className="">
+          <div className='max-md:w-[100vw] bg-white mt-2 rounded-xl max-md:overflow-x-auto max-md:whitespace-nowrap'>
             <Table
               dataSource={deliveries}
               rowKey="_id"
@@ -263,7 +327,16 @@ const AdminDelivery = () => {
           {/* Modal for Add New / Restock */}
           {isModalOpen && (
             <div className="fixed inset-0 flex justify-center items-center z-50">
-              <div className="bg-white p-6 rounded-lg w-full max-w-md border-[1px] border-gray-400">
+              <div className="relative bg-white p-6 rounded-lg w-full max-w-md border border-gray-400">
+
+                {/* Close Button */}
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="absolute top-2 right-3 text-gray-600 hover:text-black text-xl font-bold cursor-pointer"
+                >
+                  &times;
+                </button>
+
                 <h2 className="text-xl font-bold mb-4">Select Action</h2>
                 <div className="flex gap-4 justify-center">
                   <button
@@ -271,23 +344,23 @@ const AdminDelivery = () => {
                       setIsAddNewModalOpen(true);
                       setIsModalOpen(false);
                     }}
-                    className="px-4 py-2 bg-blue-600 text-white rounded cursor-pointer">
+                    className="px-4 py-2 bg-blue-600 text-white rounded cursor-pointer"
+                  >
                     Add New
                   </button>
                   <button
-                    type="primary"
                     onClick={() => {
-                      setShowRestockModal(true)
+                      setShowRestockModal(true);
                       setIsModalOpen(false);
                     }}
-                    className="px-4 py-2 bg-green-600 text-white rounded cursor-pointer">
+                    className="px-4 py-2 bg-green-600 text-white rounded cursor-pointer"
+                  >
                     Restock
                   </button>
                 </div>
               </div>
             </div>
           )}
-
           {/* Use the AddDeliveryModal component */}
           {isAddNewModalOpen && (
             <AddDeliveryModal
@@ -306,6 +379,9 @@ const AdminDelivery = () => {
               setShopPrice={setShopPrice}
               quantity={quantity}
               setQuantity={setQuantity}
+              vatPercentage={vatPercentage} // <-- pass VAT
+              isVatApplied={isVatApplied} // <-- pass the VAT status
+              setIsVatApplied={setIsVatApplied} // <-- pass setter to update VAT status
             />
           )}
 
@@ -314,6 +390,7 @@ const AdminDelivery = () => {
             onCancel={() => setShowRestockModal(false)}
             onRestockSuccess={handleRestockSuccess}
             refresh={fetchDeliveries()}
+            restockAPI="api/admin-restocks"
           />
         </div>
       </div>

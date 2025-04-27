@@ -1,8 +1,9 @@
+
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Tooltip from './Tooltip';
 
-const NavItem = ({ isNavCollapsed, icon, iconHovered, tooltipText, link, onClick }) => {
+const StaffNavItem = ({ isNavCollapsed, icon, iconHovered, tooltipText, link, onClick }) => {
   const [isHovered, setIsHovered] = useState(false);
   const location = useLocation();
   const isActive = location.pathname === link; // Check if current route matches the link
@@ -21,12 +22,9 @@ const NavItem = ({ isNavCollapsed, icon, iconHovered, tooltipText, link, onClick
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
-          <img
-            src={isHovered || isActive ? iconHovered : icon}
-            alt={`${tooltipText} Icon`}
-            width={18}
-            height={18}
-          />
+          <div className="text-xl">
+            {isHovered || isActive ? iconHovered : icon}
+          </div>
           {!isNavCollapsed && <p className="text-sm ml-3 truncate max-w-[110px]">{tooltipText}</p>}
         </div>
       </a>
@@ -37,4 +35,4 @@ const NavItem = ({ isNavCollapsed, icon, iconHovered, tooltipText, link, onClick
   );
 };
 
-export default NavItem;
+export default StaffNavItem;

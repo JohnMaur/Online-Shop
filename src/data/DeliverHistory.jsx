@@ -81,13 +81,16 @@ const DeliveryHistory = ({ refresh, setTotalDeliveredCost }) => {
   return (
     <div className="mt-10">
       <p className="text-2xl font-semibold mb-4">Delivery History</p>
-      <Table
-        dataSource={deliveryHistory}
-        rowKey="_id"
-        columns={historyColumns}
-        pagination={{ pageSize: 5 }}
-        className="bg-white rounded-lg shadow"
-      />
+      <div className='max-md:w-[100vw] bg-white mt-2 rounded-xl max-md:overflow-x-auto whitespace-nowrap'>
+        <Table
+          dataSource={deliveryHistory}
+          rowKey="_id"
+          columns={historyColumns}
+          pagination={{ pageSize: 5 }}
+          className="bg-white rounded-lg shadow"
+        />
+      </div>
+
     </div>
   );
 };

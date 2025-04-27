@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import axios from "axios";
-import { add } from "../assets/icons"; // Image for the placeholder
-import { firebase } from "../firebaseConfig";
+import { add } from "../../assets/icons"; // Image for the placeholder
+import { firebase } from "../../firebaseConfig";
 
-const Modal = ({ isOpen, onClose, staffUsername, refreshProducts }) => {
+const AdminAddingNewProduct = ({ isOpen, onClose, staffUsername, refreshProducts }) => {
   if (!isOpen) return null;
 
   const [productData, setProductData] = useState([]);
@@ -113,7 +113,7 @@ const Modal = ({ isOpen, onClose, staffUsername, refreshProducts }) => {
 
       console.log("Payload to send:", newProduct);
 
-      const response = await axios.post("http://localhost:3000/api/add-product", newProduct);
+      const response = await axios.post("http://localhost:3000/api/admin-add-product", newProduct);
       alert(response.data.message);
 
       refreshProducts();
@@ -167,7 +167,7 @@ const Modal = ({ isOpen, onClose, staffUsername, refreshProducts }) => {
         <label className="block text-sm font-medium my-2">Color</label>
         <Select options={colorOptions} value={color} onChange={setColor} />
 
-        <div className="flex justify-end gap-2 mt-5">
+        <div className="flex justify-end gap-2">
           <button onClick={onClose} className="px-4 py-2 bg-gray-300 rounded cursor-pointer">Cancel</button>
           <button onClick={handleSave} className="px-4 py-2 bg-blue-500 text-white rounded cursor-pointer">{loading ? "Adding..." : "Add"}</button>
         </div>
@@ -176,4 +176,4 @@ const Modal = ({ isOpen, onClose, staffUsername, refreshProducts }) => {
   );
 };
 
-export default Modal;
+export default AdminAddingNewProduct;

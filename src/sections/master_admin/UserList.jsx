@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Spin, Alert, Button, Modal, Input } from 'antd'; // Added Modal, Input components
-import { NavigationBar, Header } from "../layout";
+import { NavigationBar, Header, MobileAdminNavbar } from "../layout";
 
 const UserList = () => {
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [userList, setUserList] = useState([]);
   const [loading, setLoading] = useState(false); // Track loading state
   const [error, setError] = useState(null); // Track error state
@@ -11,7 +12,11 @@ const UserList = () => {
   const [formValues, setFormValues] = useState({}); // Form data for editing
 
   const toggleNav = () => {
-    setIsNavCollapsed(!isNavCollapsed);
+    if (window.innerWidth <= 768) {
+      setIsMobileNavOpen(!isMobileNavOpen);
+    } else {
+      setIsNavCollapsed(!isNavCollapsed);
+    }
   };
 
   const fetchUserList = async () => {
@@ -157,7 +162,7 @@ const UserList = () => {
     <div className={`flex flex-row-reverse max-md:flex-row w-full`}>
       <div className='flex flex-col flex-1 h-screen'>
         <Header toggleNav={toggleNav} />
-
+        <MobileAdminNavbar isOpen={isMobileNavOpen} onClose={() => setIsMobileNavOpen(false)} />
         <div className={`flex-1 overflow-auto mt-14 bg-[#EFEFEF] p-6`}>
           <h2 className="text-xl font-bold mb-4">User List</h2>
 
@@ -173,7 +178,7 @@ const UserList = () => {
             // Display a message if no users are available
             <p>No users found.</p>
           ) : (
-            <div className='bg-white rounded-xl'>
+            <div className='max-md:w-[100vw] bg-white mt-2 rounded-xl max-md:overflow-x-auto max-md:whitespace-nowrap'>
               <Table dataSource={userList} columns={columns} rowKey="username" pagination={{ pageSize: 5 }} />
             </div>
           )}

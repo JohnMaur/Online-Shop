@@ -1,41 +1,3 @@
-// import React, { useState } from 'react';
-// import { StaffNavBar, Header } from "../layout"
-
-// const StaffReceiving = () => {
-//   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
-//   const [staffUsername, setStaffUsername] = useState("");
-
-//   const toggleNav = () => {
-//     setIsNavCollapsed(!isNavCollapsed);
-//   };
-
-//   return (
-//     <div className={`flex flex-row-reverse max-md:flex-row w-full`}>
-//       <div className='flex flex-col flex-1 h-screen'>
-//         <Header
-//           toggleNav={toggleNav}
-//         />
-
-//         <div className={`flex-1 overflow-auto mt-14 bg-[#EFEFEF]`}>
-//           {/* Your content here */}
-//           <p>Staff Receiving</p>
-//         </div>
-//       </div>
-
-//       <nav className={`max-md:hidden ${isNavCollapsed ? "w-20" : "w-56"} transition-width duration-300`}>
-//         <StaffNavBar
-//           isNavCollapsed={isNavCollapsed}
-//           setStaffUsername={setStaffUsername}
-//         />
-//       </nav>
-
-//     </div>
-//   )
-// }
-
-// export default StaffReceiving
-
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
@@ -54,13 +16,12 @@ import {
 } from "@chakra-ui/react";
 import { WarningIcon } from '@chakra-ui/icons';
 import { CustomButton, CancelOrderModal } from '../../components';
-import { StaffNavBar, Header, MobileStaffNavbar } from "../layout";
+import { NavigationBar, Header, MobileAdminNavbar } from "../layout"
 import dayjs from 'dayjs';
 
-const StaffReceiving = () => {
+const AdminToReceive = () => {
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
-  const [staffUsername, setStaffUsername] = useState("");
   const [receivingData, setReceivingData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadingOrderId, setLoadingOrderId] = useState(null);
@@ -131,7 +92,6 @@ const StaffReceiving = () => {
     try {
       await axios.post(`http://localhost:3000/api/mark-received/${orderId}`, {
         orderReceivedDate,
-        staffUsername,
       });
       setReceivingData((prev) => prev.filter(order => order._id !== orderId));
       toast({
@@ -167,8 +127,7 @@ const StaffReceiving = () => {
     try {
       console.log("Sending cancel request to API...");
       await axios.post(`http://localhost:3000/api/cancel-order/${selectedOrderId}`, {
-        canceledReason: reason,
-        staffUsername,
+        canceledReason: reason
       });
 
       setReceivingData(prev => prev.filter(order => order._id !== selectedOrderId));
@@ -204,13 +163,13 @@ const StaffReceiving = () => {
         display={{ base: 'none', md: 'block' }}
       >
         <nav className={`max-md:hidden ${isNavCollapsed ? "w-20" : "w-56"} transition-width duration-300`}>
-          <StaffNavBar isNavCollapsed={isNavCollapsed} setStaffUsername={setStaffUsername} />
+          <NavigationBar isNavCollapsed={isNavCollapsed}/>
         </nav>
       </Box>
 
       <Box className='h-[100vh] overflow-auto' flex="1" h="full" bg={useColorModeValue("gray.50", "gray.900")}>
         <Header toggleNav={toggleNav} />
-        <MobileStaffNavbar isOpen={isMobileNavOpen} onClose={() => setIsMobileNavOpen(false)} />
+        <MobileAdminNavbar isOpen={isMobileNavOpen} onClose={() => setIsMobileNavOpen(false)} />
         <Box px={6} pt={65} pb={10}>
           <Text fontSize="3xl" fontWeight="bold" mb={6}>
             Receiving Orders
@@ -332,4 +291,5 @@ const StaffReceiving = () => {
   );
 };
 
-export default StaffReceiving;
+export default AdminToReceive
+

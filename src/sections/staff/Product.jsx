@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { StaffNavBar, Header } from "../layout";
+import { StaffNavBar, Header, MobileStaffNavbar } from "../layout";
 import { CustomButton, Modal, UpdateProduct, ConfirmModal } from '../../components';
 
 const StaffProduct = () => {
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [staffUsername, setStaffUsername] = useState("");
   const [products, setProducts] = useState([]);
@@ -17,7 +18,7 @@ const StaffProduct = () => {
       console.warn("Staff is empty. Skipping fetch.");
       return; // Stop execution if staffUsername is empty
     }
-    
+
     try {
       const response = await fetch('http://localhost:3000/api/products'); // Adjust URL as needed
       const data = await response.json();
@@ -42,12 +43,37 @@ const StaffProduct = () => {
     }
   }, [isUpdateModalOpen]);
 
+  // const deleteProduct = async () => {
+  //   if (!productToDelete) return;
+
+  //   try {
+  //     const response = await fetch(`http://localhost:3000/api/delete-product/${productToDelete._id}`, {
+  //       method: "DELETE",
+  //     });
+
+  //     if (response.ok) {
+  //       fetchProducts(); // Refresh product list
+  //     } else {
+  //       alert("Failed to delete product.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error deleting product:", error);
+  //     alert("An error occurred while deleting the product.");
+  //   }
+
+  //   setIsConfirmModalOpen(false);
+  //   setProductToDelete(null);
+  // };
   const deleteProduct = async () => {
     if (!productToDelete) return;
 
     try {
       const response = await fetch(`http://localhost:3000/api/delete-product/${productToDelete._id}`, {
         method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ staffUsername })  // Send staffUsername in the request body
       });
 
       if (response.ok) {
@@ -65,7 +91,11 @@ const StaffProduct = () => {
   };
 
   const toggleNav = () => {
-    setIsNavCollapsed(!isNavCollapsed);
+    if (window.innerWidth <= 768) {
+      setIsMobileNavOpen(!isMobileNavOpen);
+    } else {
+      setIsNavCollapsed(!isNavCollapsed);
+    }
   };
 
   const openUpdateModal = (product) => {
@@ -77,6 +107,7 @@ const StaffProduct = () => {
     <div className="flex flex-row-reverse max-md:flex-row w-full">
       <div className="flex flex-col flex-1 h-screen">
         <Header toggleNav={toggleNav} />
+        <MobileStaffNavbar isOpen={isMobileNavOpen} onClose={() => setIsMobileNavOpen(false)} />
         <div className="w-full flex-1 overflow-auto mt-14 bg-[#EFEFEF]">
           <div className="w-11/12 lg:w-5/12 xl:w-1/3 m-4">
             <CustomButton
@@ -98,7 +129,8 @@ const StaffProduct = () => {
                   alt={product.productName}
                   className="w-full h-48 object-contain rounded-lg"
                 />
-                <p className="font-semibold mt-2">Product Name: {product.productName}</p>
+                <p className="font-semibold mt-2">Brand: {product.brand}</p>
+                <p>Product Name: {product.productName}</p>
                 <p>Color: {product.color}</p>
                 <div className='flex justify-end space-x-2'>
                   <div className='w-28'>
@@ -148,6 +180,8 @@ const StaffProduct = () => {
         onClose={() => setIsUpdateModalOpen(false)}
         product={selectedProduct}
         refreshProducts={fetchProducts}
+        staffUsername={staffUsername}
+        editableApi="api/update-product"
       />
 
       <ConfirmModal

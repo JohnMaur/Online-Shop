@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { StaffNavBar, Header } from "../layout";
+import { StaffNavBar, Header, MobileStaffNavbar } from "../layout";
 import { ConfirmModal, CustomButton } from '../../components';
 import { Table, Button, Modal, Form, message, Select } from 'antd';
 import axios from 'axios';
 
 const ItemSettings = () => {
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [staffUsername, setStaffUsername] = useState("");
   const [productData, setProductData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,15 +29,36 @@ const ItemSettings = () => {
     }
   };
 
+  // const handleAddOrEdit = async (values) => {
+  //   try {
+  //     if (editingProduct) {
+  //       await axios.put(`http://localhost:3000/api/product-maintenance/${editingProduct._id}`, values);
+  //       message.success("Product updated successfully");
+  //     } else {
+  //       await axios.post('http://localhost:3000/api/product-maintenance', values);
+  //       message.success("Product added successfully");
+  //     }
+  //     setIsModalOpen(false);
+  //     fetchProductData();
+  //     form.resetFields();
+  //     setEditingProduct(null);
+  //   } catch (error) {
+  //     message.error("Operation failed");
+  //   }
+  // };
+
   const handleAddOrEdit = async (values) => {
     try {
+      const payload = { ...values, staffUsername };
+
       if (editingProduct) {
-        await axios.put(`http://localhost:3000/api/product-maintenance/${editingProduct._id}`, values);
+        await axios.put(`http://localhost:3000/api/product-maintenance/${editingProduct._id}`, payload);
         message.success("Product updated successfully");
       } else {
-        await axios.post('http://localhost:3000/api/product-maintenance', values);
+        await axios.post('http://localhost:3000/api/product-maintenance', payload);
         message.success("Product added successfully");
       }
+
       setIsModalOpen(false);
       fetchProductData();
       form.resetFields();
@@ -51,9 +73,24 @@ const ItemSettings = () => {
     setIsConfirmOpen(true);
   };
 
+  // const handleDelete = async () => {
+  //   try {
+  //     await axios.delete(`http://localhost:3000/api/product-maintenance/${selectedProductId}`);
+  //     message.success("Product deleted successfully");
+  //     fetchProductData();
+  //   } catch (error) {
+  //     message.error("Delete failed");
+  //   } finally {
+  //     setIsConfirmOpen(false);
+  //     setSelectedProductId(null);
+  //   }
+  // };
+
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:3000/api/product-maintenance/${selectedProductId}`);
+      await axios.delete(`http://localhost:3000/api/product-maintenance/${selectedProductId}`, {
+        data: { staffUsername }  // pass staffUsername for audit log
+      });
       message.success("Product deleted successfully");
       fetchProductData();
     } catch (error) {
@@ -63,6 +100,7 @@ const ItemSettings = () => {
       setSelectedProductId(null);
     }
   };
+
 
   const columns = [
     {
@@ -110,10 +148,21 @@ const ItemSettings = () => {
     },
   ];
 
+  const toggleNav = () => {
+    if (window.innerWidth <= 768) {
+      setIsMobileNavOpen(!isMobileNavOpen);
+    } else {
+      setIsNavCollapsed(!isNavCollapsed);
+    }
+  };
+
   return (
     <div className={`flex flex-row-reverse max-md:flex-row w-full`}>
       <div className='flex flex-col flex-1 h-screen'>
-        <Header toggleNav={() => setIsNavCollapsed(!isNavCollapsed)} />
+        <Header
+          toggleNav={toggleNav}
+        />
+        <MobileStaffNavbar isOpen={isMobileNavOpen} onClose={() => setIsMobileNavOpen(false)} />
         <div className='flex-1 overflow-auto mt-14 bg-[#EFEFEF] md:p-4'>
           <div className='w-1/3 mb-5 max-md:w-full'>
             <CustomButton
@@ -123,7 +172,7 @@ const ItemSettings = () => {
               hoverButton="hover:bg-[#454545]"
               onClick={() => { setIsModalOpen(true); form.resetFields(); setEditingProduct(null); }}
             />
-          </div>
+          </div> 
           {/* <Button type="primary" onClick={() => { setIsModalOpen(true); form.resetFields(); setEditingProduct(null); }}>Add New</Button> */}
           <div className='max-md:w-[100vw] bg-white mt-2 rounded-xl max-md:overflow-x-auto whitespace-nowrap'>
             <Table dataSource={productData} columns={columns} rowKey="_id" className="mt-4" />

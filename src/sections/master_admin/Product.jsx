@@ -1,15 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { NavigationBar, Header } from "../layout";
-import { CustomButton, UpdateProduct, ConfirmModal, Modal } from '../../components';
+import { NavigationBar, Header, MobileAdminNavbar } from "../layout";
+import { CustomButton, UpdateProduct, ConfirmModal, Modal, AdminAddingNewProduct } from '../../components';
 
 const Product = () => {
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [products, setProducts] = useState([]);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
+
+  const toggleNav = () => {
+    if (window.innerWidth <= 768) {
+      setIsMobileNavOpen(!isMobileNavOpen);
+    } else {
+      setIsNavCollapsed(!isNavCollapsed);
+    }
+  };
 
   const fetchProducts = async () => {
     try {
@@ -32,7 +41,7 @@ const Product = () => {
     if (!productToDelete) return;
 
     try {
-      const response = await fetch(`http://localhost:3000/api/delete-product/${productToDelete._id}`, {
+      const response = await fetch(`http://localhost:3000/api/admin-delete-product/${productToDelete._id}`, {
         method: "DELETE",
       });
 
@@ -50,10 +59,6 @@ const Product = () => {
     setProductToDelete(null);
   };
 
-  const toggleNav = () => {
-    setIsNavCollapsed(!isNavCollapsed);
-  };
-
   const openUpdateModal = (product) => {
     setSelectedProduct(product);
     setIsUpdateModalOpen(true);
@@ -63,6 +68,7 @@ const Product = () => {
     <div className="flex flex-row-reverse max-md:flex-row w-full">
       <div className="flex flex-col flex-1 h-screen">
         <Header toggleNav={toggleNav} />
+        <MobileAdminNavbar isOpen={isMobileNavOpen} onClose={() => setIsMobileNavOpen(false)} />
         <div className="w-full flex-1 overflow-auto mt-14 bg-[#EFEFEF]">
           <div className="w-11/12 lg:w-5/12 xl:w-1/3 m-4">
             <CustomButton
@@ -121,7 +127,7 @@ const Product = () => {
         />
       </nav>
 
-      <Modal
+      <AdminAddingNewProduct
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         refreshProducts={fetchProducts}
@@ -132,6 +138,7 @@ const Product = () => {
         onClose={() => setIsUpdateModalOpen(false)}
         product={selectedProduct}
         refreshProducts={fetchProducts}
+        editableApi="api/admin-update-product"
       />
 
       <ConfirmModal

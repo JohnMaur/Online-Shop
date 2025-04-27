@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Spin, Alert, Button, Modal, Input } from 'antd';
-import { NavigationBar, Header } from "../layout";
+import { NavigationBar, Header, MobileAdminNavbar } from "../layout";
 
 const StaffList = () => {
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [staffList, setStaffList] = useState([]);
   const [loading, setLoading] = useState(false); // Track loading state
   const [error, setError] = useState(null); // Track error state
@@ -11,7 +12,11 @@ const StaffList = () => {
   const [formValues, setFormValues] = useState({}); // Form data for editing
 
   const toggleNav = () => {
-    setIsNavCollapsed(!isNavCollapsed);
+    if (window.innerWidth <= 768) {
+      setIsMobileNavOpen(!isMobileNavOpen);
+    } else {
+      setIsNavCollapsed(!isNavCollapsed);
+    }
   };
 
   // Fetch staff list on page load
@@ -168,11 +173,11 @@ const StaffList = () => {
     <div className={`flex flex-row-reverse max-md:flex-row w-full`}>
       <div className="flex flex-col flex-1 h-screen">
         <Header toggleNav={toggleNav} />
-
+        <MobileAdminNavbar isOpen={isMobileNavOpen} onClose={() => setIsMobileNavOpen(false)} />
         <div className={`flex-1 overflow-auto mt-14 bg-[#EFEFEF] p-6`}>
           <h2 className="text-xl font-bold mb-4">Staff List</h2>
 
-          {loading ? (
+          {/* {loading ? (
             <div className="flex justify-center">
               <Spin size="large" />
             </div>
@@ -181,10 +186,26 @@ const StaffList = () => {
           ) : staffList.length === 0 ? (
             <p>No staff found.</p>
           ) : (
-            <div className='bg-white rounded-xl'>
+            <div className='max-md:w-[100vw] bg-white mt-2 rounded-xl max-md:overflow-x-auto max-md:whitespace-nowrap'>
+              <Table dataSource={staffList} columns={columns} rowKey="username" pagination={{ pageSize: 5 }} />
+            </div>
+          )} */}
+          {loading ? (
+            <div className="flex justify-center">
+              <Spin size="large" />
+            </div>
+          ) : error ? (
+            <Alert message={`Error: ${error}`} type="error" showIcon />
+          ) : staffList.length === 0 ? (
+            <div className="flex justify-center items-center h-40">
+              <p className="text-gray-500 text-lg">No staff found.</p>
+            </div>
+          ) : (
+            <div className='max-md:w-[100vw] bg-white mt-2 rounded-xl max-md:overflow-x-auto max-md:whitespace-nowrap'>
               <Table dataSource={staffList} columns={columns} rowKey="username" pagination={{ pageSize: 5 }} />
             </div>
           )}
+
         </div>
       </div>
 

@@ -2,21 +2,36 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Form, Select, InputNumber, Button, message } from 'antd';
 import axios from 'axios';
 
-const RestockModal = ({ visible, onCancel, onRestockSuccess, refresh }) => {
+const RestockModal = ({ visible, onCancel, onRestockSuccess, refresh, restockAPI, staffUsername }) => {
   const [form] = Form.useForm();
   const [stocks, setStocks] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [selectedStock, setSelectedStock] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [vat, setVat] = useState(0);
+  const [isVatEnabled, setIsVatEnabled] = useState(false); // You can control this based on admin settings
 
   useEffect(() => {
     if (visible) {
       fetchStocks();
       fetchSuppliers();
+      fetchVAT();
       form.resetFields();
       setSelectedStock(null);
     }
   }, [visible]);
+
+  const fetchVAT = async () => {
+    try {
+      const res = await axios.get('http://localhost:3000/api/admin/vat');
+      if (res.data && res.data.value) {
+        setVat(res.data.value);
+        setIsVatEnabled(true); // or however your backend indicates it's enabled
+      }
+    } catch (err) {
+      console.error('Failed to fetch VAT:', err);
+    }
+  };
 
   const fetchStocks = async () => {
     const response = await axios.get('http://localhost:3000/api/stocks');
@@ -28,20 +43,53 @@ const RestockModal = ({ visible, onCancel, onRestockSuccess, refresh }) => {
     setSuppliers(Array.isArray(response.data) ? response.data : []);
   };
 
+  // const handleRestock = async (values) => {
+  //   try {
+  //     setLoading(true);
+  //     const { stockId, supplierId, supplierPrice, shopPrice, quantity } = values;
+
+  //     // Make the API request to restock
+  //     await axios.post(`http://localhost:3000/${restockAPI}`, {
+  //       stockId,
+  //       supplierId,
+  //       supplierPrice: parseFloat(supplierPrice),
+  //       shopPrice: parseFloat(shopPrice),
+  //       quantity: parseInt(quantity),
+  //       staffUsername: staffUsername || null,
+  //     });
+
+  //     message.success('Restocked successfully!');
+  //     onRestockSuccess();
+  //     form.resetFields();
+  //     onCancel();
+  //   } catch (error) {
+  //     message.error('Failed to restock');
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const handleRestock = async (values) => {
     try {
       setLoading(true);
       const { stockId, supplierId, supplierPrice, shopPrice, quantity } = values;
-  
-      // Make the API request to restock
-      await axios.post('http://localhost:3000/api/restocks', {
+
+      let finalShopPrice = parseFloat(shopPrice);
+
+      if (isVatEnabled) {
+        const vatAmount = finalShopPrice * (vat / 100);
+        finalShopPrice += vatAmount;
+      }
+
+      await axios.post(`http://localhost:3000/${restockAPI}`, {
         stockId,
         supplierId,
         supplierPrice: parseFloat(supplierPrice),
-        shopPrice: parseFloat(shopPrice),
+        shopPrice: parseFloat(finalShopPrice.toFixed(2)), // now includes VAT
         quantity: parseInt(quantity),
+        staffUsername: staffUsername || null,
       });
-  
+
       message.success('Restocked successfully!');
       onRestockSuccess();
       form.resetFields();
@@ -51,7 +99,7 @@ const RestockModal = ({ visible, onCancel, onRestockSuccess, refresh }) => {
     } finally {
       setLoading(false);
     }
-  };  
+  };
 
   return (
     <Modal
@@ -99,7 +147,7 @@ const RestockModal = ({ visible, onCancel, onRestockSuccess, refresh }) => {
           </Select>
         </Form.Item>
 
-        <Form.Item name="supplierPrice" label="Supplier Price" rules={[{ required: true }]}>
+        {/* <Form.Item name="supplierPrice" label="Supplier Price" rules={[{ required: true }]}>
           <InputNumber min={0} step={0.01} style={{ width: '100%' }} prefix="₱" />
         </Form.Item>
 
@@ -109,6 +157,79 @@ const RestockModal = ({ visible, onCancel, onRestockSuccess, refresh }) => {
 
         <Form.Item name="quantity" label="Quantity" rules={[{ required: true }]}>
           <InputNumber min={1} style={{ width: '100%' }} />
+        </Form.Item> */}
+
+        <Form.Item name="supplierPrice" label="Supplier Price" rules={[{ required: true }]}>
+          <InputNumber
+            min={0}
+            step={0.01}
+            style={{ width: '100%' }}
+            prefix="₱"
+            onKeyPress={(e) => {
+              const allowedChars = /[0-9.]/
+              if (!allowedChars.test(e.key)) {
+                e.preventDefault();
+              }
+            }}
+            parser={(value) => value.replace(/[^\d.]/g, '')}
+            formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          />
+        </Form.Item>
+
+        <Form.Item
+          name="shopPrice"
+          label="Shop Price"
+          rules={[
+            { required: true, message: 'Please enter shop price' },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                const supplierPrice = getFieldValue('supplierPrice');
+                if (value >= supplierPrice) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error('Shop price must be equal to or greater than supplier price'));
+              },
+            }),
+          ]}
+        >
+          <InputNumber
+            min={0}
+            step={0.01}
+            style={{ width: '100%' }}
+            prefix="₱"
+            onKeyPress={(e) => {
+              const allowedChars = /[0-9.]/
+              if (!allowedChars.test(e.key)) {
+                e.preventDefault();
+              }
+            }}
+            parser={(value) => value.replace(/[^\d.]/g, '')}
+            formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          />
+        </Form.Item>
+
+        {isVatEnabled && form.getFieldValue('shopPrice') && (
+          <div className="text-xs text-gray-500 mb-2">
+            Final Price with VAT ({vat}%): ₱
+            {(
+              parseFloat(form.getFieldValue('shopPrice')) +
+              (parseFloat(form.getFieldValue('shopPrice')) * (vat / 100))
+            ).toFixed(2)}
+          </div>
+        )}
+
+        <Form.Item name="quantity" label="Quantity" rules={[{ required: true }]}>
+          <InputNumber
+            min={1}
+            style={{ width: '100%' }}
+            onKeyPress={(e) => {
+              const allowedChars = /[0-9]/
+              if (!allowedChars.test(e.key)) {
+                e.preventDefault();
+              }
+            }}
+            parser={(value) => value.replace(/[^\d]/g, '')}
+          />
         </Form.Item>
 
         <Form.Item>

@@ -25,6 +25,11 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!username.trim() || !password.trim() || !confirmPassword.trim()) {
+      openModal('error', 'All fields are required.');
+      return;
+    }
+
     if (password !== confirmPassword) {
       const errorMessage = 'Passwords do not match.';
       openModal('error', errorMessage); // Show error modal
@@ -72,36 +77,83 @@ const SignUp = () => {
 
         <form className="w-full" onSubmit={handleSubmit}>
           {/* Name Input */}
-          <TextInput
+          {/* <TextInput
             label="Username"
             placeholder="Username"
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+          /> */}
+
+          <TextInput
+            label="Username"
+            placeholder="Username"
+            type="text"
+            value={username}
+            maxLength={25}
+            onChange={(e) => {
+              if (e.target.value.length <= 25) {
+                setUsername(e.target.value);
+              }
+            }}
           />
+          {username.length >= 25 && (
+            <p className="text-red-500 text-sm mt-1">Maximum of 25 characters reached</p>
+          )}
 
           {/* Password Input */}
-          <TextInput
+          {/* <TextInput
             label="Password"
             placeholder="Password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+          /> */}
+          <TextInput
+            label="Password"
+            placeholder="Password"
+            type="password"
+            value={password}
+            maxLength={25}
+            onChange={(e) => {
+              if (e.target.value.length <= 25) {
+                setPassword(e.target.value);
+              }
+            }}
           />
+          {password.length >= 25 && (
+            <p className="text-red-500 text-sm mt-1">Maximum of 25 characters reached</p>
+          )}
 
           {/* Confirm Password Input */}
-          <TextInput
+          {/* <TextInput
             label="Confirm Password"
             placeholder="Confirm Password"
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
+          /> */}
+          <TextInput
+            label="Confirm Password"
+            placeholder="Confirm Password"
+            type="password"
+            value={confirmPassword}
+            maxLength={25}
+            onChange={(e) => {
+              if (e.target.value.length <= 25) {
+                setConfirmPassword(e.target.value);
+              }
+            }}
           />
+          {confirmPassword.length >= 25 && (
+            <p className="text-red-500 text-sm mt-1">Maximum of 25 characters reached</p>
+          )}
 
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full mt-3 bg-[#8699DA] text-white py-2 rounded-full hover:bg-[#798dce] cursor-pointer focus:outline-none"
+            className="w-full mt-3 bg-[#8699DA] text-white py-2 rounded-full hover:bg-[#798dce] cursor-pointer focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={!username || !password || !confirmPassword}
           >
             Sign Up
           </button>

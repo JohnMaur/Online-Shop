@@ -7,7 +7,7 @@
 //           {label}
 //         </label>
 //       )}
-      
+
 //       {/* Input */}
 //       <input
 //         type={type}
@@ -25,7 +25,7 @@
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react"; // Import icons
 
-const TextInput = ({ label, placeholder, type, value, onChange }) => {
+const TextInput = ({ label, placeholder, type, value, onChange, phoneNumber }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -39,13 +39,26 @@ const TextInput = ({ label, placeholder, type, value, onChange }) => {
 
       {/* Input with Eye Icon */}
       <div className="relative">
-        <input
-          type={type === "password" && !showPassword ? "password" : "text"}
-          placeholder={placeholder}
-          value={value} // Controlled input value
-          onChange={onChange} // Event handler for changes
-          className="w-full px-4 py-2 border-[1px] border-[#8699DA] rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10"
-        />
+        {phoneNumber ? (
+          <div className="flex items-center space-x-1">
+            <p>63+</p>
+            <input
+              type={type === "password" && !showPassword ? "password" : "text"}
+              placeholder={placeholder}
+              value={value} // Controlled input value
+              onChange={onChange} // Event handler for changes
+              className="w-full px-4 py-2 border-[1px] border-[#8699DA] rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10"
+            />
+          </div>
+        ) : (
+          <input
+            type={type === "password" && !showPassword ? "password" : "text"}
+            placeholder={placeholder}
+            value={value} // Controlled input value
+            onChange={onChange} // Event handler for changes
+            className="w-full px-4 py-2 border-[1px] border-[#8699DA] rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10"
+          />
+        )}
         {type === "password" && (
           <button
             type="button"

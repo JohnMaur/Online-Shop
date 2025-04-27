@@ -17,6 +17,11 @@ import AdminAddingSupplier from "./Modal/AdminAddingSupplier";
 import AddDeliveryModal from "./Modal/AddDeliveryModal";
 import UpdateStock from "./Modal/UpdateStocks";
 import RestockModal from "./Modal/RestockModal";
+import CancelOrderModal from "./Modal/CancelOrderModal";
+import ShippingCancelModal from "./Modal/ShippingCancelModal";
+import AdminAddingNewProduct from "./Modal/AdminAddingNewProduct";
+import Paypal from "./Paypal";
+import StaffNavItem from "./StaffNavItem";
 
 export {
   TextInput,
@@ -38,4 +43,9 @@ export {
   AddDeliveryModal,
   UpdateStock,
   RestockModal,
+  CancelOrderModal,
+  ShippingCancelModal,
+  AdminAddingNewProduct,
+  Paypal,
+  StaffNavItem,
 }

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { TextInput, Profile, ChangePasswordModal } from '../../components';
-import { UserNavBar, Header } from "../layout";
+import { UserNavBar, Header, MobileNavBar } from "../layout";
 import { Modal } from 'antd';
-
+ 
 const UserLandingPage = () => {
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
+  const [showMobileNav, setShowMobileNav] = useState(false);
   const [region, setRegion] = useState('');
   const [houseStreet, setHouseStreet] = useState('');
   const [recipientName, setRecipientName] = useState('');
@@ -29,6 +30,25 @@ const UserLandingPage = () => {
       setUsername(user.username);
       fetchAccountInfo(user.username);
     }
+  }, []);
+
+  const toggleNav = () => {
+    if (window.innerWidth <= 768) {
+      setShowMobileNav(prev => !prev);
+    } else {
+      setIsNavCollapsed(!isNavCollapsed);
+    }
+  };
+
+  // Close mobile nav on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768) {
+        setShowMobileNav(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const fetchAccountInfo = async (username) => {
@@ -97,14 +117,24 @@ const UserLandingPage = () => {
     setModalVisible(true);
   };
 
+  const showLimitReachedModal = (fieldName) => {
+    openModal("error", `${fieldName} can only have a maximum of ${fieldName === "Recipient's Name" ? "25" : "50"} characters.`);
+  };
+
   const handleCloseModal = () => {
     setModalVisible(false);
   };
-
+ 
   return (
     <div className="flex flex-row-reverse max-md:flex-row w-full">
       <div className="flex flex-col flex-1 h-screen">
-        <Header toggleNav={() => setIsNavCollapsed(!isNavCollapsed)} />
+        <Header toggleNav={toggleNav} />
+
+        {showMobileNav && (
+          <div className="md:hidden fixed top-14 left-0 w-full z-50 bg-white shadow-md">
+            <MobileNavBar />
+          </div>
+        )}
 
         <div className="flex-1 overflow-auto mt-14 bg-[#EFEFEF]">
           {region && houseStreet && recipientName && phoneNumber ? (
@@ -139,7 +169,7 @@ const UserLandingPage = () => {
           ) : null}
 
           <div
-            className={`flex flex-col justify-center h-[90vh] content-center w-5/12 mx-20 max-md:w-full max-md:mx-5 max-sm:mx-2 ${region && houseStreet && recipientName && phoneNumber ? "hidden" : ""
+            className={`flex flex-col justify-center h-[90vh] content-center w-5/12 max-md:w-full md:ml-10 ${region && houseStreet && recipientName && phoneNumber ? "hidden" : ""
               }`}
           >
             <div className="bg-white p-10 rounded-2xl">
@@ -148,11 +178,61 @@ const UserLandingPage = () => {
               </div>
 
               <form className="w-full" onSubmit={handleSave}>
-                <TextInput label="Region/City/District" placeholder="Metro Manila/Taguig City/Central Bicutan" value={tempRegion} onChange={(e) => setTempRegion(e.target.value)} />
-                <TextInput label="House No./Street" placeholder="BLK 144 LoT 19/Arago Street" type="text" value={tempHouseStreet} onChange={(e) => setTempHouseStreet(e.target.value)} />
-                <TextInput label="Recipient's Name" placeholder="John" value={tempRecipientName} onChange={(e) => setTempRecipientName(e.target.value)} />
-                <TextInput label="Phone Number" placeholder="09*********" type="text" value={tempPhoneNumber} onChange={(e) => setTempPhoneNumber(e.target.value)} />
+                {/* <TextInput label="Region/City/District" placeholder="Metro Manila/Taguig City/Central Bicutan" value={tempRegion} onChange={(e) => setTempRegion(e.target.value)} />
+                <TextInput label="House No./Street" placeholder="BLK 144 LoT 19/Arago Street" type="text" value={tempHouseStreet} onChange={(e) => setTempHouseStreet(e.target.value)} /> */}
+                <TextInput
+                  label="Region/City/District"
+                  placeholder="Metro Manila/Taguig City/Central Bicutan"
+                  value={tempRegion}
+                  onChange={(e) => {
+                    const input = e.target.value;
+                    if (input.length <= 50) {
+                      setTempRegion(input);
+                    } else {
+                      showLimitReachedModal("Region/City/District");
+                    }
+                  }}
+                />
 
+                <TextInput
+                  label="House No./Street"
+                  placeholder="BLK 144 LoT 19/Arago Street"
+                  value={tempHouseStreet}
+                  onChange={(e) => {
+                    const input = e.target.value;
+                    if (input.length <= 50) {
+                      setTempHouseStreet(input);
+                    } else {
+                      showLimitReachedModal("House No./Street");
+                    }
+                  }}
+                />
+                <TextInput
+                  label="Recipient's Name"
+                  placeholder="John"
+                  value={tempRecipientName}
+                  onChange={(e) => {
+                    const onlyLetters = e.target.value.replace(/[^a-zA-Z\s]/g, '');
+                    if (onlyLetters.length <= 25) {
+                      setTempRecipientName(onlyLetters);
+                    } else {
+                      showLimitReachedModal("Recipient's Name");
+                    }
+                  }}
+                />
+                <TextInput
+                  label="Phone Number"
+                  placeholder="9123456789"
+                  type="text"
+                  value={tempPhoneNumber}
+                  onChange={(e) => {
+                    const onlyDigits = e.target.value.replace(/\D/g, '');
+                    if (onlyDigits.length <= 10) {
+                      setTempPhoneNumber(onlyDigits);
+                    }
+                  }}
+                  phoneNumber={1}
+                />
                 <button
                   type="submit"
                   className="w-full mt-3 bg-[#8699DA] text-white py-2 rounded-full hover:bg-[#798dce] cursor-pointer focus:outline-none"
