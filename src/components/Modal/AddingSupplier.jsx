@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Input, Button, Form, Alert } from 'antd';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+const MySwal = withReactContent(Swal);
 
 const SupplierModal = ({ isOpen, onClose, refreshSuppliers, staffUsername }) => {
   const [formData, setFormData] = useState({
@@ -12,7 +16,7 @@ const SupplierModal = ({ isOpen, onClose, refreshSuppliers, staffUsername }) => 
     staffUsername: '',
   });
 
-  const [nameError, setNameError] = useState(null); // To store the name validation error
+  const [errors, setErrors] = useState({ name: null, phone: null, houseStreet: null });
 
   useEffect(() => {
     setFormData((prev) => ({ ...prev, staffUsername }));
@@ -22,46 +26,67 @@ const SupplierModal = ({ isOpen, onClose, refreshSuppliers, staffUsername }) => 
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
-    if (name === 'name') {
-      checkSupplierName(value); // Check name availability whenever the name changes
+    if (['name', 'phone', 'houseStreet'].includes(name)) {
+      checkUniqueField(name, value);
     }
   };
 
-  const checkSupplierName = async (name) => {
-    if (name.trim()) {
+  const checkUniqueField = async (field, value) => {
+    if (value.trim()) {
       try {
-        const response = await fetch('http://localhost:3000/api/check-supplier-name', {
+        const response = await fetch('http://localhost:3000/api/check-supplier-field', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name }),
+          body: JSON.stringify({ field, value }),
         });
+        const data = await response.json();
+
         if (response.ok) {
-          setNameError(null); // No error, name is available
+          setErrors((prev) => ({ ...prev, [field]: null }));
         } else {
-          const data = await response.json();
-          setNameError(data.message); // Set error message if name is taken
+          setErrors((prev) => ({ ...prev, [field]: data.message }));
         }
       } catch (error) {
-        console.error('Error checking supplier name:', error);
+        console.error('Error checking field:', error);
       }
     } else {
-      setNameError(null); // Reset error if name is empty
+      setErrors((prev) => ({ ...prev, [field]: null }));
     }
   };
 
   const handleSubmit = async () => {
-    if (nameError) {
-      alert('Please fix the errors before submitting.');
+    const { name, contactPerson, email, region, houseStreet, phone } = formData;
+  
+    if (!name || !contactPerson || !email || !region || !houseStreet || !phone) {
+      MySwal.fire({
+        icon: 'error',
+        title: 'All fields are required!',
+        text: 'Please fill out all fields before submitting.',
+      });
       return;
     }
-
+  
+    if (errors.name || errors.phone || errors.houseStreet) {
+      MySwal.fire({
+        icon: 'error',
+        title: 'Validation Error!',
+        text: 'Please fix the errors before submitting.',
+      });
+      return;
+    }
+  
+    // ✨ Generate a random supplier ID
+    const supplierID = 'SUP-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+  
     try {
       const response = await fetch('http://localhost:3000/api/add-supplier', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, supplierID }), // 👈 Add supplierID here
       });
-
+  
+      const data = await response.json();
+  
       if (response.ok) {
         refreshSuppliers();
         onClose();
@@ -74,15 +99,29 @@ const SupplierModal = ({ isOpen, onClose, refreshSuppliers, staffUsername }) => 
           phone: '',
           staffUsername: staffUsername,
         });
+        setErrors({ name: null, phone: null, houseStreet: null });
+        MySwal.fire({
+          icon: 'success',
+          title: 'Supplier Added!',
+          text: data.message,
+        });
       } else {
-        alert('Failed to add supplier.');
+        MySwal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: data.message || 'Failed to add supplier.',
+        });
       }
     } catch (error) {
       console.error('Error adding supplier:', error);
-      alert('An error occurred while adding the supplier.');
+      MySwal.fire({
+        icon: 'error',
+        title: 'Internal Server Error',
+        text: 'An error occurred while adding the supplier.',
+      });
     }
   };
-
+  
   return (
     <Modal
       title={<span className="text-lg font-semibold">Add Supplier</span>}
@@ -95,13 +134,13 @@ const SupplierModal = ({ isOpen, onClose, refreshSuppliers, staffUsername }) => 
     >
       <Form layout="vertical">
         <Form.Item label="Supplier Name">
-          <Input 
-            name="name" 
-            value={formData.name} 
-            onChange={handleChange} 
-            placeholder="Enter supplier name" 
+          <Input
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            placeholder="Enter supplier name"
           />
-          {nameError && <Alert message={nameError} type="error" showIcon />}
+          {errors.name && <Alert message={errors.name} type="error" showIcon />}
         </Form.Item>
 
         <Form.Item label="Contact Person">
@@ -118,10 +157,23 @@ const SupplierModal = ({ isOpen, onClose, refreshSuppliers, staffUsername }) => 
 
         <Form.Item label="House No./Street">
           <Input name="houseStreet" value={formData.houseStreet} onChange={handleChange} placeholder="Enter house/street" />
+          {errors.houseStreet && <Alert message={errors.houseStreet} type="error" showIcon />}
         </Form.Item>
 
         <Form.Item label="Phone Number">
-          <Input name="phone" value={formData.phone} onChange={handleChange} placeholder="Enter phone number" />
+          <Input
+            name="phone"
+            value={formData.phone}
+            placeholder="Enter phone number"
+            onChange={(e) => {
+              const onlyNums = e.target.value.replace(/\D/g, "");
+              if (onlyNums.length <= 11) {
+                handleChange({ target: { name: 'phone', value: onlyNums } });
+              }
+            }}
+            maxLength={11}
+          />
+          {errors.phone && <Alert message={errors.phone} type="error" showIcon />}
         </Form.Item>
       </Form>
     </Modal>

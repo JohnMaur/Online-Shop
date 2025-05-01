@@ -56,6 +56,10 @@ import { WarningIcon } from '@chakra-ui/icons';
 import { CustomButton, CancelOrderModal } from '../../components';
 import { StaffNavBar, Header, MobileStaffNavbar } from "../layout";
 import dayjs from 'dayjs';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+const MySwal = withReactContent(Swal);
 
 const StaffReceiving = () => {
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
@@ -121,36 +125,66 @@ const StaffReceiving = () => {
     }
   };
 
-  const handleOrderReceived = async (orderId) => {
-    const confirmed = window.confirm("Are you sure you want to mark this order as received?");
-    if (!confirmed) return;
+  // const handleOrderReceived = async (orderId) => {
+  //   const confirmed = window.confirm("Are you sure you want to mark this order as received?");
+  //   if (!confirmed) return;
 
+  //   setLoadingOrderId(orderId);
+  //   const orderReceivedDate = dayjs().format('YYYY-MM-DD');
+
+  //   try {
+  //     await axios.post(`http://localhost:3000/api/mark-received/${orderId}`, {
+  //       orderReceivedDate,
+  //       staffUsername,
+  //     });
+  //     setReceivingData((prev) => prev.filter(order => order._id !== orderId));
+  //     toast({
+  //       title: "Order marked as received.",
+  //       status: "success",
+  //       duration: 3000,
+  //       isClosable: true,
+  //     });
+  //   } catch {
+  //     toast({
+  //       title: "Failed to mark order as received.",
+  //       status: "error",
+  //       duration: 3000,
+  //       isClosable: true,
+  //     });
+  //   } finally {
+  //     setLoadingOrderId(null);
+  //   }
+  // };
+
+  const handleOrderReceived = async (orderId) => {
+    const result = await MySwal.fire({
+      title: 'Confirm Received',
+      text: 'Are you sure you want to mark this order as received?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, mark as received',
+    });
+  
+    if (!result.isConfirmed) return;
+  
     setLoadingOrderId(orderId);
     const orderReceivedDate = dayjs().format('YYYY-MM-DD');
-
+  
     try {
       await axios.post(`http://localhost:3000/api/mark-received/${orderId}`, {
         orderReceivedDate,
         staffUsername,
       });
       setReceivingData((prev) => prev.filter(order => order._id !== orderId));
-      toast({
-        title: "Order marked as received.",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
+      await MySwal.fire('Success', 'Order marked as received.', 'success');
     } catch {
-      toast({
-        title: "Failed to mark order as received.",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
+      await MySwal.fire('Error', 'Failed to mark order as received.', 'error');
     } finally {
       setLoadingOrderId(null);
     }
-  };
+  };  
 
   const handleOrderCanceled = async (reason) => {
     console.log("Canceling order with ID:", selectedOrderId); // Log selectedOrderId

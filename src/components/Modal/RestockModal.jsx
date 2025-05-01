@@ -43,32 +43,6 @@ const RestockModal = ({ visible, onCancel, onRestockSuccess, refresh, restockAPI
     setSuppliers(Array.isArray(response.data) ? response.data : []);
   };
 
-  // const handleRestock = async (values) => {
-  //   try {
-  //     setLoading(true);
-  //     const { stockId, supplierId, supplierPrice, shopPrice, quantity } = values;
-
-  //     // Make the API request to restock
-  //     await axios.post(`http://localhost:3000/${restockAPI}`, {
-  //       stockId,
-  //       supplierId,
-  //       supplierPrice: parseFloat(supplierPrice),
-  //       shopPrice: parseFloat(shopPrice),
-  //       quantity: parseInt(quantity),
-  //       staffUsername: staffUsername || null,
-  //     });
-
-  //     message.success('Restocked successfully!');
-  //     onRestockSuccess();
-  //     form.resetFields();
-  //     onCancel();
-  //   } catch (error) {
-  //     message.error('Failed to restock');
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   const handleRestock = async (values) => {
     try {
       setLoading(true);
@@ -146,18 +120,6 @@ const RestockModal = ({ visible, onCancel, onRestockSuccess, refresh, restockAPI
             ))}
           </Select>
         </Form.Item>
-
-        {/* <Form.Item name="supplierPrice" label="Supplier Price" rules={[{ required: true }]}>
-          <InputNumber min={0} step={0.01} style={{ width: '100%' }} prefix="₱" />
-        </Form.Item>
-
-        <Form.Item name="shopPrice" label="Shop Price" rules={[{ required: true }]}>
-          <InputNumber min={0} step={0.01} style={{ width: '100%' }} prefix="₱" />
-        </Form.Item>
-
-        <Form.Item name="quantity" label="Quantity" rules={[{ required: true }]}>
-          <InputNumber min={1} style={{ width: '100%' }} />
-        </Form.Item> */}
 
         <Form.Item name="supplierPrice" label="Supplier Price" rules={[{ required: true }]}>
           <InputNumber

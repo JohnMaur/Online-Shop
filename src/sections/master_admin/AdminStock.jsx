@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Select } from 'antd';
 import { NavigationBar, Header, MobileAdminNavbar } from "../layout";
 import { CustomButton, ConfirmModal, UpdateStock } from '../../components';
+import { Link } from 'react-router-dom';
 
 const { Option } = Select;
 
@@ -32,11 +33,11 @@ const AdminStock = () => {
     } catch (error) {
       console.error('Error fetching stocks:', error);
     }
-  };  
+  };
 
   useEffect(() => {
     fetchSearchStocks(search);
-  }, [search]);  
+  }, [search]);
 
 
   const fetchStocks = async () => {
@@ -116,11 +117,13 @@ const AdminStock = () => {
             {sortedStocks.length > 0 ? (
               sortedStocks.map((stock) => (
                 <div key={stock._id} className="bg-white shadow-md p-4 rounded-lg">
-                  <img
-                    src={stock.product.imageUrl}
-                    alt={stock.product.productName}
-                    className="w-full h-48 object-contain rounded-lg"
-                  />
+                  <Link to={`/admin-product-review?productID=${stock.productID}`}>
+                    <img
+                      src={stock.product.imageUrl}
+                      alt={stock.product.productName}
+                      className="w-full h-48 object-contain rounded-lg"
+                    />
+                  </Link>
                   <p className="font-semibold mt-2">Product Name: {stock.product.productName}</p>
                   <p className="font-semibold">Supplier: {stock.supplier.name}</p>
                   <p>Color: {stock.product.color || 'No color'}</p>

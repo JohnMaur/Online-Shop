@@ -173,7 +173,7 @@ import { FaTachometerAlt, FaShippingFast, FaBoxOpen, FaUsersCog, FaTools, FaSign
 import { icon, searchIcon, dashboard, dashboardLight, logout, logoutLight, product, productLight, receiving, receivingLight, shipping, shippingLight, accountInfo, accountInfoLight, maintenance, lightMaintenance, supplier, supplierLight, stock, stockLight } from "../../assets/icons";
 import { useUser } from "../../(auth)/UserContext";
  
-const StaffNavBar = ({ isNavCollapsed, setStaffUsername, onSearch }) => {
+const StaffNavBar = ({ isNavCollapsed, setStaffUsername, onSearch, responsiveLink }) => {
   const { staffLogout } = useUser(); // Get logout function from context
   const navigate = useNavigate(); // Hook for navigation
   const [username, setUsername] = useState("");
@@ -308,7 +308,7 @@ const StaffNavBar = ({ isNavCollapsed, setStaffUsername, onSearch }) => {
             icon={<FaWarehouse />}
             iconHovered={<FaWarehouse />}
             tooltipText="Stock Maintenance"
-            link="/stock-maintenance"
+            link={!responsiveLink ? "/stock-maintenance" : responsiveLink}
             setStaffUsername={username}
           />
           <StaffNavItem

@@ -14,6 +14,7 @@ import AdminOrderReceived from "./AdminOrderReceived";
 import AdminCanceledOrder from "./AdminCanceledOrder";
 import AdminOrderTransaction from "./AdminOrderTransaction";
 import AdminVAT from "./VAT";
+import AdminProductReview from "./AdminProductReview";
 
 export {
   Product,
@@ -32,4 +33,5 @@ export {
   AdminCanceledOrder,
   AdminOrderTransaction,
   AdminVAT,
+  AdminProductReview,
 }

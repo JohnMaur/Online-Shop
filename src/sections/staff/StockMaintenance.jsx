@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Select } from 'antd';
 import { StaffNavBar, Header, MobileStaffNavbar } from "../layout";
 import { CustomButton, ConfirmModal, UpdateStock } from '../../components';
+import { Link } from 'react-router-dom';
 
 const { Option } = Select;
 
@@ -117,11 +118,13 @@ const StockMaintenance = () => {
             {sortedStocks.length > 0 ? (
               sortedStocks.map((stock) => (
                 <div key={stock._id} className="bg-white shadow-md p-4 rounded-lg">
-                  <img
-                    src={stock.product.imageUrl}
-                    alt={stock.product.productName}
-                    className="w-full h-48 object-contain rounded-lg"
-                  />
+                  <Link to={`/staff-product-review?productID=${stock.productID}`}>
+                    <img
+                      src={stock.product.imageUrl}
+                      alt={stock.product.productName}
+                      className="w-full h-48 object-contain rounded-lg"
+                    />
+                  </Link>
                   <p className="font-semibold mt-2">Product Name: {stock.product.productName}</p>
                   <p className="font-semibold">Supplier: {stock.supplier.name}</p>
                   <p>Color: {stock.product.color || 'No color'}</p>

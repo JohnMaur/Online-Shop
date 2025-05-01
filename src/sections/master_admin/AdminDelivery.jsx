@@ -192,12 +192,22 @@ const AdminDelivery = () => {
   const handleSetAsDelivered = async (deliveryId) => {
     try {
       const response = await axios.post(`http://localhost:3000/api/admin-set-as-delivered/${deliveryId}`);
-      alert(response.data.message);
+      // alert(response.data.message);
+      await MySwal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: response.data.message,
+      });
       fetchDeliveries(); // Refresh the table
       setRefreshHistory(prev => !prev); // trigger re-fetch in DeliveryHistory
     } catch (error) {
       console.error("Failed to set as delivered:", error);
-      alert("Failed to move product to stock.");
+      // alert("Failed to move product to stock.");
+      MySwal.fire({
+        icon: 'error',
+        title: 'Failed to add delivery.',
+        text: 'There was an issue adding the delivery. Please try again.',
+      });
     }
   };
 

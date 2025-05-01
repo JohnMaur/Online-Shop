@@ -99,6 +99,75 @@
 
 // With ADMIN
 
+// import React, { createContext, useContext, useState, useEffect } from 'react';
+
+// // Create the UserContext with default value being null (user not logged in)
+// const UserContext = createContext(null);
+
+// export const useUser = () => {
+//   return useContext(UserContext); // Custom hook to use user context
+// };
+
+// export const UserProvider = ({ children }) => {
+//   const [user, setUser] = useState(null);
+//   const [staff, setStaff] = useState(null);
+//   const [admin, setAdmin] = useState(null); // 🔥 new state
+
+//   useEffect(() => {
+//     const storedUser = localStorage.getItem("user");
+//     const storedStaff = localStorage.getItem("staff");
+//     const storedAdmin = localStorage.getItem("admin"); // 🔥 load from storage
+
+//     if (storedUser) setUser(JSON.parse(storedUser));
+//     if (storedStaff) setStaff(JSON.parse(storedStaff));
+//     if (storedAdmin) setAdmin(JSON.parse(storedAdmin)); // 🔥
+//   }, []);
+
+//   const login = (username, token) => {
+//     const userData = { username, token };
+//     setUser(userData);
+//     localStorage.setItem("user", JSON.stringify(userData));
+//   };
+
+//   const loginStaff = (username, token) => {
+//     const staffData = { username, token };
+//     setStaff(staffData);
+//     localStorage.setItem("staff", JSON.stringify(staffData));
+//   };
+
+//   const loginAdmin = (username, token) => { // 🔥 new function
+//     const adminData = { username, token };
+//     setAdmin(adminData);
+//     localStorage.setItem("admin", JSON.stringify(adminData));
+//   };
+
+//   const userlogout = () => {
+//     setUser(null);
+//     localStorage.removeItem("user");
+//   };
+
+//   const staffLogout = () => {
+//     setStaff(null);
+//     localStorage.removeItem("staff");
+//   };
+
+//   const adminLogout = () => { // 🔥 new function
+//     setAdmin(null);
+//     localStorage.removeItem("admin");
+//   };
+
+//   return (
+//     <UserContext.Provider value={{
+//       user, staff, admin,
+//       login, loginStaff, loginAdmin,
+//       userlogout, staffLogout, adminLogout
+//     }}>
+//       {children}
+//     </UserContext.Provider>
+//   );
+// };
+
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 // Create the UserContext with default value being null (user not logged in)
@@ -111,16 +180,19 @@ export const useUser = () => {
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [staff, setStaff] = useState(null);
-  const [admin, setAdmin] = useState(null); // 🔥 new state
+  const [admin, setAdmin] = useState(null);
+  const [loading, setLoading] = useState(true); // ⬅️ New loading state
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     const storedStaff = localStorage.getItem("staff");
-    const storedAdmin = localStorage.getItem("admin"); // 🔥 load from storage
+    const storedAdmin = localStorage.getItem("admin");
 
     if (storedUser) setUser(JSON.parse(storedUser));
     if (storedStaff) setStaff(JSON.parse(storedStaff));
-    if (storedAdmin) setAdmin(JSON.parse(storedAdmin)); // 🔥
+    if (storedAdmin) setAdmin(JSON.parse(storedAdmin));
+
+    setLoading(false); // ⬅️ Done loading
   }, []);
 
   const login = (username, token) => {
@@ -135,7 +207,7 @@ export const UserProvider = ({ children }) => {
     localStorage.setItem("staff", JSON.stringify(staffData));
   };
 
-  const loginAdmin = (username, token) => { // 🔥 new function
+  const loginAdmin = (username, token) => {
     const adminData = { username, token };
     setAdmin(adminData);
     localStorage.setItem("admin", JSON.stringify(adminData));
@@ -151,10 +223,13 @@ export const UserProvider = ({ children }) => {
     localStorage.removeItem("staff");
   };
 
-  const adminLogout = () => { // 🔥 new function
+  const adminLogout = () => {
     setAdmin(null);
     localStorage.removeItem("admin");
   };
+
+  // ⬇️ Don't render children until loading is complete
+  if (loading) return null;
 
   return (
     <UserContext.Provider value={{

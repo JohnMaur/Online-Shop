@@ -148,8 +148,6 @@
 // };
 
 // export default AdminSupplier;
-
-
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { NavigationBar, Header, MobileAdminNavbar } from "../layout";
@@ -165,6 +163,7 @@ const AdminSupplier = () => {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [suppliers, setSuppliers] = useState([]);
+  const [deliveries, setDeliveries] = useState([]);  // Add state for deliveries
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [selectedSupplier, setSelectedSupplier] = useState(null);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
@@ -178,13 +177,18 @@ const AdminSupplier = () => {
     }
   };
 
+  // Fetch suppliers and deliveries
   const fetchSuppliers = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api/suppliers`);
-      const data = await response.json();
-      setSuppliers(data);
+      const supplierResponse = await fetch(`http://localhost:3000/api/suppliers`);
+      const supplierData = await supplierResponse.json();
+      setSuppliers(supplierData);
+
+      const deliveryResponse = await fetch(`http://localhost:3000/api/deliveries`);
+      const deliveryData = await deliveryResponse.json();
+      setDeliveries(deliveryData);
     } catch (error) {
-      console.error('Error fetching suppliers:', error);
+      console.error('Error fetching data:', error);
     }
   };
 
@@ -197,6 +201,31 @@ const AdminSupplier = () => {
       fetchSuppliers();
     }
   }, [isUpdateModalOpen]);
+
+  const updateSupplier = async (updatedData) => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/update-supplier/${selectedSupplier._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...updatedData,
+          houseStreet: updatedData.address, // mapping form's 'address' field back to 'houseStreet'
+        }),
+      });
+
+      if (response.ok) {
+        fetchSuppliers();  // Refresh the list after updating
+        setIsUpdateModalOpen(false); // Close modal
+      } else {
+        alert("Failed to update supplier.");
+      }
+    } catch (error) {
+      console.error("Error updating supplier:", error);
+      alert("An error occurred while updating the supplier.");
+    }
+  };
 
   const deleteSupplier = async () => {
     if (!supplierToDelete) return;
@@ -215,6 +244,11 @@ const AdminSupplier = () => {
     }
     setIsConfirmModalOpen(false);
     setSupplierToDelete(null);
+  };
+
+  // Check if the supplier exists in deliveries
+  const isSupplierInDeliveries = (supplierID) => {
+    return deliveries.some(delivery => delivery.supplier.supplierID === supplierID);
   };
 
   return (
@@ -236,7 +270,6 @@ const AdminSupplier = () => {
           <div className="max-w-[100%] mx-auto">
             <div className="mb-6 flex justify-between items-center">
               <h1 className='text-3xl font-bold text-gray-800'>Suppliers</h1>
-            
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -266,16 +299,18 @@ const AdminSupplier = () => {
                         setIsUpdateModalOpen(true);
                       }}
                     />
-                    <CustomButton
-                      nameButton="Remove"
-                      rounded="rounded-md"
-                      color="bg-red-500"
-                      hoverButton="hover:bg-red-600"
-                      onClick={() => {
-                        setSupplierToDelete(supplier);
-                        setIsConfirmModalOpen(true);
-                      }}
-                    />
+                    {!isSupplierInDeliveries(supplier.supplierID) && (
+                      <CustomButton
+                        nameButton="Remove"
+                        rounded="rounded-md"
+                        color="bg-red-500"
+                        hoverButton="hover:bg-red-600"
+                        onClick={() => {
+                          setSupplierToDelete(supplier);
+                          setIsConfirmModalOpen(true);
+                        }}
+                      />
+                    )}
                   </div>
                 </motion.div>
               ))}
@@ -298,6 +333,7 @@ const AdminSupplier = () => {
         isOpen={isUpdateModalOpen}
         onClose={() => setIsUpdateModalOpen(false)}
         supplier={selectedSupplier}
+        onUpdate={updateSupplier} 
         refreshSuppliers={fetchSuppliers}
       />
 

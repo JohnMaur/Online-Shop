@@ -10,6 +10,7 @@ import DeleveryMaintenance from "./Delevery";
 import OrderTranstaction from "./OrderTranstaction";
 import OrderReceived from "./OrderReceived";
 import CanceledOrder from "./canceledOrder";
+import StaffProductreview from "./Staff-Product-review";
 
 export {
   StaffDashboard,
@@ -24,4 +25,5 @@ export {
   OrderTranstaction,
   OrderReceived,
   CanceledOrder,
+  StaffProductreview,
 }
