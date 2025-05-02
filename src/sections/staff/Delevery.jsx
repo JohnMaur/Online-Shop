@@ -37,20 +37,20 @@
 //   const [loading, setLoading] = useState(false);
 
 //   const fetchVAT = async () => {
-//     const res = await axios.get('http://localhost:3000/api/admin/vat'); // Adjust your endpoint
+//     const res = await axios.get('https://online-shop-server-1.onrender.com/api/admin/vat'); // Adjust your endpoint
 //     setVatPercentage(res.data.value); // assuming res.data.value = 12
 //   };
 
 //   const fetchData = async () => {
-//     const productsRes = await axios.get('http://localhost:3000/api/products');
+//     const productsRes = await axios.get('https://online-shop-server-1.onrender.com/api/products');
 //     setProducts(productsRes.data);
 
-//     const supplierRes = await axios.get('http://localhost:3000/api/suppliers');
+//     const supplierRes = await axios.get('https://online-shop-server-1.onrender.com/api/suppliers');
 //     setSuppliers(supplierRes.data);
 //   };
 
 //   const fetchDeliveries = async () => {
-//     const res = await axios.get('http://localhost:3000/api/deliveries');
+//     const res = await axios.get('https://online-shop-server-1.onrender.com/api/deliveries');
 //     setDeliveries(res.data);
 //   };
 
@@ -73,7 +73,7 @@
 //         addedAt: new Date()
 //       };
 
-//       await axios.post('http://localhost:3000/api/admin-add-delivery', payload);
+//       await axios.post('https://online-shop-server-1.onrender.com/api/admin-add-delivery', payload);
 //       // SweetAlert Success
 //       MySwal.fire({
 //         icon: 'success',
@@ -103,7 +103,7 @@
 
 //   const handleSetAsDelivered = async (deliveryId) => {
 //     try {
-//       const response = await axios.post(`http://localhost:3000/api/set-as-delivered/${deliveryId}`, {
+//       const response = await axios.post(`https://online-shop-server-1.onrender.com/api/set-as-delivered/${deliveryId}`, {
 //         staffUsername, // ✅ Send the staffUsername from local state
 //       });
 
@@ -382,20 +382,20 @@ const DeleveryMaintenance = () => {
   const [loading, setLoading] = useState(false);
 
   const fetchVAT = async () => {
-    const res = await axios.get('http://localhost:3000/api/admin/vat'); // Adjust your endpoint
+    const res = await axios.get('https://online-shop-server-1.onrender.com/api/admin/vat'); // Adjust your endpoint
     setVatPercentage(res.data.value); // assuming res.data.value = 12
   };
 
   const fetchData = async () => {
-    const productsRes = await axios.get('http://localhost:3000/api/products');
+    const productsRes = await axios.get('https://online-shop-server-1.onrender.com/api/products');
     setProducts(productsRes.data);
 
-    const supplierRes = await axios.get('http://localhost:3000/api/suppliers');
+    const supplierRes = await axios.get('https://online-shop-server-1.onrender.com/api/suppliers');
     setSuppliers(supplierRes.data);
   };
 
   const fetchDeliveries = async () => {
-    const res = await axios.get('http://localhost:3000/api/deliveries');
+    const res = await axios.get('https://online-shop-server-1.onrender.com/api/deliveries');
     setDeliveries(res.data);
   };
 
@@ -430,7 +430,7 @@ const DeleveryMaintenance = () => {
         addedAt: new Date()
       };
 
-      await axios.post('http://localhost:3000/api/admin-add-delivery', payload);
+      await axios.post('https://online-shop-server-1.onrender.com/api/admin-add-delivery', payload);
       // SweetAlert Success
       MySwal.fire({
         icon: 'success',
@@ -460,7 +460,7 @@ const DeleveryMaintenance = () => {
 
   const handleSetAsDelivered = async (deliveryId) => {
     try {
-      const response = await axios.post(`http://localhost:3000/api/set-as-delivered/${deliveryId}`, {
+      const response = await axios.post(`https://online-shop-server-1.onrender.com/api/set-as-delivered/${deliveryId}`, {
         staffUsername, // ✅ Send the staffUsername from local state
       });
 
