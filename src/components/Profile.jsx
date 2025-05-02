@@ -7,7 +7,7 @@ import withReactContent from 'sweetalert2-react-content';
 
 const MySwal = withReactContent(Swal);
 
-const Profile = ({ region, houseStreet, recipient, staffFullname, phoneNumber, email, username, contactPerson, updateAPI, getApi, titleHeader }) => {
+const Profile = ({ region, houseStreet, recipient, staffFullname, phoneNumber, email, username, contactPerson, updateAPI, getApi, titleHeader, gmail }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [imageFile, setImageFile] = useState(null);
   const [uploading, setUploading] = useState(false);

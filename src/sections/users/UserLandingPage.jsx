@@ -2,9 +2,9 @@
 // import axios from 'axios';
 // import { TextInput, Profile, ChangePasswordModal } from '../../components';
 // import { UserNavBar, Header, MobileNavBar } from "../layout";
-// import { Modal } from 'antd';
+// import { Modal, Spin } from 'antd';
 
-// const UserLandingPage = () => { 
+// const UserLandingPage = () => {
 //   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
 //   const [showMobileNav, setShowMobileNav] = useState(false);
 //   const [region, setRegion] = useState('');
@@ -23,6 +23,8 @@
 //   const [modalVisible, setModalVisible] = useState(false);
 //   const [modalType, setModalType] = useState('');
 //   const [editModalVisible, setEditModalVisible] = useState(false);
+
+//   const [loading, setLoading] = useState(true); // new
 
 //   useEffect(() => {
 //     const user = JSON.parse(localStorage.getItem("user"));
@@ -52,8 +54,9 @@
 //   }, []);
 
 //   const fetchAccountInfo = async (username) => {
+//     setLoading(true); // new
 //     try {
-//       const response = await axios.get(`http://localhost:3000/api/account-info/${username}`);
+//       const response = await axios.get(`https://online-shop-server-1.onrender.com/api/account-info/${username}`);
 //       if (response.status === 200) {
 //         const { region, houseStreet, recipientName, phoneNumber } = response.data;
 //         setRegion(region || '');
@@ -63,6 +66,8 @@
 //       }
 //     } catch (error) {
 //       console.error("Error fetching account info:", error);
+//     } finally {
+//       setLoading(false); // new
 //     }
 //   };
 
@@ -88,10 +93,10 @@
 //         return;
 //       }
 
-//       const response = await axios.post("http://localhost:3000/api/update-account", {
+//       const response = await axios.post("https://online-shop-server-1.onrender.com/api/update-account", {
 //         username,
 //         region: tempRegion,
-//         houseStreet: tempHouseStreet,
+//         houseStreet: tempHouseStreet, 
 //         recipientName: tempRecipientName,
 //         phoneNumber: tempPhoneNumber,
 //       });
@@ -137,113 +142,118 @@
 //         )}
 
 //         <div className="flex-1 overflow-auto mt-14 bg-[#EFEFEF]">
-//           {region && houseStreet && recipientName && phoneNumber ? (
-//             <div className="m-7">
-//               <Profile
-//                 titleHeader="User Information"
-//                 region={region}
-//                 houseStreet={houseStreet}
-//                 recipient={recipientName}
-//                 phoneNumber={phoneNumber}
-//                 username={username}
-//                 getApi="api/get-profile-picture"
-//                 updateAPI="api/update-profile-picture"
-//               />
-//               <div className="flex justify-end mt-5 lg:mr-16">
-//                 <div className='space-x-2'>
-//                   <button
-//                     onClick={() => setChangePasswordVisible(true)}
-//                     className="px-16 bg-black text-white py-2 rounded-xl hover:bg-[#454545] cursor-pointer active:opacity-65"
-//                   >
-//                     Change Password
-//                   </button>
-//                   <button
-//                     onClick={handleOpenEditModal}
-//                     className="px-16 bg-[#656565] text-white py-2 rounded-xl hover:bg-[#767676] cursor-pointer active:opacity-65"
-//                   >
-//                     Edit Info
-//                   </button>
+//           <Spin spinning={loading}>
+//             {region && houseStreet && recipientName && phoneNumber ? (
+//               <div className="m-7">
+//                 <Profile
+//                   titleHeader="User Information"
+//                   region={region}
+//                   houseStreet={houseStreet}
+//                   recipient={recipientName}
+//                   phoneNumber={phoneNumber}
+//                   username={username}
+//                   getApi="api/get-profile-picture"
+//                   updateAPI="api/update-profile-picture"
+//                 />
+//                 <div className="flex justify-end mt-5 lg:mr-16">
+//                   <div className='space-x-2'>
+//                     <button
+//                       onClick={() => setChangePasswordVisible(true)}
+//                       className="px-16 bg-black text-white py-2 rounded-xl hover:bg-[#454545] cursor-pointer active:opacity-65"
+//                     >
+//                       Change Password
+//                     </button>
+//                     <button
+//                       onClick={handleOpenEditModal}
+//                       className="px-16 bg-[#656565] text-white py-2 rounded-xl hover:bg-[#767676] cursor-pointer active:opacity-65"
+//                     >
+//                       Edit Info
+//                     </button>
+//                   </div>
 //                 </div>
 //               </div>
-//             </div>
-//           ) : null}
 
-//           <div
-//             className={`flex flex-col justify-center h-[90vh] content-center w-5/12 max-md:w-full md:ml-10 ${region && houseStreet && recipientName && phoneNumber ? "hidden" : ""
-//               }`}
-//           >
-//             <div className="bg-white p-10 rounded-2xl">
-//               <div className="mb-8">
-//                 <h1 className="text-2xl font-bold text-[#444B59] mb-2">Account information</h1>
-//               </div>
+//             ) : null}
 
-//               <form className="w-full" onSubmit={handleSave}>
-//                 {/* <TextInput label="Region/City/District" placeholder="Metro Manila/Taguig City/Central Bicutan" value={tempRegion} onChange={(e) => setTempRegion(e.target.value)} />
+//             <div
+//               className={`flex flex-col justify-center h-[90vh] content-center w-5/12 max-md:w-full md:ml-10 ${region && houseStreet && recipientName && phoneNumber ? "hidden" : ""
+//                 }`}
+//             >
+//               <div className="bg-white p-10 rounded-2xl">
+//                 <div className="mb-8">
+//                   <h1 className="text-2xl font-bold text-[#444B59] mb-2">Account information</h1>
+//                 </div>
+
+//                 <form className="w-full" onSubmit={handleSave}>
+//                   {/* <TextInput label="Region/City/District" placeholder="Metro Manila/Taguig City/Central Bicutan" value={tempRegion} onChange={(e) => setTempRegion(e.target.value)} />
 //                 <TextInput label="House No./Street" placeholder="BLK 144 LoT 19/Arago Street" type="text" value={tempHouseStreet} onChange={(e) => setTempHouseStreet(e.target.value)} /> */}
-//                 <TextInput
-//                   label="Region/City/District"
-//                   placeholder="Metro Manila/Taguig City/Central Bicutan"
-//                   value={tempRegion}
-//                   onChange={(e) => {
-//                     const input = e.target.value;
-//                     if (input.length <= 50) {
-//                       setTempRegion(input);
-//                     } else {
-//                       showLimitReachedModal("Region/City/District");
-//                     }
-//                   }}
-//                 />
+//                   <TextInput
+//                     label="Region/City/District"
+//                     placeholder="Metro Manila/Taguig City/Central Bicutan"
+//                     value={tempRegion}
+//                     onChange={(e) => {
+//                       const input = e.target.value;
+//                       if (input.length <= 50) {
+//                         setTempRegion(input);
+//                       } else {
+//                         showLimitReachedModal("Region/City/District");
+//                       }
+//                     }}
+//                   />
 
-//                 <TextInput
-//                   label="House No./Street"
-//                   placeholder="BLK 144 LoT 19/Arago Street"
-//                   value={tempHouseStreet}
-//                   onChange={(e) => {
-//                     const input = e.target.value;
-//                     if (input.length <= 50) {
-//                       setTempHouseStreet(input);
-//                     } else {
-//                       showLimitReachedModal("House No./Street");
-//                     }
-//                   }}
-//                 />
-//                 <TextInput
-//                   label="Recipient's Name"
-//                   placeholder="John"
-//                   value={tempRecipientName}
-//                   onChange={(e) => {
-//                     const onlyLetters = e.target.value.replace(/[^a-zA-Z\s]/g, '');
-//                     if (onlyLetters.length <= 25) {
-//                       setTempRecipientName(onlyLetters);
-//                     } else {
-//                       showLimitReachedModal("Recipient's Name");
-//                     }
-//                   }}
-//                 />
-//                 <TextInput
-//                   label="Phone Number"
-//                   placeholder="9123456789"
-//                   type="text"
-//                   value={tempPhoneNumber}
-//                   onChange={(e) => {
-//                     const onlyDigits = e.target.value.replace(/\D/g, '');
-//                     if (onlyDigits.length <= 10) {
-//                       setTempPhoneNumber(onlyDigits);
-//                     }
-//                   }}
-//                   phoneNumber={1}
-//                 />
-//                 <button
-//                   type="submit"
-//                   className="w-full mt-3 bg-[#8699DA] text-white py-2 rounded-full hover:bg-[#798dce] cursor-pointer focus:outline-none"
-//                 >
-//                   Save
-//                 </button>
-//               </form>
+//                   <TextInput
+//                     label="House No./Street"
+//                     placeholder="BLK 144 LoT 19/Arago Street"
+//                     value={tempHouseStreet}
+//                     onChange={(e) => {
+//                       const input = e.target.value;
+//                       if (input.length <= 50) {
+//                         setTempHouseStreet(input);
+//                       } else {
+//                         showLimitReachedModal("House No./Street");
+//                       }
+//                     }}
+//                   />
+//                   <TextInput
+//                     label="Recipient's Name"
+//                     placeholder="John"
+//                     value={tempRecipientName}
+//                     onChange={(e) => {
+//                       const onlyLetters = e.target.value.replace(/[^a-zA-Z\s]/g, '');
+//                       if (onlyLetters.length <= 25) {
+//                         setTempRecipientName(onlyLetters);
+//                       } else {
+//                         showLimitReachedModal("Recipient's Name");
+//                       }
+//                     }}
+//                   />
+//                   <TextInput
+//                     label="Phone Number"
+//                     placeholder="9123456789"
+//                     type="text"
+//                     value={tempPhoneNumber}
+//                     onChange={(e) => {
+//                       const onlyDigits = e.target.value.replace(/\D/g, '');
+//                       if (onlyDigits.length <= 10) {
+//                         setTempPhoneNumber(onlyDigits);
+//                       }
+//                     }}
+//                     phoneNumber={1}
+//                   />
+//                   <button
+//                     type="submit"
+//                     className="w-full mt-3 bg-[#8699DA] text-white py-2 rounded-full hover:bg-[#798dce] cursor-pointer focus:outline-none"
+//                   >
+//                     Save
+//                   </button>
+//                 </form>
+//               </div>
 //             </div>
-//           </div>
+//           </Spin>
 //         </div>
 //       </div>
+
+
 
 //       <nav className={`max-md:hidden ${isNavCollapsed ? "w-20" : "w-56"} transition-width duration-300`}>
 //         <UserNavBar isNavCollapsed={isNavCollapsed} />
@@ -298,6 +308,8 @@ const UserLandingPage = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [username, setUsername] = useState('');
   const [changePasswordVisible, setChangePasswordVisible] = useState(false);
+  const [gmail, setGmail] = useState('');
+  const [tempGmail, setTempGmail] = useState('');
 
   const [tempRegion, setTempRegion] = useState('');
   const [tempHouseStreet, setTempHouseStreet] = useState('');
@@ -343,7 +355,8 @@ const UserLandingPage = () => {
     try {
       const response = await axios.get(`https://online-shop-server-1.onrender.com/api/account-info/${username}`);
       if (response.status === 200) {
-        const { region, houseStreet, recipientName, phoneNumber } = response.data;
+        const { region, houseStreet, recipientName, phoneNumber, gmail } = response.data;
+        setGmail(gmail || '');
         setRegion(region || '');
         setHouseStreet(houseStreet || '');
         setRecipientName(recipientName || '');
@@ -361,6 +374,7 @@ const UserLandingPage = () => {
     setTempRegion(region);
     setTempHouseStreet(houseStreet);
     setTempRecipientName(recipientName);
+    setTempGmail(gmail);
     setTempPhoneNumber(phoneNumber);
     setEditModalVisible(true);
   };
@@ -381,9 +395,10 @@ const UserLandingPage = () => {
       const response = await axios.post("https://online-shop-server-1.onrender.com/api/update-account", {
         username,
         region: tempRegion,
-        houseStreet: tempHouseStreet, 
+        houseStreet: tempHouseStreet,
         recipientName: tempRecipientName,
         phoneNumber: tempPhoneNumber,
+        gmail: tempGmail,
       });
 
       if (response.status === 200) {
@@ -394,6 +409,7 @@ const UserLandingPage = () => {
         setHouseStreet(tempHouseStreet);
         setRecipientName(tempRecipientName);
         setPhoneNumber(tempPhoneNumber);
+        setGmail(tempGmail);
         setEditModalVisible(false);
       }
     } catch (error) {
@@ -437,6 +453,7 @@ const UserLandingPage = () => {
                   recipient={recipientName}
                   phoneNumber={phoneNumber}
                   username={username}
+                  email={gmail}
                   getApi="api/get-profile-picture"
                   updateAPI="api/update-profile-picture"
                 />
@@ -513,6 +530,12 @@ const UserLandingPage = () => {
                     }}
                   />
                   <TextInput
+                    label="Gmail"
+                    placeholder="example@gmail.com"
+                    value={tempGmail}
+                    onChange={(e) => setTempGmail(e.target.value)}
+                  />
+                  <TextInput
                     label="Phone Number"
                     placeholder="9123456789"
                     type="text"
@@ -550,6 +573,12 @@ const UserLandingPage = () => {
           <TextInput label="Region/City/District" value={tempRegion} onChange={(e) => setTempRegion(e.target.value)} />
           <TextInput label="House No./Street" value={tempHouseStreet} onChange={(e) => setTempHouseStreet(e.target.value)} />
           <TextInput label="Recipient's Name" value={tempRecipientName} onChange={(e) => setTempRecipientName(e.target.value)} />
+          <TextInput
+            label="Gmail"
+            value={tempGmail}
+            onChange={(e) => setTempGmail(e.target.value)}
+          />
+
           <TextInput label="Phone Number" value={tempPhoneNumber} onChange={(e) => setTempPhoneNumber(e.target.value)} />
           <button type="submit" className="w-full mt-3 bg-black hover:bg-[#454545] text-white py-2 rounded-full cursor-pointer">Save</button>
         </form>

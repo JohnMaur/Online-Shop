@@ -17,7 +17,7 @@
 //       navigate("/account-info");
 //     }
 //   }, [user, navigate]);
-  
+
 //   const handleLogin = async (e) => {
 //     e.preventDefault();
 //     try {
@@ -103,6 +103,10 @@ import { useNavigate } from "react-router-dom";
 import { TextInput, ContinueWith } from '../components';
 import { homepage } from "../assets/image";
 import { useUser } from "./UserContext";
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+const MySwal = withReactContent(Swal);
+
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -117,7 +121,7 @@ const Login = () => {
       navigate("/account-info");
     }
   }, [user, navigate]);
-  
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -129,7 +133,7 @@ const Login = () => {
         password,
       });
 
-      if (response.status === 200) { 
+      if (response.status === 200) {
         const { token } = response.data;
         login(username, token);
         navigate("/account-info");
@@ -141,6 +145,44 @@ const Login = () => {
       setLoading(false);
     }
   };
+
+  const handleForgotPassword = async () => {
+    const { value: username } = await MySwal.fire({
+      title: 'Enter your username',
+      input: 'text',
+      inputPlaceholder: 'Username',
+      showCancelButton: true,
+    });
+  
+    if (!username) return;
+  
+    try {
+      await axios.post("https://online-shop-server-1.onrender.com/api/forgot-password", { username });
+  
+      const { value: otp } = await MySwal.fire({
+        title: 'Enter the OTP sent to your email',
+        input: 'text',
+        inputPlaceholder: 'OTP',
+      });
+  
+      const { value: newPassword } = await MySwal.fire({
+        title: 'Enter new password',
+        input: 'password',
+        inputPlaceholder: 'New password',
+      });
+  
+      await axios.post("https://online-shop-server-1.onrender.com/api/reset-password", {
+        username,
+        otp,
+        newPassword,
+      });
+  
+      MySwal.fire('Success', 'Your password has been updated!', 'success');
+    } catch (error) {
+      MySwal.fire('Error', error.response?.data?.message || 'Something went wrong', 'error');
+    }
+  };
+  
 
   return (
     <div className='flex flex-row'>
@@ -169,14 +211,19 @@ const Login = () => {
 
           {error && <p className="text-red-500">{error}</p>}
 
-          <a href="" className="flex justify-end text-sm text-[#8699DA] hover:text-[#6172a9] mb-5">Forget password?</a>
+          <button
+            type="button"
+            className="flex justify-end text-sm text-[#8699DA] hover:text-[#6172a9] mb-5 ml-auto"
+            onClick={handleForgotPassword}
+          >
+            Forgot password?
+          </button>
 
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-2 rounded-full focus:outline-none cursor-pointer ${
-              loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#8699DA] hover:bg-[#798dce] text-white'
-            }`}
+            className={`w-full py-2 rounded-full focus:outline-none cursor-pointer ${loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#8699DA] hover:bg-[#798dce] text-white'
+              }`}
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
