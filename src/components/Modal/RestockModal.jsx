@@ -23,7 +23,7 @@ const RestockModal = ({ visible, onCancel, onRestockSuccess, refresh, restockAPI
 
   const fetchVAT = async () => {
     try {
-      const res = await axios.get('https://online-shop-server-1.onrender.com/api/admin/vat');
+      const res = await axios.get('http://localhost:3000/api/admin/vat');
       if (res.data && res.data.value) {
         setVat(res.data.value);
         setIsVatEnabled(true); // or however your backend indicates it's enabled
@@ -34,12 +34,12 @@ const RestockModal = ({ visible, onCancel, onRestockSuccess, refresh, restockAPI
   };
 
   const fetchStocks = async () => {
-    const response = await axios.get('https://online-shop-server-1.onrender.com/api/stocks');
+    const response = await axios.get('http://localhost:3000/api/stocks');
     setStocks(Array.isArray(response.data) ? response.data : []);
   };
 
   const fetchSuppliers = async () => {
-    const response = await axios.get('https://online-shop-server-1.onrender.com/api/suppliers');
+    const response = await axios.get('http://localhost:3000/api/suppliers');
     setSuppliers(Array.isArray(response.data) ? response.data : []);
   };
 
@@ -55,7 +55,7 @@ const RestockModal = ({ visible, onCancel, onRestockSuccess, refresh, restockAPI
         finalShopPrice += vatAmount;
       }
 
-      await axios.post(`https://online-shop-server-1.onrender.com/${restockAPI}`, {
+      await axios.post(`http://localhost:3000/${restockAPI}`, {
         stockId,
         supplierId,
         supplierPrice: parseFloat(supplierPrice),
