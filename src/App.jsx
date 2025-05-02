@@ -81,7 +81,7 @@ const App = () => {
       <Router>
         <Routes>
           {/* Auth routes */}
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Login />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/login-staff" element={<LoginStaff />} />
