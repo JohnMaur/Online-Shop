@@ -238,8 +238,14 @@ const AdminItemSettings = () => {
   const handleAddOrEdit = async (values) => {
     try {
       // Check if the category already exists
+      // const categoryCheckRes = await axios.get('https://online-shop-server-1.onrender.com/api/check-category', {
+      //   params: { category: values.category }
+      // });
       const categoryCheckRes = await axios.get('https://online-shop-server-1.onrender.com/api/check-category', {
-        params: { category: values.category }
+        params: {
+          category: values.category,
+          excludeId: editingProduct?._id || "",  // ✅ exclude the current editing product
+        }
       });
 
       if (categoryCheckRes.data.exists) {
