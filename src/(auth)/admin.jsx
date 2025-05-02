@@ -249,8 +249,6 @@ const Admin = () => {
 
           {error && <p className="text-red-500">{error}</p>}
 
-          <a href="" className="flex justify-end text-sm text-[#8699DA] hover:text-[#6172a9] mb-5">Forget password?</a>
-
           <button
             type="submit"
             disabled={loading}
