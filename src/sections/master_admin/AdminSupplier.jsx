@@ -22,7 +22,7 @@
 
 //   const fetchSuppliers = async () => {
 //     try {
-//       const response = await fetch(`http://localhost:3000/api/suppliers`);
+//       const response = await fetch(`https://online-shop-server-1.onrender.com/api/suppliers`);
 //       const data = await response.json();
 //       setSuppliers(data);
 //     } catch (error) {
@@ -43,7 +43,7 @@
 //   const deleteSupplier = async () => {
 //     if (!supplierToDelete) return;
 //     try {
-//       const response = await fetch(`http://localhost:3000/api/delete-supplier/${supplierToDelete._id}`, {
+//       const response = await fetch(`https://online-shop-server-1.onrender.com/api/delete-supplier/${supplierToDelete._id}`, {
 //         method: "DELETE",
 //       });
 //       if (response.ok) {
@@ -180,11 +180,11 @@ const AdminSupplier = () => {
   // Fetch suppliers and deliveries
   const fetchSuppliers = async () => {
     try {
-      const supplierResponse = await fetch(`http://localhost:3000/api/suppliers`);
+      const supplierResponse = await fetch(`https://online-shop-server-1.onrender.com/api/suppliers`);
       const supplierData = await supplierResponse.json();
       setSuppliers(supplierData);
 
-      const deliveryResponse = await fetch(`http://localhost:3000/api/deliveries`);
+      const deliveryResponse = await fetch(`https://online-shop-server-1.onrender.com/api/deliveries`);
       const deliveryData = await deliveryResponse.json();
       setDeliveries(deliveryData);
     } catch (error) {
@@ -204,7 +204,7 @@ const AdminSupplier = () => {
 
   const updateSupplier = async (updatedData) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/update-supplier/${selectedSupplier._id}`, {
+      const response = await fetch(`https://online-shop-server-1.onrender.com/api/update-supplier/${selectedSupplier._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -230,7 +230,7 @@ const AdminSupplier = () => {
   const deleteSupplier = async () => {
     if (!supplierToDelete) return;
     try {
-      const response = await fetch(`http://localhost:3000/api/delete-supplier/${supplierToDelete._id}`, {
+      const response = await fetch(`https://online-shop-server-1.onrender.com/api/delete-supplier/${supplierToDelete._id}`, {
         method: "DELETE",
       });
       if (response.ok) {

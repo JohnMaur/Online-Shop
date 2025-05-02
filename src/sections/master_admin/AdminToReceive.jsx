@@ -49,7 +49,7 @@ const AdminToReceive = () => {
   const fetchReceivingDetails = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:3000/api/all-receiving');
+      const response = await axios.get('https://online-shop-server-1.onrender.com/api/all-receiving');
       const toReceiveOrders = response.data;
 
       const uniqueUsernames = [...new Set(toReceiveOrders.map(order => order.username))];
@@ -57,7 +57,7 @@ const AdminToReceive = () => {
       const userDetails = await Promise.all(
         uniqueUsernames.map(async (username) => {
           try {
-            const res = await axios.get(`http://localhost:3000/api/account-info/${username}`);
+            const res = await axios.get(`https://online-shop-server-1.onrender.com/api/account-info/${username}`);
             return { username, ...res.data };
           } catch {
             return { username, region: "N/A", houseStreet: "N/A", phoneNumber: "N/A" };
@@ -94,7 +94,7 @@ const AdminToReceive = () => {
   //   const orderReceivedDate = dayjs().format('YYYY-MM-DD');
 
   //   try {
-  //     await axios.post(`http://localhost:3000/api/admin-mark-received/${orderId}`, {
+  //     await axios.post(`https://online-shop-server-1.onrender.com/api/admin-mark-received/${orderId}`, {
   //       orderReceivedDate,
   //     });
   //     setReceivingData((prev) => prev.filter(order => order._id !== orderId));
@@ -133,7 +133,7 @@ const AdminToReceive = () => {
     const orderReceivedDate = dayjs().format('YYYY-MM-DD');
   
     try {
-      await axios.post(`http://localhost:3000/api/admin-mark-received/${orderId}`, {
+      await axios.post(`https://online-shop-server-1.onrender.com/api/admin-mark-received/${orderId}`, {
         orderReceivedDate,
       });
       setReceivingData((prev) => prev.filter(order => order._id !== orderId));
@@ -159,7 +159,7 @@ const AdminToReceive = () => {
 
     try {
       console.log("Sending cancel request to API...");
-      await axios.post(`http://localhost:3000/api/admin-cancel-order/${selectedOrderId}`, {
+      await axios.post(`https://online-shop-server-1.onrender.com/api/admin-cancel-order/${selectedOrderId}`, {
         canceledReason: reason
       });
 

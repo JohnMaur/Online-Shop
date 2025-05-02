@@ -25,7 +25,7 @@ const StaffList = () => {
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:3000/api/staff-list');
+      const response = await fetch('https://online-shop-server-1.onrender.com/api/staff-list');
       if (!response.ok) {
         throw new Error('Failed to fetch staff data');
       }
@@ -68,7 +68,7 @@ const StaffList = () => {
         newPassword: formValues.password && formValues.password !== "*****" ? formValues.password : undefined,
       };
 
-      const response = await fetch(`http://localhost:3000/api/update-staffAccount`, {
+      const response = await fetch(`https://online-shop-server-1.onrender.com/api/update-staffAccount`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -96,7 +96,7 @@ const StaffList = () => {
       const confirmed = window.confirm(`Are you sure you want to delete staff "${username}"?`);
       if (!confirmed) return;
 
-      const response = await fetch(`http://localhost:3000/api/staff/${username}`, {
+      const response = await fetch(`https://online-shop-server-1.onrender.com/api/staff/${username}`, {
         method: 'DELETE',
       });
 

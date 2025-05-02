@@ -28,7 +28,7 @@
 
 //   const fetchProductData = async () => {
 //     try {
-//       const res = await axios.get('http://localhost:3000/api/product-maintenance');
+//       const res = await axios.get('https://online-shop-server-1.onrender.com/api/product-maintenance');
 //       setProductData(Array.isArray(res.data) ? res.data : []); // Ensure it's an array
 //     } catch (error) {
 //       message.error("Failed to fetch data");
@@ -39,10 +39,10 @@
 //   const handleAddOrEdit = async (values) => {
 //     try {
 //       if (editingProduct) {
-//         await axios.put(`http://localhost:3000/api/admin-product-maintenance/${editingProduct._id}`, values);
+//         await axios.put(`https://online-shop-server-1.onrender.com/api/admin-product-maintenance/${editingProduct._id}`, values);
 //         message.success("Product updated successfully");
 //       } else {
-//         await axios.post('http://localhost:3000/api/adminadd-product-maintenance', values);
+//         await axios.post('https://online-shop-server-1.onrender.com/api/adminadd-product-maintenance', values);
 //         message.success("Product added successfully");
 //       }
 //       setIsModalOpen(false);
@@ -61,7 +61,7 @@
 
 //   const handleDelete = async () => {
 //     try {
-//       await axios.delete(`http://localhost:3000/api/admin-product-maintenance/${selectedProductId}`);
+//       await axios.delete(`https://online-shop-server-1.onrender.com/api/admin-product-maintenance/${selectedProductId}`);
 //       message.success("Product deleted successfully");
 //       fetchProductData();
 //     } catch (error) {
@@ -217,7 +217,7 @@ const AdminItemSettings = () => {
 
   const fetchProductData = async () => {
     try {
-      const res = await axios.get('http://localhost:3000/api/product-maintenance');
+      const res = await axios.get('https://online-shop-server-1.onrender.com/api/product-maintenance');
       setProductData(Array.isArray(res.data) ? res.data : []);
     } catch (error) {
       message.error("Failed to fetch product maintenance data");
@@ -227,7 +227,7 @@ const AdminItemSettings = () => {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get('http://localhost:3000/api/products');
+      const res = await axios.get('https://online-shop-server-1.onrender.com/api/products');
       setProducts(Array.isArray(res.data) ? res.data : []);
     } catch (error) {
       message.error("Failed to fetch products data");
@@ -238,7 +238,7 @@ const AdminItemSettings = () => {
   const handleAddOrEdit = async (values) => {
     try {
       // Check if the category already exists
-      const categoryCheckRes = await axios.get('http://localhost:3000/api/check-category', {
+      const categoryCheckRes = await axios.get('https://online-shop-server-1.onrender.com/api/check-category', {
         params: { category: values.category }
       });
 
@@ -257,10 +257,10 @@ const AdminItemSettings = () => {
       }
 
       if (editingProduct) {
-        await axios.put(`http://localhost:3000/api/admin-product-maintenance/${editingProduct._id}`, payload);
+        await axios.put(`https://online-shop-server-1.onrender.com/api/admin-product-maintenance/${editingProduct._id}`, payload);
         message.success("Product updated successfully");
       } else {
-        await axios.post('http://localhost:3000/api/adminadd-product-maintenance', payload);
+        await axios.post('https://online-shop-server-1.onrender.com/api/adminadd-product-maintenance', payload);
         message.success("Product added successfully");
       }
 
@@ -281,7 +281,7 @@ const AdminItemSettings = () => {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:3000/api/admin-product-maintenance/${selectedProductId}`);
+      await axios.delete(`https://online-shop-server-1.onrender.com/api/admin-product-maintenance/${selectedProductId}`);
       message.success("Product deleted successfully");
       fetchProductData();
     } catch (error) {

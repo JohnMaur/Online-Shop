@@ -24,7 +24,7 @@ const AdminToShip = () => {
   const fetchShippingDetails = async () => {
     try {
       // Fetch all userShipping data
-      const response = await axios.get('http://localhost:3000/api/all-shipping');
+      const response = await axios.get('https://online-shop-server-1.onrender.com/api/all-shipping');
       const shippingOrders = response.data;
 
       if (!Array.isArray(shippingOrders)) {
@@ -37,7 +37,7 @@ const AdminToShip = () => {
       const userDetails = await Promise.all(
         uniqueUsernames.map(async (username) => {
           try {
-            const res = await axios.get(`http://localhost:3000/api/account-info/${username}`);
+            const res = await axios.get(`https://online-shop-server-1.onrender.com/api/account-info/${username}`);
             return { username, ...res.data };
           } catch (error) {
             console.warn(`⚠️ No account info found for: ${username}`);

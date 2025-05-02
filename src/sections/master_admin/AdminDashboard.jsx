@@ -18,7 +18,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchTotalUsers = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/total-users');
+        const response = await axios.get('https://online-shop-server-1.onrender.com/api/total-users');
         setTotalUsers(response.data.totalUsers);
       } catch (error) {
         console.error('Error fetching total users:', error);
@@ -40,7 +40,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchTotalStaff = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/total-staff');
+        const response = await axios.get('https://online-shop-server-1.onrender.com/api/total-staff');
         setTotalStaff(response.data.totalUsers); // ✅ Correct: Updates totalStaff
       } catch (error) {
         console.error('Error fetching total staff:', error);
@@ -53,9 +53,9 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchTotals = async () => {
       try {
-        const shippingRes = await axios.get('http://localhost:3000/api/total-user-shipping');
-        const toReceiveRes = await axios.get('http://localhost:3000/api/total-to-receive');
-        const stocksRes = await axios.get('http://localhost:3000/api/total-stocks');
+        const shippingRes = await axios.get('https://online-shop-server-1.onrender.com/api/total-user-shipping');
+        const toReceiveRes = await axios.get('https://online-shop-server-1.onrender.com/api/total-to-receive');
+        const stocksRes = await axios.get('https://online-shop-server-1.onrender.com/api/total-stocks');
   
         setTotalShipped(shippingRes.data.totalShipping);
         setTotalToReceive(toReceiveRes.data.totalToReceive);

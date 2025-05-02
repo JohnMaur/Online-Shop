@@ -25,7 +25,7 @@
 //   useEffect(() => {
 //     const fetchData = async () => {
 //       try {
-//         const productResponse = await axios.get("http://localhost:3000/api/product-maintenance");
+//         const productResponse = await axios.get("https://online-shop-server-1.onrender.com/api/product-maintenance");
 //         setProductData(productResponse.data);
 //       } catch (error) {
 //         console.error("Error fetching product or supplier data:", error);
@@ -113,7 +113,7 @@
 
 //   //     console.log("Payload to send:", newProduct);
 
-//   //     const response = await axios.post("http://localhost:3000/api/admin-add-product", newProduct);
+//   //     const response = await axios.post("https://online-shop-server-1.onrender.com/api/admin-add-product", newProduct);
 //   //     alert(response.data.message);
 
 //   //     refreshProducts();
@@ -185,7 +185,7 @@
   
 //       console.log("Payload to send:", newProduct);
   
-//       const response = await axios.post("http://localhost:3000/api/admin-add-product", newProduct);
+//       const response = await axios.post("https://online-shop-server-1.onrender.com/api/admin-add-product", newProduct);
 //       alert(response.data.message);
   
 //       refreshProducts();
@@ -277,7 +277,7 @@ const AdminAddingNewProduct = ({ isOpen, onClose, staffUsername, refreshProducts
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const productResponse = await axios.get("http://localhost:3000/api/product-maintenance");
+        const productResponse = await axios.get("https://online-shop-server-1.onrender.com/api/product-maintenance");
         setProductData(productResponse.data);
       } catch (error) {
         console.error("Error fetching product or supplier data:", error);
@@ -405,7 +405,7 @@ const AdminAddingNewProduct = ({ isOpen, onClose, staffUsername, refreshProducts
   
       console.log("Payload to send:", newProduct);
   
-      const response = await axios.post("http://localhost:3000/api/admin-add-product", newProduct);
+      const response = await axios.post("https://online-shop-server-1.onrender.com/api/admin-add-product", newProduct);
       Swal.fire({
         title: "Success",
         text: response.data.message,

@@ -40,7 +40,7 @@ const AdminProductReview = () => {
 
   const fetchReviews = async () => {
     try {
-      const res = await axios.get(`http://localhost:3000/api/reviews-by-product/${productID}`);
+      const res = await axios.get(`https://online-shop-server-1.onrender.com/api/reviews-by-product/${productID}`);
       setReviews(res.data);
     } catch (error) {
       console.error("Error fetching reviews:", error);
@@ -49,7 +49,7 @@ const AdminProductReview = () => {
 
   const fetchProduct = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/stocks");
+      const res = await axios.get("https://online-shop-server-1.onrender.com/api/stocks");
       const foundProduct = res.data.find(p => p.productID === productID);
       setProduct(foundProduct);
     } catch (error) {

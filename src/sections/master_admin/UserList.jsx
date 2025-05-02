@@ -24,7 +24,7 @@ const UserList = () => {
     setError(null); // Clear previous errors
 
     try {
-      const response = await fetch('http://localhost:3000/api/user-list');
+      const response = await fetch('https://online-shop-server-1.onrender.com/api/user-list');
 
       // Check if response is successful
       if (!response.ok) {
@@ -64,7 +64,7 @@ const UserList = () => {
 
   const handleSave = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api/user/${editingUser.username}`, {
+      const response = await fetch(`https://online-shop-server-1.onrender.com/api/user/${editingUser.username}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -95,7 +95,7 @@ const UserList = () => {
       const confirmed = window.confirm(`Are you sure you want to delete user "${username}"?`);
       if (!confirmed) return;
 
-      const response = await fetch(`http://localhost:3000/api/user/${username}`, {
+      const response = await fetch(`https://online-shop-server-1.onrender.com/api/user/${username}`, {
         method: 'DELETE',
       });
 
@@ -205,6 +205,14 @@ const UserList = () => {
               <Input
                 name="recipientName"
                 value={formValues.recipientName}
+                onChange={handleFormChange}
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block">Password</label>
+              <Input.Password
+                name="password"
+                value={formValues.password}
                 onChange={handleFormChange}
               />
             </div>

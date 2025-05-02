@@ -22,7 +22,7 @@ const ChangePasswordModal = ({ isVisible, onClose, username, getApi }) => {
 
     try {
       setLoading(true);
-      const response = await axios.post(`http://localhost:3000/${getApi}`, {
+      const response = await axios.post(`https://online-shop-server-1.onrender.com/${getApi}`, {
         username,
         oldPassword,
         newPassword,

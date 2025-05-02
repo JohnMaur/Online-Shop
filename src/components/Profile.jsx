@@ -17,7 +17,7 @@ const Profile = ({ region, houseStreet, recipient, staffFullname, phoneNumber, e
     const fetchProfilePicture = async () => {
       try {
         // const response = await axios.get(`http://localhost:3000/api/get-profile-picture/${username}`);
-        const response = await axios.get(`http://localhost:3000/${getApi}/${username}`);
+        const response = await axios.get(`https://online-shop-server-1.onrender.com/${getApi}/${username}`);
         if (response.data.profilePicture) {
           setSelectedImage(response.data.profilePicture); // Set the fetched image
         }
@@ -58,7 +58,7 @@ const Profile = ({ region, houseStreet, recipient, staffFullname, phoneNumber, e
 
       // Update profile picture URL in MongoDB
       // await axios.post("http://localhost:3000/api/update-profile-picture", {
-      await axios.post(`http://localhost:3000/${updateAPI}`, {
+      await axios.post(`https://online-shop-server-1.onrender.com/${updateAPI}`, {
         username,
         profilePicture: downloadURL,
       });

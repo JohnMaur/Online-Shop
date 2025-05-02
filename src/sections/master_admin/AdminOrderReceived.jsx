@@ -36,7 +36,7 @@ const AdminOrderReceived = () => {
   const fetchReceivedOrders = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:3000/api/all-order-received");
+      const res = await axios.get("https://online-shop-server-1.onrender.com/api/all-order-received");
       setReceivedOrders(res.data);
     } catch (err) {
       toast({

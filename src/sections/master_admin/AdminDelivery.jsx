@@ -81,7 +81,7 @@ const AdminDelivery = () => {
   };
 
   const fetchVAT = async () => {
-    const res = await axios.get('http://localhost:3000/api/admin/vat'); // Adjust your endpoint
+    const res = await axios.get('https://online-shop-server-1.onrender.com/api/admin/vat'); // Adjust your endpoint
     setVatPercentage(res.data.value); // assuming res.data.value = 12
   };
 
@@ -92,15 +92,15 @@ const AdminDelivery = () => {
   }, []);
 
   const fetchData = async () => {
-    const productsRes = await axios.get('http://localhost:3000/api/products');
+    const productsRes = await axios.get('https://online-shop-server-1.onrender.com/api/products');
     setProducts(productsRes.data);
 
-    const supplierRes = await axios.get('http://localhost:3000/api/suppliers');
+    const supplierRes = await axios.get('https://online-shop-server-1.onrender.com/api/suppliers');
     setSuppliers(supplierRes.data);
   };
 
   const fetchDeliveries = async () => {
-    const res = await axios.get('http://localhost:3000/api/deliveries');
+    const res = await axios.get('https://online-shop-server-1.onrender.com/api/deliveries');
     setDeliveries(res.data);
   };
 
@@ -120,7 +120,7 @@ const AdminDelivery = () => {
   //       totalCost: parseFloat(supplierPrice) * parseInt(quantity),
   //       addedAt: new Date()
   //     };
-  //     await axios.post('http://localhost:3000/api/admin-add-delivery', payload);
+  //     await axios.post('https://online-shop-server-1.onrender.com/api/admin-add-delivery', payload);
   //     // SweetAlert Success
   //     MySwal.fire({
   //       icon: 'success',
@@ -160,7 +160,7 @@ const AdminDelivery = () => {
         addedAt: new Date(),
       };
 
-      await axios.post('http://localhost:3000/api/admin-add-delivery', payload);
+      await axios.post('https://online-shop-server-1.onrender.com/api/admin-add-delivery', payload);
       // SweetAlert Success
       MySwal.fire({
         icon: 'success',
@@ -191,7 +191,7 @@ const AdminDelivery = () => {
 
   const handleSetAsDelivered = async (deliveryId) => {
     try {
-      const response = await axios.post(`http://localhost:3000/api/admin-set-as-delivered/${deliveryId}`);
+      const response = await axios.post(`https://online-shop-server-1.onrender.com/api/admin-set-as-delivered/${deliveryId}`);
       // alert(response.data.message);
       await MySwal.fire({
         icon: 'success',

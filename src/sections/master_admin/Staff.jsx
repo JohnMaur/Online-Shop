@@ -29,7 +29,7 @@
 //     }
 
 //     try {
-//       const response = await axios.post('http://localhost:3000/api/staffSignup', {
+//       const response = await axios.post('https://online-shop-server-1.onrender.com/api/staffSignup', {
 //         username,
 //         password,
 //       });
@@ -177,7 +177,7 @@ const Staff = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:3000/api/staffSignup', {
+      const response = await axios.post('https://online-shop-server-1.onrender.com/api/staffSignup', {
         username,
         password,
       });

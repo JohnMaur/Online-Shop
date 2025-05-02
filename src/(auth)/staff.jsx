@@ -195,12 +195,12 @@ const LoginStaff = () => {
     e.preventDefault();
     setLoading(true);
     setError("");
-
+ 
     try {
       const response = await axios.post("https://online-shop-server-1.onrender.com/api/staffLogin", {
         username,
         password,
-      });
+      }); 
 
       if (response.status === 200) {
         const { token } = response.data;

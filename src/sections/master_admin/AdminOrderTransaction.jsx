@@ -22,8 +22,8 @@
 //     setLoading(true);
 //     try {
 //       const url = type === 'canceled'
-//         ? 'http://localhost:3000/api/all-canceled-orders'
-//         : 'http://localhost:3000/api/all-order-received';
+//         ? 'https://online-shop-server-1.onrender.com/api/all-canceled-orders'
+//         : 'https://online-shop-server-1.onrender.com/api/all-order-received';
 
 //       const res = await axios.get(url);
 //       setData(res.data);
@@ -123,8 +123,8 @@ const AdminOrderTransaction = () => {
     setLoading(true);
     try {
       const url = type === 'canceled'
-        ? 'http://localhost:3000/api/all-canceled-orders'
-        : 'http://localhost:3000/api/all-order-received';
+        ? 'https://online-shop-server-1.onrender.com/api/all-canceled-orders'
+        : 'https://online-shop-server-1.onrender.com/api/all-order-received';
 
       const res = await axios.get(url);
       setData(res.data);

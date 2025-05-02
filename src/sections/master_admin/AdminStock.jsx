@@ -27,7 +27,7 @@ const AdminStock = () => {
 
   const fetchSearchStocks = async (query = '') => {
     try {
-      const response = await fetch(`http://localhost:3000/api/search-userStocks?search=${query}`);
+      const response = await fetch(`https://online-shop-server-1.onrender.com/api/search-userStocks?search=${query}`);
       const data = await response.json();
       setStocks(data);
     } catch (error) {
@@ -42,7 +42,7 @@ const AdminStock = () => {
 
   const fetchStocks = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/stocks");
+      const response = await fetch("https://online-shop-server-1.onrender.com/api/stocks");
       const data = await response.json();
       setStocks(data);
     } catch (error) {
@@ -54,7 +54,7 @@ const AdminStock = () => {
     if (!productToDelete) return;
 
     try {
-      const response = await fetch(`http://localhost:3000/api/delete-stock/${productToDelete._id}`, {
+      const response = await fetch(`https://online-shop-server-1.onrender.com/api/delete-stock/${productToDelete._id}`, {
         method: "DELETE",
       });
 

@@ -44,7 +44,7 @@ const StaffProfile = () => {
 
   const fetchAccountInfo = async (username) => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/staff-info/${username}`);
+      const response = await axios.get(`https://online-shop-server-1.onrender.com/api/staff-info/${username}`);
       if (response.status === 200 && response.data) {
         const { staffFullname, email, region, houseStreet, phoneNumber, contactPerson } = response.data;
 
@@ -84,7 +84,7 @@ const StaffProfile = () => {
         return;
       }
 
-      const response = await axios.post("http://localhost:3000/api/update-staffAccount", {
+      const response = await axios.post("https://online-shop-server-1.onrender.com/api/update-staffAccount", {
         staffUsername,
         staffFullname: tempStaffFullname,
         email: tempEmail,
@@ -171,11 +171,11 @@ const StaffProfile = () => {
               <div className="flex flex-col justify-center h-[90vh] content-center w-5/12 mx-20 max-md:w-full max-md:mx-5 max-sm:mx-2">
                 <div className='bg-white p-10 rounded-2xl'>
                   <div className="mb-8">
-                    <h1 className="text-2xl font-bold text-[#444B59] mb-2">Supplier Maintenace</h1>
+                    <h1 className="text-2xl font-bold text-[#444B59] mb-2">Staff Info</h1>
                   </div>
 
                   <form className="w-full" onSubmit={handleSave}>
-                    <TextInput label="Supplier Name" placeholder="Surname/First Name/Middle Name" type="text" value={tempStaffFullname} onChange={(e) => setTempStaffFullname(e.target.value)} />
+                    <TextInput label="Staff Name" placeholder="Surname/First Name/Middle Name" type="text" value={tempStaffFullname} onChange={(e) => setTempStaffFullname(e.target.value)} />
                     <TextInput label="Contact Person" placeholder="Surname/First Name/Middle Name" value={tempContactPerson} onChange={(e) => setTempContactPerson(e.target.value)} />
                     <TextInput label="Email Address" placeholder="example@gmail.com" type="text" value={tempEmail} onChange={(e) => setTempEmail(e.target.value)} />
                     <TextInput label="Phone Number" placeholder="09*********" type="text" value={tempPhoneNumber} onChange={(e) => setTempPhoneNumber(e.target.value)} />

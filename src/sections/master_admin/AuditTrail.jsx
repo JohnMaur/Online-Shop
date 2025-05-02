@@ -61,7 +61,7 @@ const AuditTrail = () => {
   useEffect(() => {
     const fetchLogs = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/audit-logs?role=${roleFilter}`);
+        const response = await axios.get(`https://online-shop-server-1.onrender.com/api/audit-logs?role=${roleFilter}`);
         setLogs(response.data);
       } catch (error) {
         console.error("Error fetching audit logs:", error);

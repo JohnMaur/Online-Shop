@@ -64,7 +64,7 @@ const AdminVAT = () => {
 
   const fetchVAT = async () => {
     try {
-      const res = await axios.get('http://localhost:3000/api/admin/vat');
+      const res = await axios.get('https://online-shop-server-1.onrender.com/api/admin/vat');
       if (res.data?.value !== undefined) {
         setVat(res.data.value);
         setIsExisting(true);
@@ -86,7 +86,7 @@ const AdminVAT = () => {
       }
 
       if (isExisting) {
-        await axios.put('http://localhost:3000/api/admin/vat', { value: parsedVat });
+        await axios.put('https://online-shop-server-1.onrender.com/api/admin/vat', { value: parsedVat });
         MySwal.fire({
           icon: 'success',
           title: 'VAT Updated',
@@ -95,7 +95,7 @@ const AdminVAT = () => {
           showConfirmButton: false,
         });
       } else {
-        await axios.post('http://localhost:3000/api/admin/vat', { value: parsedVat });
+        await axios.post('https://online-shop-server-1.onrender.com/api/admin/vat', { value: parsedVat });
         setIsExisting(true);
         MySwal.fire({
           icon: 'success',

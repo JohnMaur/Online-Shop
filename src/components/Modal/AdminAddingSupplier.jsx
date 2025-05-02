@@ -29,7 +29,7 @@
 //   const checkSupplierName = async (name) => {
 //     if (name.trim()) {
 //       try {
-//         const response = await fetch('http://localhost:3000/api/check-supplier-name', {
+//         const response = await fetch('https://online-shop-server-1.onrender.com/api/check-supplier-name', {
 //           method: 'POST',
 //           headers: { 'Content-Type': 'application/json' },
 //           body: JSON.stringify({ name }),
@@ -70,7 +70,7 @@
 //     }
 
 //     try {
-//       const response = await fetch('http://localhost:3000/api/adminAdd-supplier', {
+//       const response = await fetch('https://online-shop-server-1.onrender.com/api/adminAdd-supplier', {
 //         method: 'POST',
 //         headers: { 'Content-Type': 'application/json' },
 //         body: JSON.stringify(formData),
@@ -238,7 +238,7 @@ const AdminAddingSupplier = ({ isOpen, onClose, refreshSuppliers }) => {
     }
 
     try {
-      const res = await fetch('http://localhost:3000/api/check-supplier-field', {
+      const res = await fetch('https://online-shop-server-1.onrender.com/api/check-supplier-field', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ field, value }),
@@ -275,7 +275,7 @@ const AdminAddingSupplier = ({ isOpen, onClose, refreshSuppliers }) => {
     }
   
     try {
-      const res = await fetch('http://localhost:3000/api/adminAdd-supplier', {
+      const res = await fetch('https://online-shop-server-1.onrender.com/api/adminAdd-supplier', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),

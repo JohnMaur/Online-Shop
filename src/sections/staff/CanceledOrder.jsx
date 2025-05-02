@@ -1,40 +1,3 @@
-// import React, { useState } from 'react';
-// import { StaffNavBar, Header } from "../layout"
-
-// const CanceledOrder = () => {
-//   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
-//   const [staffUsername, setStaffUsername] = useState("");
-
-//   const toggleNav = () => {
-//     setIsNavCollapsed(!isNavCollapsed);
-//   };
-
-//   return (
-//     <div className={`flex flex-row-reverse max-md:flex-row w-full`}>
-//       <div className='flex flex-col flex-1 h-screen'>
-//         <Header
-//           toggleNav={toggleNav}
-//         />
-
-//         <div className={`flex-1 overflow-auto mt-14 bg-[#EFEFEF]`}>
-//           {/* Your content here */}
-//           <p>Canceled Received</p>
-//         </div>
-//       </div>
-
-//       <nav className={`max-md:hidden ${isNavCollapsed ? "w-20" : "w-56"} transition-width duration-300`}>
-//         <StaffNavBar
-//           isNavCollapsed={isNavCollapsed}
-//           setStaffUsername={setStaffUsername}
-//         />
-//       </nav>
-
-//     </div>
-//   )
-// }
-
-// export default CanceledOrder
-
 import React, { useEffect, useState } from 'react';
 import {
   Box,
@@ -45,6 +8,7 @@ import {
   Divider,
   Skeleton,
   useToast,
+  Spinner,
 } from "@chakra-ui/react";
 import axios from 'axios';
 import dayjs from 'dayjs';
@@ -73,7 +37,7 @@ const CanceledOrder = () => {
   const fetchCanceledOrders = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:3000/api/all-canceled-orders");
+      const res = await axios.get("https://online-shop-server-1.onrender.com/api/all-canceled-orders");
       setCanceledOrders(res.data);
     } catch (err) {
       toast({
@@ -96,12 +60,17 @@ const CanceledOrder = () => {
           <Text fontSize="3xl" fontWeight="bold" mb={6}>Canceled Orders</Text>
 
           {loading ? (
-            <Stack spacing={4}>
-              {[...Array(3)].map((_, i) => (
-                <Skeleton height="200px" borderRadius="lg" key={i} />
-              ))}
-            </Stack>
-          ) : canceledOrders.length > 0 ? (
+            // Show Spinner while loading
+            <Flex justify="center" align="center" mt={20}>
+              <Spinner
+                size="xl"
+                thickness="4px"
+                speed="0.65s"
+                color="blue.500"
+                style={{ width: '25px', height: '25px' }} // Custom size here
+              />
+            </Flex>
+          )  : canceledOrders.length > 0 ? (
             canceledOrders.map((order) => (
               <Box
                 key={order._id}

@@ -7,7 +7,7 @@ const DeliveryHistory = ({ refresh, setTotalDeliveredCost }) => {
 
   const fetchDeliveryHistory = async () => {
     try {
-      const res = await axios.get('http://localhost:3000/api/delivery-history');
+      const res = await axios.get('https://online-shop-server-1.onrender.com/api/delivery-history');
       setDeliveryHistory(res.data);
 
       const total = res.data.reduce((sum, item) => sum + item.totalCost, 0);

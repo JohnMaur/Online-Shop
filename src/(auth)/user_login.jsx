@@ -22,7 +22,7 @@
 //     e.preventDefault();
 //     try {
 //       // Send login request to backend API
-//       // const response = await axios.post("http://localhost:3000/api/login", {
+//       // const response = await axios.post("https://online-shop-server-1.onrender.com/api/login", {
 //       const response = await axios.post("https://online-shop-server-1.onrender.com/api/login", {
 //         username,
 //         password,
@@ -129,7 +129,7 @@ const Login = () => {
         password,
       });
 
-      if (response.status === 200) {
+      if (response.status === 200) { 
         const { token } = response.data;
         login(username, token);
         navigate("/account-info");

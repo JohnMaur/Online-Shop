@@ -34,7 +34,7 @@ const SupplierModal = ({ isOpen, onClose, refreshSuppliers, staffUsername }) => 
   const checkUniqueField = async (field, value) => {
     if (value.trim()) {
       try {
-        const response = await fetch('http://localhost:3000/api/check-supplier-field', {
+        const response = await fetch('https://online-shop-server-1.onrender.com/api/check-supplier-field', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ field, value }),
@@ -79,7 +79,7 @@ const SupplierModal = ({ isOpen, onClose, refreshSuppliers, staffUsername }) => 
     const supplierID = 'SUP-' + Math.random().toString(36).substr(2, 9).toUpperCase();
   
     try {
-      const response = await fetch('http://localhost:3000/api/add-supplier', {
+      const response = await fetch('https://online-shop-server-1.onrender.com/api/add-supplier', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...formData, supplierID }), // 👈 Add supplierID here

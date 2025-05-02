@@ -22,7 +22,7 @@
 
 //   const fetchProducts = async () => {
 //     try {
-//       const response = await fetch('http://localhost:3000/api/products'); // Adjust URL as needed
+//       const response = await fetch('https://online-shop-server-1.onrender.com/api/products'); // Adjust URL as needed
 //       const data = await response.json();
 //       setProducts(data);
 //     } catch (error) {
@@ -41,7 +41,7 @@
 //     if (!productToDelete) return;
 
 //     try {
-//       const response = await fetch(`http://localhost:3000/api/admin-delete-product/${productToDelete._id}`, {
+//       const response = await fetch(`https://online-shop-server-1.onrender.com/api/admin-delete-product/${productToDelete._id}`, {
 //         method: "DELETE",
 //       });
 
@@ -179,7 +179,7 @@
 
 //   const fetchProducts = async () => {
 //     try {
-//       const response = await fetch('http://localhost:3000/api/products');
+//       const response = await fetch('https://online-shop-server-1.onrender.com/api/products');
 //       const data = await response.json();
 //       setProducts(data);
 //     } catch (error) {
@@ -189,7 +189,7 @@
 
 //   const fetchStocks = async () => {
 //     try {
-//       const response = await fetch('http://localhost:3000/api/stocks'); // Adjust this URL
+//       const response = await fetch('https://online-shop-server-1.onrender.com/api/stocks'); // Adjust this URL
 //       const data = await response.json();
 //       setStocks(data);
 //     } catch (error) {
@@ -199,7 +199,7 @@
 
 //   const fetchDeliveries = async () => {
 //     try {
-//       const response = await fetch('http://localhost:3000/api/deliveries'); // Adjust this URL
+//       const response = await fetch('https://online-shop-server-1.onrender.com/api/deliveries'); // Adjust this URL
 //       const data = await response.json();
 //       setDeliveries(data);
 //     } catch (error) {
@@ -224,7 +224,7 @@
 //     if (!productToDelete) return;
 
 //     try {
-//       const response = await fetch(`http://localhost:3000/api/admin-delete-product/${productToDelete._id}`, {
+//       const response = await fetch(`https://online-shop-server-1.onrender.com/api/admin-delete-product/${productToDelete._id}`, {
 //         method: "DELETE",
 //       });
 
@@ -372,7 +372,7 @@ const Product = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/products');
+      const response = await fetch('https://online-shop-server-1.onrender.com/api/products');
       const data = await response.json();
       setProducts(data);
     } catch (error) {
@@ -382,7 +382,7 @@ const Product = () => {
 
   const fetchStocks = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/stocks');
+      const response = await fetch('https://online-shop-server-1.onrender.com/api/stocks');
       const data = await response.json();
       setStocks(data);
     } catch (error) {
@@ -392,7 +392,7 @@ const Product = () => {
 
   const fetchDeliveries = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/deliveries');
+      const response = await fetch('https://online-shop-server-1.onrender.com/api/deliveries');
       const data = await response.json();
       setDeliveries(data);
     } catch (error) {
@@ -425,7 +425,7 @@ const Product = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const response = await fetch(`http://localhost:3000/api/admin-delete-product/${product._id}`, {
+          const response = await fetch(`https://online-shop-server-1.onrender.com/api/admin-delete-product/${product._id}`, {
             method: "DELETE",
           });
 
