@@ -20,7 +20,7 @@
 //         const shippingRes = await axios.get('https://online-shop-server-1.onrender.com/api/total-user-shipping');
 //         const toReceiveRes = await axios.get('https://online-shop-server-1.onrender.com/api/total-to-receive');
 //         const stocksRes = await axios.get('https://online-shop-server-1.onrender.com/api/total-stocks');
-  
+
 //         setTotalShipped(shippingRes.data.totalShipping);
 //         setTotalToReceive(toReceiveRes.data.totalToReceive);
 //         setTotalProducts(stocksRes.data.totalStocks);
@@ -29,7 +29,7 @@
 //         console.error("Error fetching totals:", error);
 //       }
 //     };
-  
+
 //     fetchTotals();
 //   }, []);
 
@@ -129,7 +129,7 @@ const StaffDashboard = () => {
         const shippingRes = await axios.get('https://online-shop-server-1.onrender.com/api/total-user-shipping');
         const toReceiveRes = await axios.get('https://online-shop-server-1.onrender.com/api/total-to-receive');
         const stocksRes = await axios.get('https://online-shop-server-1.onrender.com/api/total-stocks');
-  
+
         setTotalShipped(shippingRes.data.totalShipping);
         setTotalToReceive(toReceiveRes.data.totalToReceive);
         setTotalProducts(stocksRes.data.totalStocks);
@@ -140,7 +140,7 @@ const StaffDashboard = () => {
         setIsLoading(false); // Stop loading after data is fetched
       }
     };
-  
+
     fetchTotals();
   }, []);
 
@@ -175,14 +175,21 @@ const StaffDashboard = () => {
                   title="To ship"
                   subtext="Total shipping"
                   subtextResult={totalShipped}
-                  linkTo="/staff-shipping"
+                  linkTo="/staff-order-transaction"
                 />
+                {/* <DashboardCard
+                  icon={receiving}
+                  title="To receive"
+                  subtext="Total receiving" 
+                  subtextResult={totalToReceive}
+                  linkTo="/staff-order-transaction"
+                /> */}
                 <DashboardCard
                   icon={receiving}
                   title="To receive"
                   subtext="Total receiving"
                   subtextResult={totalToReceive}
-                  linkTo="/staff-receiving"
+                  linkTo="/staff-order-transaction?status=receiving"
                 />
                 <DashboardCard
                   icon={product}
@@ -194,7 +201,17 @@ const StaffDashboard = () => {
                 />
               </div>
 
-              <div className='flex space-x-8 m-8 max-md:flex-col max-md:space-y-8'>
+              <div className='flex space-x-2 m-8 max-md:flex-col max-md:space-y-8'>
+                {/* <div className='w-1/3 md:pr-6 max-md:w-full'>
+                  <DashboardCard
+                    icon={product}
+                    title="Stocks"
+                    subtext="Total stocks"
+                    subtextResult={totalProducts}
+                    subtext1="Sold"
+                    linkTo="/stock-maintenance"
+                  />
+                </div> */}
                 <div className='w-1/3 md:pr-6 max-md:w-full'>
                   <DashboardCard
                     icon={stock}

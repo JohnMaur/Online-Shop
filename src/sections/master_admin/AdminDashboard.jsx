@@ -47,7 +47,7 @@ const AdminDashboard = () => {
       }
     };
 
-    fetchTotalStaff();
+    fetchTotalStaff(); 
   }, []);
 
   useEffect(() => {
@@ -99,7 +99,7 @@ const AdminDashboard = () => {
               title="To ship"
               subtext="Total shipping"
               subtextResult={totalShipped}
-              linkTo="/admin-to-ship"
+              linkTo="/admin-order-transac"
             />
           </div>
 
@@ -109,7 +109,7 @@ const AdminDashboard = () => {
               title="To receive"
               subtext="Total receiving"
               subtextResult={totalToReceive}
-              linkTo="/admin-to-receive"
+              linkTo="/admin-order-transac?status=receiving"
             />
             <DashboardCard
               icon={product}

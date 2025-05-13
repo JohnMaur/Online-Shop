@@ -11,6 +11,7 @@ import OrderTranstaction from "./OrderTranstaction";
 import OrderReceived from "./OrderReceived";
 import CanceledOrder from "./CanceledOrder"; // ✅ correct
 import StaffProductreview from "./Staff-Product-review";
+import OrderTransac from "./OrderTransac";
 
 export {
   StaffDashboard,
@@ -26,4 +27,5 @@ export {
   OrderReceived,
   CanceledOrder,
   StaffProductreview,
+  OrderTransac,
 }

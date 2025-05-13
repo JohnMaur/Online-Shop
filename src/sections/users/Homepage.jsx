@@ -309,6 +309,7 @@ const Homepage = () => {
                     <p>{stock.product.productName}</p>
                     <p>Color: {stock.product.color}</p>
                     <p>Price: ₱ {stock.shopPrice}.00</p>
+                    <p className='text-gray-600'>Quantity: {stock.quantity}</p>
                     <div className='flex justify-end space-x-2 mt-2'>
                       <div className='w-32 max-md:w-full'>
                         <CustomButton

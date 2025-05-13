@@ -22,6 +22,12 @@ import ShippingCancelModal from "./Modal/ShippingCancelModal";
 import AdminAddingNewProduct from "./Modal/AdminAddingNewProduct";
 import Paypal from "./Paypal";
 import StaffNavItem from "./StaffNavItem";
+import ProductDetails from "./ProductDetails";
+import ProductReviews from "./ProductReviews";
+import ShippingOrders from "./OrderTransaction/ShippingOrders";
+import ReceivingOrders from "./OrderTransaction/ReceivingOrders";
+import ReceivedOrders from "./OrderTransaction/ReceivedOrders";
+import CanceledOrders from "./OrderTransaction/CanceledOrders";
 
 export {
   TextInput,
@@ -48,4 +54,10 @@ export {
   AdminAddingNewProduct,
   Paypal,
   StaffNavItem,
+  ProductDetails,
+  ProductReviews,
+  ShippingOrders,
+  ReceivingOrders,
+  ReceivedOrders,
+  CanceledOrders
 }

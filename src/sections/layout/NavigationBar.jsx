@@ -229,10 +229,11 @@ const NavigationBar = ({ isNavCollapsed, onSearch }) => {
         <div className="mt-5 h-[65vh] overflow-y-auto custom-scrollbar pr-1">
           <StaffNavItem isNavCollapsed={isNavCollapsed} icon={<FaTachometerAlt />} iconHovered={<FaTachometerAlt />} tooltipText="Dashboard" link="/dashboard" />
           <StaffNavItem isNavCollapsed={isNavCollapsed} icon={<FaUserTie />} iconHovered={<FaUserTie />} tooltipText="Staff" link="/staff" />
-          <StaffNavItem isNavCollapsed={isNavCollapsed} icon={<FaShippingFast />} iconHovered={<FaShippingFast />} tooltipText="To Ship" link="/admin-to-ship" />
+          <StaffNavItem isNavCollapsed={isNavCollapsed} icon={<FaShippingFast />} iconHovered={<FaShippingFast />} tooltipText="Order Transaction" link="/admin-order-transac" />
+          {/* <StaffNavItem isNavCollapsed={isNavCollapsed} icon={<FaShippingFast />} iconHovered={<FaShippingFast />} tooltipText="To Ship" link="/admin-to-ship" />
           <StaffNavItem isNavCollapsed={isNavCollapsed} icon={<FaBoxOpen />} iconHovered={<FaBoxOpen />} tooltipText="To Receive" link="/admin-to-receive" />
           <StaffNavItem isNavCollapsed={isNavCollapsed} icon={<FaClipboardList />} iconHovered={<FaClipboardList />} tooltipText="Order Received" link="/admin-order-received" />
-          <StaffNavItem isNavCollapsed={isNavCollapsed} icon={<FaClipboardList />} iconHovered={<FaClipboardList />} tooltipText="Order Canceled" link="/admin-order-canceled" />
+          <StaffNavItem isNavCollapsed={isNavCollapsed} icon={<FaClipboardList />} iconHovered={<FaClipboardList />} tooltipText="Order Canceled" link="/admin-order-canceled" /> */}
           <StaffNavItem isNavCollapsed={isNavCollapsed} icon={<FaClipboardList />} iconHovered={<FaClipboardList />} tooltipText="Order Transaction" link="/admin-order-transaction" />
           <StaffNavItem isNavCollapsed={isNavCollapsed} icon={<FaTools />} iconHovered={<FaTools />} tooltipText="Category Maintenance" link="/product_maintenance" />
           <StaffNavItem isNavCollapsed={isNavCollapsed} icon={<FaBox />} iconHovered={<FaBox />} tooltipText="Product" link="/product" />

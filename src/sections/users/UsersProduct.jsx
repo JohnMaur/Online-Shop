@@ -1,3 +1,182 @@
+// import React, { useState, useEffect } from 'react';
+// import { useLocation, useNavigate } from 'react-router-dom';
+// import { UserNavBar, Header, MobileNavBar } from "../layout";
+// import axios from 'axios';
+// import { FaUserCircle } from 'react-icons/fa';
+// import { Star } from 'lucide-react';
+// import { ArrowLeft } from 'lucide-react';
+
+// const UsersProduct = () => {
+//   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
+//   const [showMobileNav, setShowMobileNav] = useState(false);
+//   const [productID, setProductID] = useState(null);
+//   const [reviews, setReviews] = useState([]);
+//   const [product, setProduct] = useState(null);
+
+//   const location = useLocation();
+//   const navigate = useNavigate();
+
+//   const toggleNav = () => {
+//     if (window.innerWidth <= 768) {
+//       setShowMobileNav(prev => !prev);
+//     } else {
+//       setIsNavCollapsed(!isNavCollapsed);
+//     }
+//   };
+
+//   // Close mobile nav on window resize
+//   useEffect(() => {
+//     const handleResize = () => {
+//       if (window.innerWidth > 768) {
+//         setShowMobileNav(false);
+//       }
+//     };
+//     window.addEventListener("resize", handleResize);
+//     return () => window.removeEventListener("resize", handleResize);
+//   }, []);
+
+//   useEffect(() => {
+//     const queryParams = new URLSearchParams(location.search);
+//     const id = queryParams.get('productID');
+//     setProductID(id);
+//   }, [location.search]);
+
+//   useEffect(() => {
+//     if (productID) {
+//       fetchReviews();
+//       fetchProduct();
+//     }
+//   }, [productID]);
+
+//   const fetchReviews = async () => {
+//     try {
+//       const res = await axios.get(`https://online-shop-server-1.onrender.com/api/reviews-by-product/${productID}`);
+//       setReviews(res.data);
+//     } catch (error) {
+//       console.error("Error fetching reviews:", error);
+//     }
+//   };
+
+//   const fetchProduct = async () => {
+//     try {
+//       const res = await axios.get("https://online-shop-server-1.onrender.com/api/stocks");
+//       const foundProduct = res.data.find(p => p.productID === productID);
+//       setProduct(foundProduct);
+//     } catch (error) {
+//       console.error("Error fetching product:", error);
+//     }
+//   };
+
+//   const renderStars = (rating) => {
+//     let stars = [];
+//     for (let i = 1; i <= 5; i++) {
+//       stars.push(
+//         <Star
+//           key={i}
+//           color={i <= rating ? "#ffd700" : "#e4e4e4"}
+//           size={20}
+//         />
+//       );
+//     }
+//     return stars;
+//   };
+
+//   return (
+//     <div className="flex w-full">
+//       {/* Sidebar (left) */}
+//       <nav className={`max-md:hidden ${isNavCollapsed ? "w-20" : "w-56"} transition-width duration-300`}>
+//         <UserNavBar isNavCollapsed={isNavCollapsed} responsiveLink="/user-product" />
+//       </nav>
+
+//       {/* Main Content */}
+//       <div className='flex flex-col flex-1 h-screen'>
+//         <Header toggleNav={toggleNav} />
+//         {showMobileNav && (
+//           <div className="md:hidden fixed top-14 left-0 w-full z-50 bg-white shadow-md">
+//             <MobileNavBar />
+//           </div>
+//         )}
+
+//         <div className="flex-1 overflow-auto mt-14 bg-gray-50 p-6">
+//           {/* Back Button */}
+//           <button
+//             onClick={() => navigate('/home')}
+//             className="flex items-center mb-4 text-blue-500 hover:underline"
+//           >
+//             <ArrowLeft className="mr-2" /> Back to Home
+//           </button>
+
+//           <div className="flex flex-col md:flex-row gap-6">
+//             {/* Product Section */}
+//             <div className="w-full md:w-1/2 bg-white p-6 rounded-lg shadow-md">
+//               {product ? (
+//                 <div className="space-y-4">
+//                   <img
+//                     src={product.product.imageUrl}
+//                     alt={product.product.productName}
+//                     className="w-full max-w-md rounded-md object-cover shadow"
+//                   />
+//                   <div>
+//                     <p className="text-lg font-semibold">{product.product.productName}</p>
+//                     <p className="text-sm text-gray-500">{product.product.brand}</p>
+//                     <p className="text-md font-bold text-green-600">₱{product.shopPrice}</p>
+//                   </div>
+//                 </div>
+//               ) : (
+//                 <p className="text-gray-500 text-sm">Product details not found.</p>
+//               )}
+//             </div>
+
+//             {/* Reviews Section */}
+//             <div className="flex-1">
+//               <h2 className="text-2xl font-semibold text-gray-700 mb-4">Reviews</h2>
+
+//               {reviews.length === 0 ? (
+//                 <p className="text-gray-500 text-sm">No reviews for this product yet.</p>
+//               ) : (
+//                 <div className="space-y-4 overflow-auto h-[70vh]">
+//                   {reviews.map((review, idx) => (
+//                     <div key={idx} className="bg-white p-4 rounded-md shadow hover:shadow-md transition">
+//                       <div className="flex items-center mb-2">
+//                         {review.accountInfo?.profilePicture ? (
+//                           <img
+//                             src={review.accountInfo.profilePicture}
+//                             alt="Reviewer"
+//                             className="w-8 h-8 rounded-full object-cover mr-3"
+//                           />
+//                         ) : (
+//                           <FaUserCircle size={28} className="text-blue-400 mr-3" />
+//                         )}
+//                         <div className="flex-1">
+//                           <div className="flex items-center">{renderStars(Number(review.rating) || 0)}</div>
+//                           <p className="text-xs text-gray-500 mt-1">
+//                             {review.accountInfo?.recipientName || "Anonymous"} • {new Date(review.createdAt).toLocaleDateString()}
+//                           </p>
+//                         </div>
+//                       </div>
+//                       <p className="text-gray-700 text-sm mb-2">{review.review}</p>
+//                       {review.reviewImageUrl && (
+//                         <img
+//                           src={review.reviewImageUrl}
+//                           alt="Review"
+//                           className="w-full max-w-xs rounded-md shadow-sm"
+//                         />
+//                       )}
+//                     </div>
+//                   ))}
+//                 </div>
+//               )}
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default UsersProduct;
+
+
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { UserNavBar, Header, MobileNavBar } from "../layout";
@@ -5,6 +184,7 @@ import axios from 'axios';
 import { FaUserCircle } from 'react-icons/fa';
 import { Star } from 'lucide-react';
 import { ArrowLeft } from 'lucide-react';
+import { ProductDetails, ProductReviews } from '../../components';
 
 const UsersProduct = () => {
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
@@ -12,6 +192,7 @@ const UsersProduct = () => {
   const [productID, setProductID] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [product, setProduct] = useState(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -80,7 +261,21 @@ const UsersProduct = () => {
     }
     return stars;
   };
- 
+
+  const handleNextImage = () => {
+    if (product?.product?.imageUrl?.length > 0) {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % product.product.imageUrl.length);
+    }
+  };
+
+  const handlePrevImage = () => {
+    if (product?.product?.imageUrl?.length > 0) {
+      setCurrentImageIndex((prevIndex) =>
+        (prevIndex - 1 + product.product.imageUrl.length) % product.product.imageUrl.length
+      );
+    }
+  };
+
   return (
     <div className="flex w-full">
       {/* Sidebar (left) */}
@@ -108,65 +303,15 @@ const UsersProduct = () => {
 
           <div className="flex flex-col md:flex-row gap-6">
             {/* Product Section */}
-            <div className="w-full md:w-1/2 bg-white p-6 rounded-lg shadow-md">
-              {product ? (
-                <div className="space-y-4">
-                  <img
-                    src={product.product.imageUrl}
-                    alt={product.product.productName}
-                    className="w-full max-w-md rounded-md object-cover shadow"
-                  />
-                  <div>
-                    <p className="text-lg font-semibold">{product.product.productName}</p>
-                    <p className="text-sm text-gray-500">{product.product.brand}</p>
-                    <p className="text-md font-bold text-green-600">₱{product.shopPrice}</p>
-                  </div>
-                </div>
-              ) : (
-                <p className="text-gray-500 text-sm">Product details not found.</p>
-              )}
-            </div>
+            <ProductDetails
+              product={product}
+              currentImageIndex={currentImageIndex}
+              handlePrevImage={handlePrevImage}
+              handleNextImage={handleNextImage}
+              navigate={navigate}
+            />
+            <ProductReviews reviews={reviews} />
 
-            {/* Reviews Section */}
-            <div className="flex-1">
-              <h2 className="text-2xl font-semibold text-gray-700 mb-4">Reviews</h2>
-
-              {reviews.length === 0 ? (
-                <p className="text-gray-500 text-sm">No reviews for this product yet.</p>
-              ) : (
-                <div className="space-y-4 overflow-auto h-[70vh]">
-                  {reviews.map((review, idx) => (
-                    <div key={idx} className="bg-white p-4 rounded-md shadow hover:shadow-md transition">
-                      <div className="flex items-center mb-2">
-                        {review.accountInfo?.profilePicture ? (
-                          <img
-                            src={review.accountInfo.profilePicture}
-                            alt="Reviewer"
-                            className="w-8 h-8 rounded-full object-cover mr-3"
-                          />
-                        ) : (
-                          <FaUserCircle size={28} className="text-blue-400 mr-3" />
-                        )}
-                        <div className="flex-1">
-                          <div className="flex items-center">{renderStars(Number(review.rating) || 0)}</div>
-                          <p className="text-xs text-gray-500 mt-1">
-                            {review.accountInfo?.recipientName || "Anonymous"} • {new Date(review.createdAt).toLocaleDateString()}
-                          </p>
-                        </div>
-                      </div>
-                      <p className="text-gray-700 text-sm mb-2">{review.review}</p>
-                      {review.reviewImageUrl && (
-                        <img
-                          src={review.reviewImageUrl}
-                          alt="Review"
-                          className="w-full max-w-xs rounded-md shadow-sm"
-                        />
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
           </div>
         </div>
       </div>
@@ -175,4 +320,3 @@ const UsersProduct = () => {
 };
 
 export default UsersProduct;
- 

@@ -245,6 +245,7 @@ import React, { useState, useEffect } from 'react';
 import { StaffNavBar, Header, MobileStaffNavbar } from "../layout";
 import { ConfirmModal, CustomButton } from '../../components';
 import { Table, Button, Modal, Form, message, Input, Select } from 'antd'; // Add Select here
+import { SearchOutlined } from '@ant-design/icons';
 import axios from 'axios';
 
 const ItemSettings = () => {
@@ -258,6 +259,7 @@ const ItemSettings = () => {
   const [selectedProductId, setSelectedProductId] = useState(null);
   const [editingProduct, setEditingProduct] = useState(null);
   const [categoryExists, setCategoryExists] = useState(false);
+  const [searchCategory, setSearchCategory] = useState('');
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -275,6 +277,16 @@ const ItemSettings = () => {
     }
   };
 
+  const filteredData = productData.filter(item => {
+    const categoryStr = Array.isArray(item.category)
+      ? item.category.join(", ")
+      : typeof item.category === "string"
+        ? item.category
+        : "";
+
+    return categoryStr.toLowerCase().includes(searchCategory.toLowerCase());
+  });
+
   const fetchProducts = async () => {
     try {
       const res = await axios.get('https://online-shop-server-1.onrender.com/api/products');
@@ -287,11 +299,6 @@ const ItemSettings = () => {
 
   const handleAddOrEdit = async (values) => {
     try {
-      // Check if the category already exists
-      // const categoryCheckRes = await axios.get('https://online-shop-server-1.onrender.com/api/check-category', {
-      //   params: { category: values.category }
-      // });
-      // Before submitting, check for duplicates excluding current ID if editing
       const categoryCheckRes = await axios.get('https://online-shop-server-1.onrender.com/api/check-category', {
         params: {
           category: values.category,
@@ -389,6 +396,11 @@ const ItemSettings = () => {
       render: (sizes) => (Array.isArray(sizes) ? sizes.join(", ") : sizes),
     },
     {
+      title: 'Sex',
+      dataIndex: 'sex',
+      key: 'sex',
+    },
+    {
       title: 'Actions',
       render: (_, record) => (
         <>
@@ -425,18 +437,34 @@ const ItemSettings = () => {
         <Header toggleNav={toggleNav} />
         <MobileStaffNavbar isOpen={isMobileNavOpen} onClose={() => setIsMobileNavOpen(false)} />
         <div className='flex-1 overflow-auto mt-14 bg-[#EFEFEF] md:p-4'>
-          <div className='w-1/3 mb-5 max-md:w-full'>
-            <CustomButton
-              nameButton="Add New"
-              rounded="rounded-lg"
-              color="bg-black"
-              hoverButton="hover:bg-[#454545]"
-              onClick={() => { setIsModalOpen(true); form.resetFields(); setEditingProduct(null); }}
-            />
+
+          <div className='flex justify-end items-center content-center space-x-2 max-md:flex-col'>
+            <div className='w-1/3 max-md:w-full'>
+              <CustomButton
+                nameButton="Add New"
+                rounded="rounded-lg"
+                color="bg-black"
+                hoverButton="hover:bg-[#454545]"
+                onClick={() => { setIsModalOpen(true); form.resetFields(); setEditingProduct(null); }}
+              />
+            </div>
+            <div className='flex justify-end w-full md:w-[250px]'>
+              <div className='w-[250px] mt-3'>
+                <Input
+                  placeholder="Search by Category"
+                  allowClear
+                  prefix={<SearchOutlined />}
+                  value={searchCategory}
+                  onChange={(e) => setSearchCategory(e.target.value)}
+                  size="large"
+                />
+              </div>
+            </div>
+
           </div>
 
           <div className='max-md:w-[100vw] bg-white mt-2 rounded-xl max-md:overflow-x-auto whitespace-nowrap'>
-            <Table dataSource={productData} columns={columns} rowKey="_id" className="mt-4" />
+            <Table dataSource={filteredData} columns={columns} rowKey="_id" className="mt-4" />
           </div>
         </div>
       </div>
@@ -455,28 +483,93 @@ const ItemSettings = () => {
           <Form.Item
             label="Category"
             name="category"
-            rules={[{ required: true, message: "Category is required" }]}
+            rules={[
+              { required: true, message: "Category is required" },
+              { pattern: /^[A-Za-z\s]+$/, message: "Only letters are allowed" },
+            ]}
             help={categoryExists ? "Category already exists" : ""}
             validateStatus={categoryExists ? "error" : ""}
           >
-            <Input placeholder="Enter category" />
+            <Input
+              placeholder="Enter category"
+              onChange={(e) => {
+                const value = e.target.value.replace(/[^A-Za-z\s]/g, '');
+                form.setFieldsValue({ category: value });
+              }}
+            />
           </Form.Item>
 
           <Form.Item label="Sub-Category" name="subCategory">
-            <Select mode="tags" placeholder="Enter sub-categories (press enter after each)" />
+            <Select
+              mode="tags"
+              placeholder="Enter sub-categories (press enter after each)"
+              onInputKeyDown={(e) => {
+                const allowed = /^[A-Za-z\s]$/;
+                if (!allowed.test(e.key) && e.key !== 'Backspace' && e.key !== 'Enter') {
+                  e.preventDefault();
+                }
+              }}
+              onChange={(value) => {
+                const filtered = value.filter(v => /^[A-Za-z\s]+$/.test(v));
+                form.setFieldsValue({ subCategory: filtered });
+              }}
+            />
           </Form.Item>
 
           <Form.Item label="Brand" name="brand">
-            <Select mode="tags" placeholder="Enter brands (press enter after each)" />
+            <Select
+              mode="tags"
+              placeholder="Enter brands (press enter after each)"
+              onInputKeyDown={(e) => {
+                const key = e.key;
+                const isValid = /^[a-zA-Z0-9]$/.test(key) || ['Backspace', 'Enter', 'Tab', 'ArrowLeft', 'ArrowRight', ' '].includes(key);
+                if (!isValid) {
+                  e.preventDefault();
+                }
+              }}
+            />
           </Form.Item>
 
           <Form.Item label="Color" name="color">
-            <Select mode="tags" placeholder="Enter colors (press enter after each)" />
+            <Select
+              mode="tags"
+              placeholder="Enter colors (press enter after each)"
+              onInputKeyDown={(e) => {
+                const key = e.key;
+                const isValid = /^[a-zA-Z\s]$/.test(key) || ['Backspace', 'Enter', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(key);
+                if (!isValid) {
+                  e.preventDefault();
+                }
+              }}
+            />
           </Form.Item>
 
           <Form.Item label="Sizes" name="sizes">
-            <Select mode="tags" placeholder="Enter sizes (press enter after each)" />
+            <Select
+              mode="tags"
+              placeholder="Enter sizes (press enter after each)"
+              onInputKeyDown={(e) => {
+                const key = e.key;
+                const isValid = /^[a-zA-Z0-9]$/.test(key) || ['Backspace', 'Enter', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(key);
+                if (!isValid) {
+                  e.preventDefault();
+                }
+              }}
+            />
           </Form.Item>
+
+          <Form.Item
+            label="Sex"
+            name="sex"
+            rules={[{ required: true, message: "Please select a sex category" }]}
+          >
+            <Select placeholder="Select sex">
+              <Select.Option value="Male">Male</Select.Option>
+              <Select.Option value="Female">Female</Select.Option>
+              <Select.Option value="Unisex">Unisex</Select.Option>
+            </Select>
+          </Form.Item>
+
         </Form>
       </Modal>
 

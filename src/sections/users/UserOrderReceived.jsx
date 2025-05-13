@@ -598,6 +598,7 @@ const UserOrderReceived = () => {
               onChange={(e) => handleReviewChange(selectedOrder._id, e.target.value)}
             />
 
+            <p className="mb-2">Picture of product</p>
             {/* Upload Image */}
             <input type="file" accept="image/*" onChange={(e) => addImage(e, selectedOrder._id)} className="hidden" id="fileInput" />
             <div

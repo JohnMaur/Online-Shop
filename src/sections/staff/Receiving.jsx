@@ -302,20 +302,7 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {
-  Box,
-  Flex,
-  Text,
-  Image,
-  Stack,
-  Divider,
-  Button,
-  useToast,
-  Skeleton,
-  Icon,
-  useColorModeValue,
-  Spinner,
-} from "@chakra-ui/react";
+import { Box, Flex, Text, Image, Stack, Divider, Button, useToast, Skeleton, Icon, useColorModeValue, Spinner } from "@chakra-ui/react";
 import { WarningIcon } from '@chakra-ui/icons';
 import { CustomButton, CancelOrderModal } from '../../components';
 import { StaffNavBar, Header, MobileStaffNavbar } from "../layout";
@@ -558,12 +545,11 @@ const StaffReceiving = () => {
                     <CustomButton
                       nameButton="Cancel Order"
                       rounded="rounded-lg"
-                      color="bg-[#656565]"
-                      hoverButton="hover:bg-[#767676]"
-                      responsive="max-md:text-xs"
+                      color="bg-red-600"
+                      hoverButton="hover:bg-red-700"
                       onClick={() => {
-                        setSelectedOrderId(order._id);
                         setIsCancelModalOpen(true);
+                        setSelectedOrderId(order._id);
                       }}
                     />
                   </div>

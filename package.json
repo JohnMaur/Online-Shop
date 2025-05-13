@@ -21,6 +21,7 @@
     "firebase": "^11.4.0",
     "framer-motion": "^6.5.1",
     "lucide-react": "^0.477.0",
+    "query-string": "^9.1.2",
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.9",
     "react-countup": "^6.5.3",

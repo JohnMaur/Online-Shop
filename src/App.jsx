@@ -69,8 +69,8 @@
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Login, SignUp, Admin, LoginStaff, ProtectedRoute } from "./(auth)";
-import { AdminDashboard, Staff, Product, AdminItemSettings, UserList, StaffList, AdminStock, AdminSupplier, AuditTrail, AdminDelivery, AdminToShip, AdminToReceive, AdminOrderReceived, AdminCanceledOrder, AdminOrderTransaction, AdminVAT, AdminProductReview } from "./sections/master_admin";
-import { StaffDashboard, StaffProduct, StaffReceiving, StaffShipping, StaffProfile, ItemSettings, StaffMaintenance, StockMaintenance, DeleveryMaintenance, OrderTranstaction, OrderReceived, CanceledOrder, StaffProductreview } from "./sections/staff";
+import { AdminDashboard, Staff, Product, AdminItemSettings, UserList, StaffList, AdminStock, AdminSupplier, AuditTrail, AdminDelivery, AdminToShip, AdminToReceive, AdminOrderReceived, AdminCanceledOrder, AdminOrderTransaction, AdminVAT, AdminProductReview, AdminOrderTransac } from "./sections/master_admin";
+import { StaffDashboard, StaffProduct, StaffReceiving, StaffShipping, StaffProfile, ItemSettings, StaffMaintenance, StockMaintenance, DeleveryMaintenance, OrderTranstaction, OrderReceived, CanceledOrder, StaffProductreview, OrderTransac } from "./sections/staff";
 import { UserLandingPage, Receiving, Shipping, Cart, Homepage, UsersProduct, UserOrderReceived, UserCancelled } from "./sections/users";
 
 import { UserProvider } from "./(auth)/UserContext";
@@ -99,6 +99,7 @@ const App = () => {
           {/* Staff routes */}
           <Route path="/staff-dashboard" element={<ProtectedRoute role="staff" element={<StaffDashboard />} />} />
           <Route path="/staff-product" element={<ProtectedRoute role="staff" element={<StaffProduct />} />} />
+          <Route path="/staff-order-transaction" element={<ProtectedRoute role="staff" element={<OrderTransac />} />} />
           <Route path="/staff-shipping" element={<ProtectedRoute role="staff" element={<StaffShipping />} />} />
           <Route path="/staff-receiving" element={<ProtectedRoute role="staff" element={<StaffReceiving />} />} />
           <Route path="/product-maintenance" element={<ProtectedRoute role="staff" element={<ItemSettings />} />} />
@@ -126,6 +127,7 @@ const App = () => {
           <Route path="/admin-to-receive" element={<ProtectedRoute role="admin" element={<AdminToReceive />} />} />
           <Route path="/admin-order-received" element={<ProtectedRoute role="admin" element={<AdminOrderReceived />} />} />
           <Route path="/admin-order-canceled" element={<ProtectedRoute role="admin" element={<AdminCanceledOrder />} />} />
+          <Route path="/admin-order-transac" element={<ProtectedRoute role="admin" element={<AdminOrderTransac />} />} />
           <Route path="/admin-order-transaction" element={<ProtectedRoute role="admin" element={<AdminOrderTransaction />} />} />
           <Route path="/admin-VAT" element={<ProtectedRoute role="admin" element={<AdminVAT />} />} />
           <Route path="/admin-product-review" element={<ProtectedRoute role="admin" element={<AdminProductReview />} />} />

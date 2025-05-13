@@ -422,7 +422,8 @@ import { NavigationBar, Header, MobileAdminNavbar } from "../layout";
 import { CustomButton, AddDeliveryModal, RestockModal } from '../../components';
 import { DeliveryHistory } from '../../data';
 import axios from 'axios';
-import { Table, Button } from 'antd';
+import { Table, Button, Input } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
 import { FaMoneyBillWave } from "react-icons/fa";
 import CountUp from "react-countup";
 import Swal from 'sweetalert2';
@@ -452,6 +453,7 @@ const AdminDelivery = () => {
 
   const [vatPercentage, setVatPercentage] = useState(null); // Example: 12 means 12%
   const [isVatApplied, setIsVatApplied] = useState(false);
+  const [searchText, setSearchText] = useState('');
 
   const toggleNav = () => {
     if (window.innerWidth <= 768) {
@@ -510,6 +512,7 @@ const AdminDelivery = () => {
         supplierPrice: parseFloat(supplierPrice),
         shopPrice: parseFloat(finalShopPrice),
         quantity: parseInt(quantity),
+        staffUsername: "Admin",
         totalCost: parseFloat(supplierPrice) * parseInt(quantity),
         addedAt: new Date()
       };
@@ -565,10 +568,37 @@ const AdminDelivery = () => {
     }
   };
 
+  const handleSetAllAsDelivered = async () => {
+    try {
+      const response = await axios.post('https://online-shop-server-1.onrender.com/api/set-all-delivered', {
+      });
+
+      await MySwal.fire({
+        icon: 'success',
+        title: 'All Deliveries Set as Delivered!',
+        text: response.data.message,
+      });
+
+      fetchDeliveries(); // Refresh deliveries table
+      setRefreshHistory(prev => !prev); // Update delivery history too
+    } catch (error) {
+      console.error("Error setting all as delivered:", error);
+      MySwal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Something went wrong while setting all deliveries as delivered.',
+      });
+    }
+  };
+
 
   const handleRestockSuccess = () => {
     setShowRestockModal(false);
   };
+
+  const filteredDeliveries = deliveries.filter(delivery =>
+    delivery?.product?.productName?.toLowerCase().includes(searchText.toLowerCase())
+  );
 
   const deliveryColumns = [
     {
@@ -576,10 +606,15 @@ const AdminDelivery = () => {
       dataIndex: ['product', 'productName'],
       key: 'productName'
     },
+    // {
+    //   title: 'Product ID',
+    //   dataIndex: 'productID',
+    //   key: 'productID'
+    // },
     {
-      title: 'Product ID',
-      dataIndex: 'productID',
-      key: 'productID'
+      title: 'Transaction ID',
+      dataIndex: 'deliveryID',
+      key: 'deliveryID'
     },
     {
       title: 'Category',
@@ -669,9 +704,23 @@ const AdminDelivery = () => {
             />
           </div>
 
+          <div className='w-full flex justify-end'>
+            <div className="mb-4 w-64 ">
+              <Input
+                placeholder="Search by product name"
+                value={searchText}  
+                onChange={(e) => setSearchText(e.target.value)}
+                prefix={<SearchOutlined />}
+                allowClear
+                size="large"
+              />
+            </div>
+          </div>
+
           <div className='max-md:w-[100vw] bg-white mt-2 rounded-xl max-md:overflow-x-auto max-md:whitespace-nowrap'>
             <Table
-              dataSource={deliveries}
+              // dataSource={deliveries}
+              dataSource={filteredDeliveries}
               rowKey="_id"
               columns={deliveryColumns}
               pagination={{ pageSize: 5 }}
@@ -679,6 +728,17 @@ const AdminDelivery = () => {
             />
           </div>
 
+          {deliveries.length > 0 && (
+            <div className="mt-4 text-right">
+              <Button
+                type="primary"
+                danger
+                onClick={handleSetAllAsDelivered}
+              >
+                Set All as Delivered
+              </Button>
+            </div>
+          )}
 
           <div className='my-5'>
             <DeliveryHistory

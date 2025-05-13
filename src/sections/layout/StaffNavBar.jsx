@@ -238,7 +238,8 @@ const StaffNavBar = ({ isNavCollapsed, setStaffUsername, onSearch, responsiveLin
           )}
         </div>
 
-        <div className="mt-5 h-[65vh] overflow-y-auto custom-scrollbar pr-1">
+        {/* <div className="mt-5 h-[65vh] overflow-y-auto custom-scrollbar pr-1"> */}
+        <div className="mt-5 pr-1">
           <StaffNavItem
             isNavCollapsed={isNavCollapsed}
             icon={<FaTachometerAlt />}
@@ -247,6 +248,13 @@ const StaffNavBar = ({ isNavCollapsed, setStaffUsername, onSearch, responsiveLin
             link="/staff-dashboard"
           />
           <StaffNavItem
+            isNavCollapsed={isNavCollapsed}
+            icon={<FaShippingFast />}
+            iconHovered={<FaShippingFast />}
+            tooltipText="Order Transaction"
+            link="/staff-order-transaction"
+          />
+          {/* <StaffNavItem
             isNavCollapsed={isNavCollapsed}
             icon={<FaShippingFast />}
             iconHovered={<FaShippingFast />}
@@ -273,12 +281,12 @@ const StaffNavBar = ({ isNavCollapsed, setStaffUsername, onSearch, responsiveLin
             iconHovered={<FaWarehouse />}
             tooltipText="Canceled Received"
             link="/staff-canceled-order"
-          />
+          /> */}
           <StaffNavItem
             isNavCollapsed={isNavCollapsed}
             icon={<FaCogs />}
             iconHovered={<FaCogs />}
-            tooltipText="Order Transaction"
+            tooltipText="Transaction Reports  "
             link="/order-transaction"
           />
           <StaffNavItem

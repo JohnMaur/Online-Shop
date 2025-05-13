@@ -108,6 +108,8 @@ const RestockModal = ({ visible, onCancel, onRestockSuccess, refresh, restockAPI
             <p><strong>Sub Category:</strong> {selectedStock.product?.subCategory || 'N/A'}</p>
             <p><strong>Brand:</strong> {selectedStock.product?.brand || 'N/A'}</p>
             <p><strong>Color:</strong> {selectedStock.product?.color || 'N/A'}</p>
+            <p><strong>Size:</strong> {selectedStock.product?.size || 'N/A'}</p>
+            <p><strong>Sex:</strong> {selectedStock.product?.gender || 'N/A'}</p>
           </div>
         )}
 

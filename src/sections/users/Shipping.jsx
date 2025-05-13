@@ -315,6 +315,7 @@ const Shipping = () => {
                           </p>
                           <p className="text-base">₱{order.price}</p>
                           <p className="text-base">Quantity: {order.quantity}</p>
+                          <p className="text-base">Shipping Fee: ₱{order.shippingPrice}</p>
                           <p className="text-base flex items-center gap-1">
                             <CreditCard size={16} /> {order.paymentMethod}
                           </p>
