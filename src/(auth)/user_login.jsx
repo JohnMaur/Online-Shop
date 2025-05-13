@@ -22,8 +22,8 @@
 //     e.preventDefault();
 //     try {
 //       // Send login request to backend API
-//       // const response = await axios.post("http://localhost:3000/api/login", {
-//       const response = await axios.post("http://localhost:3000/api/login", {
+//       // const response = await axios.post("https://online-shop-server-1.onrender.com/api/login", {
+//       const response = await axios.post("https://online-shop-server-1.onrender.com/api/login", {
 //         username,
 //         password,
 //       });
@@ -128,7 +128,7 @@
 //     setError(""); // Clear previous errors
 
 //     try {
-//       const response = await axios.post("http://localhost:3000/api/login", {
+//       const response = await axios.post("https://online-shop-server-1.onrender.com/api/login", {
 //         username,
 //         password,
 //       });
@@ -157,7 +157,7 @@
 //     if (!username) return;
 
 //     try {
-//       await axios.post("http://localhost:3000/api/forgot-password", { username });
+//       await axios.post("https://online-shop-server-1.onrender.com/api/forgot-password", { username });
 
 //       const { value: otp } = await MySwal.fire({
 //         title: 'Enter the OTP sent to your email',
@@ -171,7 +171,7 @@
 //         inputPlaceholder: 'New password',
 //       });
 
-//       await axios.post("http://localhost:3000/api/reset-password", {
+//       await axios.post("https://online-shop-server-1.onrender.com/api/reset-password", {
 //         username,
 //         otp,
 //         newPassword,
@@ -279,7 +279,7 @@ const Login = () => {
     setError("");
 
     try {
-      const response = await axios.post("http://localhost:3000/api/login", {
+      const response = await axios.post("https://online-shop-server-1.onrender.com/api/login", {
         username,
         password,
       });
@@ -301,7 +301,7 @@ const Login = () => {
           cancelButtonText: 'Cancel',
         }).then(async (result) => {
           if (result.isConfirmed) {
-            const otpSendRes = await axios.post("http://localhost:3000/api/send-force-logout-otp", { username });
+            const otpSendRes = await axios.post("https://online-shop-server-1.onrender.com/api/send-force-logout-otp", { username });
 
             if (otpSendRes.status === 200) {
               const { value: otpInput } = await MySwal.fire({
@@ -312,7 +312,7 @@ const Login = () => {
 
               if (otpInput) {
                 try {
-                  const otpVerifyRes = await axios.post("http://localhost:3000/api/verify-force-logout-otp", {
+                  const otpVerifyRes = await axios.post("https://online-shop-server-1.onrender.com/api/verify-force-logout-otp", {
                     username,
                     otp: otpInput,
                   });
@@ -350,7 +350,7 @@ const Login = () => {
     if (!username) return;
 
     try {
-      await axios.post("http://localhost:3000/api/forgot-password", { username });
+      await axios.post("https://online-shop-server-1.onrender.com/api/forgot-password", { username });
 
       const { value: otp } = await MySwal.fire({
         title: 'Enter the OTP sent to your email',
@@ -364,7 +364,7 @@ const Login = () => {
         inputPlaceholder: 'New password',
       });
 
-      await axios.post("http://localhost:3000/api/reset-password", {
+      await axios.post("https://online-shop-server-1.onrender.com/api/reset-password", {
         username,
         otp,
         newPassword,
