@@ -318,7 +318,7 @@ const Modal = ({ isOpen, onClose, staffUsername, refreshProducts }) => {
     : [];
 
   const sexOptions = category
-    ? [...new Set(productData.map((item) => item.sex))].map((sex) => ({ value: sex, label: sex }))
+    ? [...new Set(productData.filter((item) => item.category === category.value).flatMap((item) => item.sex))].map((sex) => ({ value: sex, label: sex }))
     : [];
 
   const handleCategoryChange = (selected) => {
