@@ -798,7 +798,7 @@ const Product = () => {
                           />
                         </Tooltip>
 
-                        {!isProductInStocksOrDeliveries(product._id) && (
+                        {!isProductInStocksOrDeliveries(product.productID) && (
                           <Tooltip title="Delete">
                             <Button
                               danger
