@@ -798,7 +798,7 @@ const Product = () => {
                           />
                         </Tooltip>
 
-                        {!isProductInStocksOrDeliveries(product.productID) && (
+                        {/* {!isProductInStocksOrDeliveries(product.productID) && (
                           <Tooltip title="Delete">
                             <Button
                               danger
@@ -806,7 +806,15 @@ const Product = () => {
                               onClick={() => handleDelete(product)}
                             />
                           </Tooltip>
-                        )}
+                        )} */}
+
+                        <Tooltip title="Delete">
+                          <Button
+                            danger
+                            icon={<DeleteOutlined />}
+                            onClick={() => handleDelete(product)}
+                          />
+                        </Tooltip>
 
                       </div>
                     </Card>

@@ -457,7 +457,7 @@ const StaffProduct = () => {
                           />
                         </Tooltip>
 
-                        {!isProductInStockOrDelivery(product.productID) && (
+                        {/* {!isProductInStockOrDelivery(product.productID) && (
                           <Tooltip title="Delete">
                             <Button
                               danger
@@ -465,9 +465,16 @@ const StaffProduct = () => {
                               onClick={() => handleDelete(product)}
                             />
                           </Tooltip>
-                        )}
+                        )} */}
 
-                        
+                        <Tooltip title="Delete">
+                          <Button
+                            danger
+                            icon={<DeleteOutlined />}
+                            onClick={() => handleDelete(product)}
+                          />
+                        </Tooltip>
+
                       </div>
                     </Card>
                   );

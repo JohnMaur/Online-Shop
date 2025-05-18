@@ -231,39 +231,79 @@ const UpdateProduct = ({ isOpen, onClose, product, editableApi, staffUsername })
   const [color, setColor] = useState(product.color || "");
   const [sex, setSex] = useState(product.sex || "");
 
+
   // Field values and setters to avoid eval()
   const fieldValues = { category, subCategory, brand, size, color, sex };
   const setters = { category: setCategory, subCategory: setSubCategory, brand: setBrand, size: setSize, color: setColor, sex: setSex };
 
+  // useEffect(() => {
+  //   const fetchMaintenanceData = async () => {
+  //     try {
+  //       const [maintenanceRes, allProductRes] = await Promise.all([
+  //         axios.get("https://online-shop-server-1.onrender.com/api/product-maintenance"),
+  //         axios.get("https://online-shop-server-1.onrender.com/api/products"),
+  //       ]);
+
+  //       const data = maintenanceRes.data[0];
+  //       setAllProducts(allProductRes.data);
+
+  //       if (data) {
+  //         setOptions({
+  //           category: Array.isArray(data.category) ? data.category : [],
+  //           subCategory: Array.isArray(data.subCategory) ? data.subCategory : [],
+  //           brand: Array.isArray(data.brand) ? data.brand : [],
+  //           color: Array.isArray(data.color) ? data.color : [],
+  //           size: Array.isArray(data.sizes) ? data.sizes : [],
+  //           sex: Array.isArray(data.sex) ? data.sex : [data.sex],
+  //         });
+  //       }
+  //     } catch (err) {
+  //       console.error("Failed to fetch data:", err);
+  //     }
+  //   };
+
+  //   fetchMaintenanceData();
+  // }, []);
+
   useEffect(() => {
     const fetchMaintenanceData = async () => {
       try {
-        const [maintenanceRes, allProductRes] = await Promise.all([
-          axios.get("https://online-shop-server-1.onrender.com/api/product-maintenance"),
-          axios.get("https://online-shop-server-1.onrender.com/api/products"),
-        ]);
-
-        const data = maintenanceRes.data[0];
-        setAllProducts(allProductRes.data);
-
-        if (data) {
+        const maintenanceRes = await axios.get("https://online-shop-server-1.onrender.com/api/product-maintenance");
+  
+        const maintenanceData = maintenanceRes.data; // Array of maintenance objects
+  
+        // Find the maintenance entry where productID matches the current product's _id
+        const matchedMaintenance = maintenanceData.find(item => item.productID === product.productID);
+  
+        if (matchedMaintenance) {
           setOptions({
-            category: Array.isArray(data.category) ? data.category : [],
-            subCategory: Array.isArray(data.subCategory) ? data.subCategory : [],
-            brand: Array.isArray(data.brand) ? data.brand : [],
-            color: Array.isArray(data.color) ? data.color : [],
-            size: Array.isArray(data.sizes) ? data.sizes : [],
-            sex: Array.isArray(data.sex) ? data.sex : [data.sex],
+            category: Array.isArray(matchedMaintenance.category) ? matchedMaintenance.category : [],
+            subCategory: Array.isArray(matchedMaintenance.subCategory) ? matchedMaintenance.subCategory : [],
+            brand: Array.isArray(matchedMaintenance.brand) ? matchedMaintenance.brand : [],
+            color: Array.isArray(matchedMaintenance.color) ? matchedMaintenance.color : [],
+            size: Array.isArray(matchedMaintenance.sizes) ? matchedMaintenance.sizes : [],
+            sex: Array.isArray(matchedMaintenance.sex) ? matchedMaintenance.sex : [matchedMaintenance.sex],
+          });
+        } else {
+          setOptions({
+            category: [],
+            subCategory: [],
+            brand: [],
+            color: [],
+            size: [],
+            sex: [],
           });
         }
       } catch (err) {
-        console.error("Failed to fetch data:", err);
+        console.error("Failed to fetch product maintenance data:", err);
       }
     };
-
-    fetchMaintenanceData();
-  }, []);
-
+  
+    if (product && product.productID) {
+      fetchMaintenanceData();
+    }
+  }, [product]);
+  
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     setImageFiles(files);
@@ -353,15 +393,6 @@ const UpdateProduct = ({ isOpen, onClose, product, editableApi, staffUsername })
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded-lg w-96 lg:w-[35vw] h-[85vh] overflow-auto shadow-lg">
         <h2 className="text-xl font-semibold mb-4">Update Product</h2>
-
-        {/* <label className="block text-sm font-medium mb-1">Product Images</label>
-        <input multiple type="file" accept="image/*" onChange={handleImageChange} className="mb-2" />
-
-        <div className="flex flex-wrap gap-2 mb-4">
-          {imagePreviews.map((src, idx) => (
-            <img key={idx} src={src} alt="Preview" className="w-20 h-20 object-cover rounded border" />
-          ))}
-        </div> */}
 
         <label className="block text-sm font-medium mb-2">Product Images</label>
         <input type="file" accept="image/*" multiple onChange={handleImageChange} className="hidden" id="fileInput" />
