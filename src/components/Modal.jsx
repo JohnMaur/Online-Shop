@@ -260,7 +260,7 @@ import { firebase } from "../firebaseConfig";
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
  
-const MySwal = withReactContent(Swal);
+const MySwal = withReactContent(Swal); 
 
 const Modal = ({ isOpen, onClose, staffUsername, refreshProducts }) => {
   if (!isOpen) return null;
@@ -317,9 +317,14 @@ const Modal = ({ isOpen, onClose, staffUsername, refreshProducts }) => {
     ? [...new Set(productData.filter((item) => item.category === category.value).flatMap((item) => item.color))].map((col) => ({ value: col, label: col }))
     : [];
 
-  const sexOptions = category
-    ? [...new Set(productData.filter((item) => item.category === category.value).flatMap((item) => item.sex))].map((sex) => ({ value: sex, label: sex }))
-    : [];
+  // const sexOptions = category
+  //   ? [...new Set(productData.filter((item) => item.category === category.value).flatMap((item) => item.sex))].map((sex) => ({ value: sex, label: sex }))
+  //   : [];
+  const sexOptions = [
+    { value: 'Male', label: 'Male' },
+    { value: 'Female', label: 'Female' },
+    { value: 'Unisex', label: 'Unisex' },
+  ];  
 
   const handleCategoryChange = (selected) => {
     setCategory(selected);
@@ -441,7 +446,7 @@ const Modal = ({ isOpen, onClose, staffUsername, refreshProducts }) => {
         text: response.data.message,
       });
 
-      refreshProducts();
+      refreshProducts(); 
       onClose();
     } catch (error) {
       console.error("Error adding product:", error);

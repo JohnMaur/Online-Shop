@@ -395,11 +395,11 @@ const ItemSettings = () => {
       key: 'sizes',
       render: (sizes) => (Array.isArray(sizes) ? sizes.join(", ") : sizes),
     },
-    {
-      title: 'Sex',
-      dataIndex: 'sex',
-      key: 'sex',
-    },
+    // {
+    //   title: 'Sex',
+    //   dataIndex: 'sex',
+    //   key: 'sex',
+    // },
     {
       title: 'Actions',
       render: (_, record) => (
@@ -558,7 +558,7 @@ const ItemSettings = () => {
             />
           </Form.Item>
 
-          <Form.Item
+          {/* <Form.Item
             label="Sex"
             name="sex"
             rules={[{ required: true, message: "Please select a sex category" }]}
@@ -568,7 +568,7 @@ const ItemSettings = () => {
               <Select.Option value="Female">Female</Select.Option>
               <Select.Option value="Unisex">Unisex</Select.Option>
             </Select>
-          </Form.Item>
+          </Form.Item> */}
 
         </Form>
       </Modal>
