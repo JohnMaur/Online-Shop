@@ -376,12 +376,32 @@ const Modal = ({ isOpen, onClose, staffUsername, refreshProducts }) => {
       return;
     }
 
+    if (!subCategory) {
+      MySwal.fire({ icon: 'error', title: 'Missing Field', text: 'Please select a subcategory.' });
+      return;
+    }
+
+    if (!brand) {
+      MySwal.fire({ icon: 'error', title: 'Missing Field', text: 'Please select a brand.' });
+      return;
+    }
+  
+    if (!size) {
+      MySwal.fire({ icon: 'error', title: 'Missing Field', text: 'Please select a size.' });
+      return;
+    }
+
     if (!color) {
       MySwal.fire({
         icon: 'error',
         title: 'Oops...',
         text: 'Please select a color.',
       });
+      return;
+    }
+
+    if (!sex) {
+      MySwal.fire({ icon: 'error', title: 'Missing Field', text: 'Please select a sex.' });
       return;
     }
 
