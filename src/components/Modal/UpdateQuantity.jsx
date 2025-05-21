@@ -34,15 +34,55 @@
 
 // export default UpdateQuantity;
 
+
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+const MySwal = withReactContent(Swal);
+
 const UpdateQuantity = ({ isOpen, onClose, product, newQuantity, setNewQuantity, handleUpdateQuantity }) => {
   if (!isOpen) return null;
 
+  // const handleChange = (e) => {
+  //   const value = parseInt(e.target.value, 10);
+  //   if (value <= product.availableQuantity) {
+  //     setNewQuantity(value);
+  //   } else {
+  //     setNewQuantity(product.availableQuantity);
+  //   }
+  // };
+
   const handleChange = (e) => {
-    const value = parseInt(e.target.value, 10);
-    if (value <= product.availableQuantity) {
-      setNewQuantity(value);
-    } else {
+    const input = e.target.value;
+
+    // Allow empty string so user can delete input
+    if (input === "") {
+      setNewQuantity("");
+      return;
+    }
+
+    // Parse to int
+    const value = parseInt(input, 10);
+
+    // If not a number or less than 1, set to 1
+    if (isNaN(value) || value < 1) {
+      setNewQuantity(1);
+      return;
+    }
+
+    // If greater than max, show alert and clamp
+    if (value > product.availableQuantity) {
+      MySwal.fire({
+        icon: 'warning',
+        title: 'Exceeded maximum quantity',
+        text: `You can only select up to ${product.availableQuantity} items.`,
+        timer: 2000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+      });
       setNewQuantity(product.availableQuantity);
+    } else {
+      setNewQuantity(value);
     }
   };
 

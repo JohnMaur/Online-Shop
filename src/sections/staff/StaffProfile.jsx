@@ -126,6 +126,23 @@ const StaffProfile = () => {
     }
   };
 
+  const showInvalidInputModal = (message) => {
+    Swal.fire({
+      icon: 'error',
+      title: 'Invalid Input',
+      text: message,
+    });
+  };
+
+  const showLimitReachedModal = (field) => {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Limit Reached',
+      text: `${field} must not exceed 50 characters.`,
+    });
+  };
+
+
   return (
     <div className="flex flex-row-reverse max-md:flex-row w-full">
       <div className='flex flex-col flex-1 h-screen'>
@@ -175,12 +192,85 @@ const StaffProfile = () => {
                   </div>
 
                   <form className="w-full" onSubmit={handleSave}>
-                    <TextInput label="Staff Name" placeholder="Surname/First Name/Middle Name" type="text" value={tempStaffFullname} onChange={(e) => setTempStaffFullname(e.target.value)} />
-                    <TextInput label="Contact Person" placeholder="Surname/First Name/Middle Name" value={tempContactPerson} onChange={(e) => setTempContactPerson(e.target.value)} />
+                    {/* <TextInput label="Staff Name" placeholder="Surname/First Name/Middle Name" type="text" value={tempStaffFullname} onChange={(e) => setTempStaffFullname(e.target.value)} />
+                    <TextInput label="Contact Person" placeholder="Surname/First Name/Middle Name" value={tempContactPerson} onChange={(e) => setTempContactPerson(e.target.value)} /> */}
+                    <TextInput
+                      label="Staff Name"
+                      placeholder="Surname/First Name/Middle Name"
+                      type="text"
+                      value={tempStaffFullname}
+                      onChange={(e) => {
+                        const input = e.target.value;
+                        const isValid = /^[a-zA-Z\s/]*$/.test(input); // only letters, spaces, slashes
+                        if (isValid && input.length <= 50) {
+                          setTempStaffFullname(input);
+                        } else if (!isValid) {
+                          showInvalidInputModal("Staff Name should only contain letters, spaces, and slashes.");
+                        } else {
+                          showLimitReachedModal("Staff Name");
+                        }
+                      }}
+                    />
+
+                    <TextInput
+                      label="Contact Person"
+                      placeholder="Surname/First Name/Middle Name"
+                      value={tempContactPerson}
+                      onChange={(e) => {
+                        const input = e.target.value;
+                        const isValid = /^[a-zA-Z\s/]*$/.test(input); // only letters, spaces, slashes
+                        if (isValid && input.length <= 50) {
+                          setTempContactPerson(input);
+                        } else if (!isValid) {
+                          showInvalidInputModal("Contact Person should only contain letters, spaces, and slashes.");
+                        } else {
+                          showLimitReachedModal("Contact Person");
+                        }
+                      }}
+                    />
                     <TextInput label="Email Address" placeholder="example@gmail.com" type="text" value={tempEmail} onChange={(e) => setTempEmail(e.target.value)} />
-                    <TextInput label="Phone Number" placeholder="09*********" type="text" value={tempPhoneNumber} onChange={(e) => setTempPhoneNumber(e.target.value)} />
-                    <TextInput label="Region/City/District" placeholder="Metro Manila/Taguig City/Central Bicutan" type="text" value={tempRegion} onChange={(e) => setTempRegion(e.target.value)} />
-                    <TextInput label="House No./Street" placeholder="BLK 144 LoT 19/Arago Street" type="text" value={tempHouseStreet} onChange={(e) => setTempHouseStreet(e.target.value)} />
+                    {/* <TextInput label="Phone Number" placeholder="09*********" type="text" value={tempPhoneNumber} onChange={(e) => setTempPhoneNumber(e.target.value)} /> */}
+                    <TextInput
+                      label="Phone Number"
+                      placeholder="9123456789"
+                      type="text"
+                      value={tempPhoneNumber}
+                      onChange={(e) => {
+                        const onlyDigits = e.target.value.replace(/\D/g, '');
+                        if (onlyDigits.length <= 10) {
+                          setTempPhoneNumber(onlyDigits);
+                        }
+                      }}
+                      phoneNumber={1}
+                    />
+                    {/* <TextInput label="Region/City/District" placeholder="Metro Manila/Taguig City/Central Bicutan" type="text" value={tempRegion} onChange={(e) => setTempRegion(e.target.value)} /> */}
+                    <TextInput
+                      label="Region/City/District"
+                      placeholder="Metro Manila/Taguig City/Central Bicutan"
+                      value={tempRegion}
+                      onChange={(e) => {
+                        const input = e.target.value;
+                        if (input.length <= 50) {
+                          setTempRegion(input);
+                        } else {
+                          showLimitReachedModal("Region/City/District");
+                        }
+                      }}
+                    />
+                    {/* <TextInput label="House No./Street" placeholder="BLK 144 LoT 19/Arago Street" type="text" value={tempHouseStreet} onChange={(e) => setTempHouseStreet(e.target.value)} /> */}
+                    <TextInput
+                      label="House No./Street"
+                      placeholder="BLK 144 LoT 19/Arago Street"
+                      value={tempHouseStreet}
+                      onChange={(e) => {
+                        const input = e.target.value;
+                        if (input.length <= 50) {
+                          setTempHouseStreet(input);
+                        } else {
+                          showLimitReachedModal("House No./Street");
+                        }
+                      }}
+                    />
 
                     <button type="submit" className="w-full mt-3 bg-[#8699DA] text-white py-2 rounded-full hover:bg-[#798dce] cursor-pointer focus:outline-none">
                       Save
@@ -199,12 +289,98 @@ const StaffProfile = () => {
 
       <Modal title="Edit Supplier Info" open={editModalVisible} onCancel={() => setEditModalVisible(false)} footer={null} centered>
         <form onSubmit={handleSave}>
-          <TextInput label="Supplier Name" value={tempStaffFullname} onChange={(e) => setTempStaffFullname(e.target.value)} />
+          {/* <TextInput label="Supplier Name" value={tempStaffFullname} onChange={(e) => setTempStaffFullname(e.target.value)} />
           <TextInput label="Contact Person" value={tempContactPerson} onChange={(e) => setTempContactPerson(e.target.value)} />
           <TextInput label="Email" value={tempEmail} onChange={(e) => setTempEmail(e.target.value)} />
           <TextInput label="Region/City/District" value={tempRegion} onChange={(e) => setTempRegion(e.target.value)} />
           <TextInput label="House No./Street" value={tempHouseStreet} onChange={(e) => setTempHouseStreet(e.target.value)} />
-          <TextInput label="Phone Number" value={tempPhoneNumber} onChange={(e) => setTempPhoneNumber(e.target.value)} />
+          <TextInput label="Phone Number" value={tempPhoneNumber} onChange={(e) => setTempPhoneNumber(e.target.value)} /> */}
+
+          <TextInput
+            label="Supplier Name"
+            value={tempStaffFullname}
+            onChange={(e) => {
+              const input = e.target.value;
+              const isValid = /^[a-zA-Z\s/]*$/.test(input);
+              if (isValid && input.length <= 50) {
+                setTempStaffFullname(input);
+              } else if (!isValid) {
+                showInvalidInputModal("Supplier Name should only contain letters, spaces, and slashes.");
+              } else {
+                showLimitReachedModal("Supplier Name");
+              }
+            }}
+          />
+
+          <TextInput
+            label="Contact Person"
+            value={tempContactPerson}
+            onChange={(e) => {
+              const input = e.target.value;
+              const isValid = /^[a-zA-Z\s/]*$/.test(input);
+              if (isValid && input.length <= 50) {
+                setTempContactPerson(input);
+              } else if (!isValid) {
+                showInvalidInputModal("Contact Person should only contain letters, spaces, and slashes.");
+              } else {
+                showLimitReachedModal("Contact Person");
+              }
+            }}
+          />
+
+          <TextInput
+            label="Email"
+            value={tempEmail}
+            onChange={(e) => {
+              const input = e.target.value;
+              const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input);
+              if (input.length <= 50) {
+                setTempEmail(input);
+              }
+              if (!isValid && input !== "") {
+                showInvalidInputModal("Please enter a valid email address.");
+              }
+            }}
+          />
+
+          <TextInput
+            label="Region/City/District"
+            value={tempRegion}
+            onChange={(e) => {
+              const input = e.target.value;
+              if (input.length <= 50) {
+                setTempRegion(input);
+              } else {
+                showLimitReachedModal("Region/City/District");
+              }
+            }}
+          />
+
+          <TextInput
+            label="House No./Street"
+            value={tempHouseStreet}
+            onChange={(e) => {
+              const input = e.target.value;
+              if (input.length <= 50) {
+                setTempHouseStreet(input);
+              } else {
+                showLimitReachedModal("House No./Street");
+              }
+            }}
+          />
+
+          <TextInput
+            label="Phone Number"
+            value={tempPhoneNumber}
+            onChange={(e) => {
+              const input = e.target.value.replace(/\D/g, ""); // remove non-digits
+              if (input.length <= 10) {
+                setTempPhoneNumber(input);
+              } else {
+                showLimitReachedModal("Phone Number must be 10 digits");
+              }
+            }}
+          />
           <button type="submit" className="w-full mt-3 bg-black text-white py-2 rounded-full hover:bg-[#454545] cursor-pointer focus:outline-none">Save</button>
         </form>
       </Modal>

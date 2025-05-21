@@ -52,12 +52,85 @@ const StaffList = () => {
     setEditingStaff(null); // Close modal
   };
 
+  // const handleFormChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormValues((prevState) => ({
+  //     ...prevState,
+  //     [name]: value,
+  //   }));
+  // };
+
   const handleFormChange = (e) => {
     const { name, value } = e.target;
-    setFormValues((prevState) => ({
-      ...prevState,
-      [name]: value,
+
+    // Validation rules
+    if (name === "staffFullname") {
+      const isValid = /^[a-zA-Z\s/]*$/.test(value);
+      if (!isValid) {
+        showInvalidInputModal("Full Name should only contain letters, spaces, and slashes.");
+        return;
+      }
+      if (value.length > 50) {
+        showLimitReachedModal("Full Name");
+        return;
+      }
+    }
+
+    if (name === "phoneNumber") {
+      const digitsOnly = value.replace(/\D/g, "");
+      if (digitsOnly.length > 11) {
+        showLimitReachedModal("Phone Number must be 10 digits");
+        return;
+      }
+      // Update only the digits
+      setFormValues((prev) => ({
+        ...prev,
+        [name]: digitsOnly
+      }));
+      return;
+    }
+
+    if (name === "email") {
+      if (value.length > 50) {
+        showLimitReachedModal("Email");
+        return;
+      }
+      const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+      if (!isValidEmail && value !== "") {
+        showInvalidInputModal("Please enter a valid email address.");
+        return;
+      }
+    }
+
+    if (name === "region" || name === "houseStreet") {
+      if (value.length > 50) {
+        showLimitReachedModal(name === "region" ? "Region" : "House & Street");
+        return;
+      }
+    }
+
+    // Password optional, no restriction unless you want to add some
+
+    setFormValues((prev) => ({
+      ...prev,
+      [name]: value
     }));
+  };
+
+  const showInvalidInputModal = (message) => {
+    Swal.fire({
+      icon: 'error',
+      title: 'Invalid Input',
+      text: message,
+    });
+  };
+  
+  const showLimitReachedModal = (field) => {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Limit Reached',
+      text: `${field} must not exceed 50 characters.`,
+    });
   };
 
   const handleSave = async () => {

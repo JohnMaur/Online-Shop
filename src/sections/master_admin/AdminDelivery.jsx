@@ -781,7 +781,7 @@ const AdminDelivery = () => {
                   >
                     Restock
                   </button>
-                </div>
+                </div> 
               </div>
             </div>
           )}

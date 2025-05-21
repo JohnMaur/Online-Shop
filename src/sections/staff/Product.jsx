@@ -309,13 +309,19 @@ const StaffProduct = () => {
     setIsUpdateModalOpen(true);
   };
 
+  // const isProductInStockOrDelivery = (productID) => {
+  //   return (
+  //     stocks.some(stock => stock.productID === productID) ||
+  //     deliveries.some(delivery => delivery.productID === productID)
+  //   );
+  // };
+
   const isProductInStockOrDelivery = (productID) => {
     return (
-      stocks.some(stock => stock.productID === productID) ||
       deliveries.some(delivery => delivery.productID === productID)
     );
   };
-
+  
   const handleDelete = (product) => {
     MySwal.fire({
       title: 'Are you sure?',
@@ -457,7 +463,7 @@ const StaffProduct = () => {
                           />
                         </Tooltip>
 
-                        {/* {!isProductInStockOrDelivery(product.productID) && (
+                        {!isProductInStockOrDelivery(product.productID) && (
                           <Tooltip title="Delete">
                             <Button
                               danger
@@ -465,15 +471,15 @@ const StaffProduct = () => {
                               onClick={() => handleDelete(product)}
                             />
                           </Tooltip>
-                        )} */}
+                        )}
 
-                        <Tooltip title="Delete">
+                        {/* <Tooltip title="Delete">
                           <Button
                             danger
                             icon={<DeleteOutlined />}
                             onClick={() => handleDelete(product)}
                           />
-                        </Tooltip>
+                        </Tooltip> */}
 
                       </div>
                     </Card>

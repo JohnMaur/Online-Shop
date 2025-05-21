@@ -54,11 +54,60 @@ const UserList = () => {
     setEditingUser(null); // Close modal
   };
 
+  // const handleFormChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormValues((prevState) => ({
+  //     ...prevState,
+  //     [name]: value,
+  //   }));
+  // };
   const handleFormChange = (e) => {
     const { name, value } = e.target;
-    setFormValues((prevState) => ({
-      ...prevState,
-      [name]: value,
+
+    // Validate Recipient Name
+    if (name === "recipientName") {
+      const isValid = /^[a-zA-Z\s/]*$/.test(value);
+      if (!isValid) {
+        showInvalidInputModal("Recipient Name should only contain letters, spaces, and slashes.");
+        return;
+      }
+      if (value.length > 50) {
+        showLimitReachedModal("Recipient Name");
+        return;
+      }
+    }
+
+    // Validate Phone Number
+    if (name === "phoneNumber") {
+      const digitsOnly = value.replace(/\D/g, "");
+      if (digitsOnly.length > 10) {
+        showLimitReachedModal("Phone Number must be 10 digits");
+        return;
+      }
+      setFormValues((prev) => ({
+        ...prev,
+        [name]: digitsOnly
+      }));
+      return;
+    }
+
+    // Validate Region and House & Street
+    if (name === "region" || name === "houseStreet") {
+      if (value.length > 50) {
+        showLimitReachedModal(name === "region" ? "Region" : "House & Street");
+        return;
+      }
+    }
+
+    // Validate Password (optional)
+    if (name === "password" && value.length > 0 && value.length < 6) {
+      showInvalidInputModal("Password must be at least 6 characters long.");
+      return;
+    }
+
+    setFormValues((prev) => ({
+      ...prev,
+      [name]: value
     }));
   };
 
